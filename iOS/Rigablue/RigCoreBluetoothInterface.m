@@ -104,9 +104,16 @@ static NSTimer *connectionTimeoutTimer = nil;
 #pragma mark - Connection related methods
 - (void)connectPeripheral:(CBPeripheral *)peripheral timeout:(NSNumber*)timeout
 {
-    [manager connectPeripheral:peripheral options:nil];
-    if (timeout) {
-        connectionTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:timeout.floatValue target:self selector:@selector(connectionTimeoutTimerDidFire:) userInfo:peripheral repeats:NO];
+    void (^scheduleTimeout)(void) = ^void(void) {
+        [manager connectPeripheral:peripheral options:nil];
+        if (timeout) {
+            connectionTimeoutTimer = [NSTimer scheduledTimerWithTimeInterval:timeout.doubleValue target:self selector:@selector(connectionTimeoutTimerDidFire:) userInfo:peripheral repeats:NO];
+        }
+    };
+    if (![NSThread isMainThread]) {
+        dispatch_sync(dispatch_get_main_queue(), scheduleTimeout);
+    } else {
+        scheduleTimeout();
     }
 }
 
@@ -135,7 +142,14 @@ static NSTimer *connectionTimeoutTimer = nil;
 
 - (void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral
 {
-    [connectionTimeoutTimer invalidate];
+    void (^disable_timer)(void) = ^void(void) {
+        [connectionTimeoutTimer invalidate];
+    };
+    if (![NSThread isMainThread]) {
+        dispatch_sync(dispatch_get_main_queue(), disable_timer);
+    } else {
+        disable_timer();
+    }
     if (_connectionObserver != nil) {
         [_connectionObserver didConnectDevice:peripheral];
     }
