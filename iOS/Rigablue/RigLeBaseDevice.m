@@ -61,15 +61,19 @@ static int discoveredServicesCount = 0;
     [_peripheral discoverServices:serviceList];
 }
 
-- (void)enableNotificationsForCharacteristic:(CBCharacteristic *)characteristic
+- (BOOL)enableNotificationsForCharacteristic:(CBCharacteristic *)characteristic
 {
     if (characteristic == nil) {
-        return;
+        return NO;
     }
     
     if((characteristic.properties & CBCharacteristicPropertyNotify) == CBCharacteristicPropertyNotify) {
         [_peripheral setNotifyValue:YES forCharacteristic:characteristic];
+    } else {
+        return NO;
     }
+    
+    return YES;
 }
 
 - (void)setAdvertisementData:(NSDictionary *)advData
