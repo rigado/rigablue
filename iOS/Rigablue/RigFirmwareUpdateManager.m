@@ -101,30 +101,39 @@ typedef enum FirmwareManagerState_enum
 {
     self = [super init];
     if (self) {
-        isFileSizeWritten = NO;
-        isPacketNotificationEnabled = NO;
-        isReceivingFirmwareImage = NO;
-        isLastPacket = NO;
-        shouldStopSendingPackets = NO;
-        didForceEraseAfterStmUpdateImageRan = NO;
-        
-        delegate = nil;
-        state = State_Init;
-        imageSize = 0;
-        image = nil;
+        [self initStateVariables];
     }
     return self;
 }
 
-- (BOOL)updateFirmware:(RigLeBaseDevice*)device Image:(NSData*)firmwareImage ImageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
+- (void)initStateVariables
+{
+    isFileSizeWritten = NO;
+    isPacketNotificationEnabled = NO;
+    isReceivingFirmwareImage = NO;
+    isLastPacket = NO;
+    shouldStopSendingPackets = NO;
+    didForceEraseAfterStmUpdateImageRan = NO;
+    
+    delegate = nil;
+    state = State_Init;
+    imageSize = 0;
+    image = nil;
+}
+
+- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device Image:(NSData*)firmwareImage ImageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
        activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen
 {
+    RigDfuError_t result = DfuError_None;
     NSLog(@"__updateFirmware__");
     
     // Create the firmware update service object and assigned this object as the delegate
     firmwareUpdateService = [[RigFirmwareUpdateService alloc] init];
     firmwareUpdateService.delegate = self;
-    [firmwareUpdateService setDevice:device];
+    result = [firmwareUpdateService setDevice:device];
+    if (result != DfuError_None) {
+        return result;
+    }
     
     //Intialize firmware image variables
     imageSize = firmwareImageSize;
@@ -141,18 +150,27 @@ typedef enum FirmwareManagerState_enum
     if ([device.name isEqualToString:@"RigDfu"]) {
         if (device.peripheral.state == CBPeripheralStateConnected) {
             if (!device.isDiscoveryComplete) {
-                [firmwareUpdateService triggerServiceDiscovery];
+                result = [firmwareUpdateService triggerServiceDiscovery];
+                if (result != DfuError_None) {
+                    return result;
+                }
             } else {
                 [firmwareUpdateService determineSecureDfuStatus];
-                [firmwareUpdateService enableControlPointNotifications];
+                result = [firmwareUpdateService enableControlPointNotifications];
+                if (result != DfuError_None) {
+                    return result;
+                }
             }
         } else {
-            [firmwareUpdateService connectPeripheral];
+            result = [firmwareUpdateService connectPeripheral];
+            if (result != DfuError_None) {
+                return result;
+            }
         }
     } else {
         if (characteristic == nil || device == nil || device.peripheral == nil || command == nil) {
             NSLog(@"Invalid parameter provided!");
-            return NO;
+            return DfuError_InvalidParameter;
         }
         [device.peripheral writeValue:[NSData dataWithBytes:command length:commandLen] forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
         
@@ -166,32 +184,64 @@ typedef enum FirmwareManagerState_enum
         [delegate updateStatus:@"Searching for Update Service..." errorCode:DfuError_None];
     }
     
-    return YES;
+    return result;
+}
+
+- (void)cleanUpAfterFailure
+{
+    /* Reassign connection delegate */
+    [RigLeConnectionManager sharedInstance].delegate = oldDelegate;
+    
+    /* For device disconnection if connected */
+    if (bootloaderDevice != nil) {
+        if (bootloaderDevice.peripheral.state == CBPeripheralStateConnected ||
+            bootloaderDevice.peripheral.state == CBPeripheralStateConnecting) {
+            [[RigLeConnectionManager sharedInstance] disconnectDevice:bootloaderDevice];
+        }
+    }
+    
+    [self initStateVariables];
 }
 
 - (void)updateDeviceAndTriggerDiscovery
 {
+    RigDfuError_t result = DfuError_None;
     firmwareUpdateService.shouldReconnectToPeripheral = YES;
-    [firmwareUpdateService setDevice:bootloaderDevice];
-    [firmwareUpdateService triggerServiceDiscovery];
+    result = [firmwareUpdateService setDevice:bootloaderDevice];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to set bootloader device." errorCode:result];
+        [self cleanUpAfterFailure];
+    }
+    
+    result = [firmwareUpdateService triggerServiceDiscovery];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to discover services for bootloader device or discovered services were invalid." errorCode:result];
+        [self cleanUpAfterFailure];
+    }
 }
 
 /**
  *  Simply sends the size of the firmware image to the DFU.  This is expect after enabling packet notifications through a command to the control point.
  */
-- (void)writeFileSize
+- (RigDfuError_t)writeFileSize
 {
     NSLog(@"__writeFileSize__");
-    //uint32_t fileSize = LightControllerImageSize;
+    RigDfuError_t result = DfuError_None;
     
     if ([firmwareUpdateService isSecureDfu]) {
         /* For the secure update, the start packet is stored within the first 12 bytes of the signed binary */
-        uint8_t data[12];
-        memcpy(data, &image.bytes[0], sizeof(data));
+        uint8_t data[IMAGE_START_PACKET_SIZE];
+        memcpy(data, image.bytes, sizeof(data));
+        //TODO: Check if this is actually necessary
         /* EPS - Noticed that breakpoing here kept update from failing.  Invesitgate further later!! */
         [NSThread sleepForTimeInterval:1.0f];
         
-        [firmwareUpdateService writeDataToPacketCharacteristic:data withLen:sizeof(data) shouldGetResponse:NO];
+        result = [firmwareUpdateService writeDataToPacketCharacteristic:data withLen:sizeof(data) shouldGetResponse:NO];
+        if (result != DfuError_None) {
+            [delegate updateFailed:@"Failed to write image size to packet characteristic." errorCode:result];
+            //TODO: Clean up after failure
+            return result;
+        }
         [delegate updateStatus:@"Writing Device Update Size and Type" errorCode:0];
         
         /* Adjust image size to account for data at the beginning of the image */
@@ -205,52 +255,88 @@ typedef enum FirmwareManagerState_enum
         data[2] = (imageSize >> 16) & 0xFF;
         data[3] = (imageSize >> 24) & 0xFF;
         
+        //TODO: Check if this is actually necessary
         /* EPS - Noticed that breakpoing here kept update from failing.  Invesitgate further later!! */
         [NSThread sleepForTimeInterval:1.0f];
         
-        [firmwareUpdateService writeDataToPacketCharacteristic:data withLen:sizeof(data) shouldGetResponse:NO];
+        result = [firmwareUpdateService writeDataToPacketCharacteristic:data withLen:sizeof(data) shouldGetResponse:NO];
+        if (result != DfuError_None) {
+            [delegate updateFailed:@"Failed to write image size to packet characteristic." errorCode:result];
+            //TODO: Clean up after failure
+            return result;
+        }
         [delegate updateStatus:@"Writing Device Update Size" errorCode:0];
     }
+    
+    return DfuError_None;
 }
 
 /**
  *  Enables notifications to be sent back as packets are received.  Note that this is a notification sent from the DFU on the control point
  *  and not an enablement of notifications on the Packet characteristic.
  */
-- (void)enablePacketNotifications
+- (RigDfuError_t)enablePacketNotifications
 {
+    RigDfuError_t result = DfuError_None;
+    
     NSLog(@"__enablePacketNotifications__");
     uint8_t data[] = { PACKET_RECEIVED_NOTIFICATION_REQUEST, NUMBER_OF_PACKETS, 0 };
     
-    [firmwareUpdateService writeDataToControlPoint:data withLen:sizeof(data) shouldGetResponse:YES];
+    result = [firmwareUpdateService writeDataToControlPoint:data withLen:sizeof(data) shouldGetResponse:YES];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to write enable notifications for packets." errorCode:result];
+        //TODO: Clean up after failure
+        return result;
+    }
     [delegate updateStatus:@"Enabling Notifications" errorCode:0];
+    return DfuError_None;
 }
 
-- (void)sendInitPacket
+
+- (RigDfuError_t)sendInitPacket
 {
     NSLog(@"__sendInitPacket__");
+    RigDfuError_t result = DfuError_None;
     uint8_t initPacket[IMAGE_INIT_PACKET_SIZE];
     memcpy(initPacket, &image.bytes[IMAGE_INIT_PACKET_IDX], IMAGE_INIT_PACKET_SIZE);
     
-    [firmwareUpdateService writeDataToPacketCharacteristic:initPacket withLen:IMAGE_INIT_PACKET_SIZE/2 shouldGetResponse:NO];
+    result = [firmwareUpdateService writeDataToPacketCharacteristic:initPacket withLen:IMAGE_INIT_PACKET_SIZE/2 shouldGetResponse:NO];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to write init packet." errorCode:result];
+        return result;
+    }
+    
+    /* Note that the packet characteristic does not have write with repsonse capabilities, so these two writes are performed using a delay.  iOS
+     * will not issue a callback when the characteristic has been written. */
     [NSThread sleepForTimeInterval:0.100f];
-    [firmwareUpdateService writeDataToPacketCharacteristic:&initPacket[IMAGE_INIT_PACKET_SIZE/2] withLen:IMAGE_INIT_PACKET_SIZE/2 shouldGetResponse:NO];
+    
+    result = [firmwareUpdateService writeDataToPacketCharacteristic:&initPacket[IMAGE_INIT_PACKET_SIZE/2] withLen:IMAGE_INIT_PACKET_SIZE/2 shouldGetResponse:NO];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to write init packet." errorCode:result];
+        return result;
+    }
+    return result;
 }
 
 /**
  *  Send this command prepares the DFU to receive the firmware image.
  */
-- (void)receiveFirmwareImage
+- (RigDfuError_t)receiveFirmwareImage
 {
     NSLog(@"__receiveFirmwareImage__");
     uint8_t data = RECEIVE_FIRMWARE_IMAGE;
-    [firmwareUpdateService writeDataToControlPoint:&data withLen:sizeof(data) shouldGetResponse:YES];
+    RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&data withLen:sizeof(data) shouldGetResponse:YES];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to initialize firmware image transfer." errorCode:result];
+        return result;
+    }
+    return DfuError_None;
 }
 
 /**
  *  Initiates send firmware data to the DFU.
  */
-- (void)startUploadingFile
+- (RigDfuError_t)startUploadingFile
 {
     NSLog(@"__startUploadingFile__");
     totalPackets = (imageSize / BYTES_IN_ONE_PACKET);
@@ -261,7 +347,13 @@ typedef enum FirmwareManagerState_enum
     [self deterimeLastPacketSize];
     
     [delegate updateStatus:@"Transferring New Device Software" errorCode:0];
-    [self sendPacket];
+    RigDfuError_t result = [self sendPacket];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to start transfer of image data." errorCode:result];
+        return result;
+    }
+    
+    return DfuError_None;
 }
 
 /**
@@ -283,9 +375,8 @@ typedef enum FirmwareManagerState_enum
  *  Sends one packet of data to the DFU.  If the packet being sent is the last packet, then the size
  *  is based on the size calculated in the call to determineLastPacketSize.
  */
-- (void)sendPacket
+- (RigDfuError_t)sendPacket
 {
-    //NSLog(@"__sendPacket__");
     packetNumber++;
     uint8_t packetSize = BYTES_IN_ONE_PACKET;
     
@@ -308,24 +399,30 @@ typedef enum FirmwareManagerState_enum
     }
     
     NSData *dataToSend = [image subdataWithRange:range];
-    [firmwareUpdateService writeDataToPacketCharacteristic:dataToSend.bytes withLen:dataToSend.length shouldGetResponse:NO];
+    RigDfuError_t result = [firmwareUpdateService writeDataToPacketCharacteristic:dataToSend.bytes withLen:dataToSend.length shouldGetResponse:NO];
+    return result;
 }
 
 /**
  *  Sends the command to cause the DFU to validate the firmware.
  */
-- (void)validateFirmware
+- (RigDfuError_t)validateFirmware
 {
     NSLog(@"__validateFirmware__");
     uint8_t cmd = VALIDATE_FIRMWARE_IMAGE;
-    [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
-    [delegate updateStatus:@"Validating Transferred Device Software" errorCode:0];
+    RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to start firmware validation." errorCode:result];
+        return result;
+    }
+    [delegate updateStatus:@"Validating Transferred Device Software" errorCode:DfuError_None];
+    return DfuError_None;
 }
 
 /**
  *  Sends the command to activate the newly uploaded firmware.  This will cause the device to exit the DFU and start the application.
  */
-- (void)activateFirmware
+- (RigDfuError_t)activateFirmware
 {
     NSLog(@"__activateFirmware__");
     uint8_t cmd = ACTIVATE_FIRMWARE_AND_RESET;
@@ -335,15 +432,28 @@ typedef enum FirmwareManagerState_enum
     firmwareUpdateService.alwaysReconnectOnDisconnect = NO;
     [firmwareUpdateService completeUpdate];
     
-    [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
-    [delegate updateStatus:@"Activating Updated Device Software" errorCode:0];
+    RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to write packet characteristic." errorCode:result];
+        return result;
+    }
+    
+    [delegate updateStatus:@"Activating Updated Device Software" errorCode:DfuError_None];
+    return DfuError_None;
 }
 
 #pragma mark - LeFirmwareUpdateServiceDelegate Methods
+/**
+ *  This method is sent from the delegate protocol once the device is registered as connected by CoreBluetooth.
+ */
 - (void)didConnectPeripheral
 {
     //Sent as a delegate method but not needed for this implementation
-    [firmwareUpdateService triggerServiceDiscovery];
+    RigDfuError_t result = [firmwareUpdateService triggerServiceDiscovery];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to initiate discovery for update device." errorCode:result];
+        [self cleanUpAfterFailure];
+    }
 }
 
 /**
@@ -351,35 +461,20 @@ typedef enum FirmwareManagerState_enum
  */
 - (void)didDiscoverCharacteristicsForDFUSerivce
 {
-//    RigDfuError_t error;
-//    if (state == State_DiscoverFirmwareServiceCharacteristics) {
-//        state = State_CheckEraseAfterReset;
-//        //Enable control point notifications which will perform an erase check after
-//        //notifications are successfully enabled.
-//        error = [firmwareUpdateService enableControlPointNotifications];
-//        if (error != DfuError_None) {
-//            [delegate updateStatus:@"Dfu Error: " errorCode:error];
-//        }
-//    } else if(state == State_ReconnectAfterInitialFlashErase) {
-//        //Reconnection after erasing the flash has occurred and discovery is complete.  Update the state
-//        //so that after checking the erase size (which should be the size of the firmware image), we will
-//        //initial transfer of the firmware image.
-//        state = State_TransferringRadioImage;
-//        error = [firmwareUpdateService enableControlPointNotifications];
-//        if (error != DfuError_None) {
-//            [delegate updateStatus:@"Dfu Error: " errorCode:error];
-//        }
-//    }
     if (state == State_TransferringRadioImage) {
         state = State_Init;
         isFileSizeWritten = NO;
         isPacketNotificationEnabled = NO;
         isReceivingFirmwareImage = NO;
+        isInitPacketSent = NO;
         [delegate updateProgress:0.0f];
         packetNumber = 0;
     }
-    [firmwareUpdateService enableControlPointNotifications];
-    
+    RigDfuError_t result = [firmwareUpdateService enableControlPointNotifications];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to set notifications on control point." errorCode:result];
+        [self cleanUpAfterFailure];
+    }
 }
 
 /**
@@ -400,9 +495,13 @@ typedef enum FirmwareManagerState_enum
     NSLog(@"Sending DFU_START opcode");
     shouldWaitForErasedSize = NO;
     state = State_TransferringRadioImage;
-    [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
-    //[firmwareUpdateService writeDataToControlPoint:&data withLen:1 shouldGetResponse:YES];
-    [delegate updateStatus:@"Starting Device Firmware Update" errorCode:DfuError_None];
+    RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
+    if (result != DfuError_None) {
+        [delegate updateFailed:@"Failed to write start DFU command to control point." errorCode:result];
+        //TODO: Clean up after failure
+        //return result;
+    }
+    [delegate updateStatus:@"Initializing Device Firmware Update" errorCode:DfuError_None];
 }
 
 /**
@@ -411,6 +510,8 @@ typedef enum FirmwareManagerState_enum
 - (void) didWriteValueForControlPoint
 {
     NSLog(@"__didWriteValueForControlPoint__");
+    RigDfuError_t result = DfuError_None;
+    
     //This check ensures none of the above is performed until after we successfully erase the flash.
     if (shouldWaitForErasedSize) {
         return;
@@ -425,15 +526,19 @@ typedef enum FirmwareManagerState_enum
     //This functionality behaves in tandem with the commands being written to the control point
     //from didUpdateValueForControlPoint
     if (!isFileSizeWritten) {
-        [self writeFileSize];
+        result = [self writeFileSize];
     } else if(!isInitPacketSent && [firmwareUpdateService isSecureDfu]) {
-        [self sendInitPacket];
+        result = [self sendInitPacket];
     } else if(!isPacketNotificationEnabled) {
         isPacketNotificationEnabled = YES;
-        [self receiveFirmwareImage];
+        result = [self receiveFirmwareImage];
     } else if(!isReceivingFirmwareImage) {
         isReceivingFirmwareImage = YES;
-        [self startUploadingFile];
+        result = [self startUploadingFile];
+    }
+    
+    if (result != DfuError_None) {
+        [self cleanUpAfterFailure];
     }
 }
 
@@ -461,9 +566,16 @@ typedef enum FirmwareManagerState_enum
             if ([firmwareUpdateService isSecureDfu]) {
                 isFileSizeWritten = YES;
                 uint8_t cmd = INITIALIZE_DFU;
-                [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
+                RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
+                if (result != DfuError_None) {
+                    [delegate updateFailed:@"Failed to write dfu initialization to control point." errorCode:result];
+                    //TODO: Clean up after failure
+                    //return result;
+                }
             } else {
-                [self enablePacketNotifications];
+                if ([self enablePacketNotifications] != DfuError_None) {
+                    [self cleanUpAfterFailure];
+                }
             }
         }
     } else if(opCode == RECEIVED_OPCODE && request == INITIALIZE_DFU) {
@@ -472,7 +584,9 @@ typedef enum FirmwareManagerState_enum
             //This is received after sending the initialization information.  It is only necessary for the secure
             //device firmware update.  If this is not the secure dfu, then this step is skipped.
             isInitPacketSent = YES;
-            [self enablePacketNotifications];
+            if ([self enablePacketNotifications]) {
+                [self cleanUpAfterFailure];
+            }
         }
     }
     else if (opCode == PACKET_RECEIVED_NOTIFICATION) {
@@ -485,12 +599,13 @@ typedef enum FirmwareManagerState_enum
         //If we haven't sent the last packet yet, then keep sending packets.  Once sent, we will notify the app
         //that the firmware image has been fully transferred.
         if (!isLastPacket && !shouldStopSendingPackets) {
-            [self sendPacket];
+            if([self sendPacket]) {
+                [self cleanUpAfterFailure];
+            }
         } else {
             NSLog(@"Last packet notification received");
             [delegate updateProgress:1.0];
         }
-        
     } else if (opCode == RECEIVED_OPCODE && request == RECEIVE_FIRMWARE_IMAGE) {
         NSLog(@"Opcode: Receive Firmware Image");
         if (value[2] == OPERATION_SUCCESS) {
@@ -498,10 +613,15 @@ typedef enum FirmwareManagerState_enum
             //needs to validate the firmware image, so that command is sent to the device.
             NSLog(@"Firmware transfer successful");
             [delegate updateStatus:@"Successfully Transferred Software.  Validating..." errorCode:DfuError_None];
-            [self validateFirmware];
+            RigDfuError_t result = [self validateFirmware];
+            if(result != DfuError_None) {
+                [delegate updateFailed:@"Could not initialize firmware validation!" errorCode:result];
+                [self cleanUpAfterFailure];
+            }
         } else {
-            [delegate updateStatus:@"Error during transfer" errorCode:value[2]];
             NSLog(@"Error on firmware transfer: %d", value[2]);
+            [delegate updateFailed:@"Firmwave Validation Failed!" errorCode:DfuError_ImageValidationFailure];
+            [self cleanUpAfterFailure];
         }
     } else if (opCode == RECEIVED_OPCODE && request == VALIDATE_FIRMWARE_IMAGE) {
         NSLog(@"Firmware validated");
@@ -511,16 +631,24 @@ typedef enum FirmwareManagerState_enum
             //Once the firmware is validated, the firmware transfer is considered successful and the activation command
             //is sent to the DFU.
             if(state == State_TransferringRadioImage) {
-                [delegate updateStatus:@"Device Software Validated Successfully!" errorCode:0];
+                [delegate updateStatus:@"Device Software Validated Successfully!" errorCode:DfuError_None];
                 state = State_FinishedRadioImageTransfer;
-                [self activateFirmware];
+                RigDfuError_t result = [self activateFirmware];
+                if(result != DfuError_None) {
+                    [delegate updateFailed:@"Could not activate updated firmware!" errorCode:result];
+                    [self cleanUpAfterFailure];
+                }
             }
         } else {
+            //TODO: change to update failed, clean up after failure
             NSLog(@"Error occurred during firmware validation");
-            [delegate updateStatus:@"Error on validitation" errorCode:value[2]];
+            [delegate updateFailed:@"Firmwave Activation Failed!" errorCode:DfuError_ImageValidationFailure];
+            [self cleanUpAfterFailure];
         }
     } else if (opCode == RECEIVED_OPCODE && request == ERASE_SIZE_REQUEST) {
         if (value[2] == OPERATION_SUCCESS) {
+            //NOTE: This is not used for the dual bank bootloader.  Also, as of S110 7.0, it is not nessary to disable the
+            //radio to read/write to/from the internal flash of the part.
             //This message is sent by the DFU after an erase size request.  Initially, if not earsed, the erase
             //size request will return 0.  This will trigger the firmware update manager to send an erase and
             //reset command to the device which will then cause the device to disconnect and perform the

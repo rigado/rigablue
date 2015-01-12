@@ -20,6 +20,9 @@ typedef enum DfuErrorEnum
     DfuError_ControlPointCharacteristicMissing = -2,
     DfuError_BadDevice = -3,
     DfuError_PeripheralNotSet = -4,
+    DfuError_InvalidParameter = -5,
+    DfuError_ImageValidationFailure = -6,
+    DfuError_ImageActivationFailure = -7,
     
 } RigDfuError_t;
 

@@ -79,7 +79,7 @@
  *
  *  @return YES if successful, NO otherwise
  */
-- (BOOL)updateFirmware:(RigLeBaseDevice*)device Image:(NSData*)firmwareImage ImageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
+- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device Image:(NSData*)firmwareImage ImageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
        activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen;
 
 @end
