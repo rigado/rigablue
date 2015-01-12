@@ -203,6 +203,16 @@ typedef enum FirmwareManagerState_enum
     [self initStateVariables];
 }
 
+- (uint32_t)getImageSize
+{
+    uint32_t size = imageSize;
+    if ([firmwareUpdateService isSecureDfu]) {
+        size -= (IMAGE_START_PACKET_SIZE + IMAGE_INIT_PACKET_SIZE);
+    }
+    
+    return size;
+}
+
 - (void)updateDeviceAndTriggerDiscovery
 {
     RigDfuError_t result = DfuError_None;
@@ -243,9 +253,6 @@ typedef enum FirmwareManagerState_enum
             return result;
         }
         [delegate updateStatus:@"Writing Device Update Size and Type" errorCode:0];
-        
-        /* Adjust image size to account for data at the beginning of the image */
-        imageSize -= (IMAGE_START_PACKET_SIZE + IMAGE_INIT_PACKET_SIZE);
     }
     else
     {
@@ -339,8 +346,9 @@ typedef enum FirmwareManagerState_enum
 - (RigDfuError_t)startUploadingFile
 {
     NSLog(@"__startUploadingFile__");
-    totalPackets = (imageSize / BYTES_IN_ONE_PACKET);
-    if (imageSize % BYTES_IN_ONE_PACKET) {
+    uint32_t size = [self getImageSize];
+    totalPackets = (size / BYTES_IN_ONE_PACKET);
+    if (size % BYTES_IN_ONE_PACKET) {
         totalPackets++;
     }
     
@@ -362,10 +370,12 @@ typedef enum FirmwareManagerState_enum
  */
 - (void)deterimeLastPacketSize
 {
-    if ((imageSize % BYTES_IN_ONE_PACKET) == 0) {
+    uint32_t imageSizeLocal = [self getImageSize];
+    
+    if ((imageSizeLocal % BYTES_IN_ONE_PACKET) == 0) {
         lastPacketSize = BYTES_IN_ONE_PACKET;
     } else {
-        lastPacketSize = (imageSize - ((totalPackets - 1) * BYTES_IN_ONE_PACKET));
+        lastPacketSize = (imageSizeLocal - ((totalPackets - 1) * BYTES_IN_ONE_PACKET));
     }
     
     NSLog(@"Last Packet Size: %d", lastPacketSize);
@@ -387,7 +397,7 @@ typedef enum FirmwareManagerState_enum
         /* Adjust size for last packet */
         packetSize = lastPacketSize;
     } else {
-        NSLog(@"Sending packet: %d/%d Bytes Sent: %d/%d", packetNumber, totalPackets, packetNumber * 20, imageSize);
+        NSLog(@"Sending packet: %d/%d Bytes Sent: %d/%d", packetNumber, totalPackets, packetNumber * 20, [self getImageSize]);
     }
     
     NSRange range;
@@ -594,7 +604,7 @@ typedef enum FirmwareManagerState_enum
         //knowing that each packet has been received and the total size that has been transferred thus far.
         totalBytesSent = (value[1] + (value[2] << 8) + (value[3] << 16) + (value[4] << 24)) & 0xFFFFFFFF;
         
-        [delegate updateProgress:(float)((float)totalBytesSent / (float)imageSize)];
+        [delegate updateProgress:(float)((float)totalBytesSent / (float)[self getImageSize])];
         
         //If we haven't sent the last packet yet, then keep sending packets.  Once sent, we will notify the app
         //that the firmware image has been fully transferred.
@@ -660,8 +670,7 @@ typedef enum FirmwareManagerState_enum
             //to send the DFU Start response operation code and firmware transfer will begin.  See the first if
             //condition in this function.
             totalBytesErased = (value[3] + (value[4] << 8) + (value[5] << 16) + (value[6] << 24)) & 0xFFFFFFFF;
-            if (totalBytesErased < imageSize) {
-                
+            if (totalBytesErased < [self getImageSize]) {
                 uint8_t cmd = ERASE_AND_RESET;
                 NSLog(@"Sending ERASE_AND_RESET opcode");
                 if (state == State_CheckEraseAfterReset) {
