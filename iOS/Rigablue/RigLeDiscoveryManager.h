@@ -44,10 +44,19 @@
 - (void)bluetoothNotPowered;
 
 @optional
+/*!
+ *  @method didUpdateDeviceData:
+ *
+ *  @discussion                 This method is called if a new discovery event is triggered for a device which has already been discovered.  This
+ *                              allows for tracking RSSI, device name changes, and general advertisement data monitoring.
+ *
+ *  @param device               The device data which changed.
+ *  @param index                The index of the device data in the discovered devices array provided by <code>retrieveDiscoveredDevices</code>.
+ *
+ */
 - (void)didUpdateDeviceData:(RigAvailableDeviceData*)device deviceIndex:(NSUInteger)index;
 
 @end
-
 
 /*!
  * @class RigLeDiscoveryManager
@@ -111,7 +120,11 @@
  *
  *  @discussion                 This method should be invoked any time the application needs to discover devices that match the search parameters
  *                              that are already connected to the system.  This is useful for finding bonded devices that are automatically connected
- *                              when in range of the iOS device.
+ *                              when in range of the iOS device.  Devices are not returned from this function.  They are pushed through the
+ *                              delegate method <code>didDiscoveryDevice:</code>.
+ *
+ *  @note                       This method CANNOT retrieve all connected devices in the manner in which any non-connected device is discovered (e.g.
+ *                              supplying nil as the UUID).  A UUID MUST be provided, or this function will not discovery any devices.
  *
  *
  */

@@ -66,4 +66,5 @@
  *              If <code>NO</code>, the central manager will only reported discovery of a device the first time it is seen after discovery commences.
  */
 @property BOOL allowDuplicates;
+
 @end

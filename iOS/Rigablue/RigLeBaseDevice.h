@@ -24,6 +24,10 @@
 /**
  *  @method discoveryDidCompleteForDevice:
  *
+ *  This method is called when the discovery of all services and characteristics
+ *  has completed.  After this discovery is complete, all characteristic property values
+ *  will have been read.
+ *
  *  @param device The <code>RigLeBaseDevice</code> object for which discovery has finished.
  *
  *  @discussion This method is called when all services and characteristics have been discovered for a given device.
@@ -33,13 +37,35 @@
 /**
  *  @method didUpdateValueForCharacteristic:
  *
- *  @param characteristic   The characteristic for while the value was read.  This is called when a read request is performed or when
- *                          a characteristic changes its value due to a notification from the peripheral.
+ *  This is called when a read request is performed or when
+ *  a characteristic changes its value due to a notification from the peripheral.
+ *
+ *  @param characteristic   The characteristic for which the value was read.
+ *  @param device           The device to which this characteristic belongs.
  */
 - (void)didUpdateValueForCharacteristic:(CBCharacteristic*)characteristic forDevice:(RigLeBaseDevice*)device;
 
+/**
+ *  @method didUpdateNotifyStateForCharacteristic:
+ *
+ *  This is called when a notification enable request has
+ *  been request for a particular characteristic with the notify property set.
+ *
+ *  @param characteristic   The characteristic for which notifications were enabled.
+ *  @param device           The device to which this characteristic belongs.
+ */
 - (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic*)characteristic forDevice:(RigLeBaseDevice*)device;
 
+/**
+ *  @method didWriteValueForCharacteristic:
+ *
+ *  This method is called ONLY when a characteristic is writen with the property
+ *  WriteWithResponse.  Additionally, if the characteristic does not support
+ *  WriteWithResponse (CBCharacteristicPropertyWrite), this callback will not be issued.
+ *
+ *  @param characteristic   The characteristic that was written.
+ *  @param device           The device to which this characteristic belongs.
+ */
 - (void)didWriteValueForCharacteristic:(CBCharacteristic*)characteristic forDevice:(RigLeBaseDevice*)device;
 @end
 
@@ -55,7 +81,7 @@
 /**
  *  Initialize a base device object with the provide peripheral.  Use this rather than the base init method.
  *
- *  @param peripheral The peripheral to initiailize this object against.
+ *  @param peripheral       The peripheral to initiailize this object against.
  *
  *  @return Returns new base device oject.
  */
@@ -82,9 +108,34 @@
  */
 - (NSArray*)getSerivceList;
 
-- (void)enableNotificationsForCharacteristic:(CBCharacteristic*)characteristic;
+/**
+ *  @method enableNotificationsForCharacteristic:
+ *
+ *  @param characteristic   The characteristic on which to enable notifications.
+ *
+ *  @return Returns YES if the request was successful.  If NO is returned, then it is likely that the characteristic does not have the notify property enabled.
+ *          However, even if this function returns YES, notifications are not guaranteed to be enabled.  CoreBluetooth must issue the appropriate callback.
+ *          Rigablue will forward this callback to the delete with the <code>didUpdateNotifyStateForCharacteristic</code> message.
+ */
+- (BOOL)enableNotificationsForCharacteristic:(CBCharacteristic*)characteristic;
 
+/**
+ *  @method setAdvertisementData
+ *
+ *  This method sets the advertisement data record for the device.  The storage of the advertisement data allows it to be accessed
+ *  once the device has been connected.
+ *
+ *  @param advData          The advertisement data to associate with this base device object.
+ */
 - (void)setAdvertisementData:(NSDictionary*)advData;
+
+/**
+ *  @method getAdvertisementData
+ *
+ *  This method simply retrieves the advertisement data as set with <code>setAdvertisementData</code>.
+ *
+ *  @returns nil if advertisement data not set; else the advertisement data array
+ */
 - (NSDictionary*)getAdvertisementData;
 
 /**
@@ -101,7 +152,9 @@
 /**
  *  @property name
  *
- *  @discussion The name field from the peripheral object represented by this device object.
+ *  @discussion The name field from the peripheral object represented by this device object.  This name will be based on the
+ *              advertisement data since it updates more quickly than the name.  However, if the advertisement data is not
+ *              supplied, then the name will be as provide by CoreBluetooth in the CBPeripheral object use to initialize this object.
  */
 @property (nonatomic, strong) NSString *name;
 

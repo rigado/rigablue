@@ -17,7 +17,7 @@
 @protocol RigFirmwareUpdateManagerDelegate <NSObject>
 /**
  *  NOTE: The methods in this delegate are NOT called on the App's main thread.  The programmer must invoke
- *  any view updates by using perfrom selector on main thread.  See RigTestDeviceViewController.h for an
+ *  any view updates on the application's main thread.  See RigTestDeviceViewController.h for an
  *  example.
  */
 /**
@@ -42,6 +42,10 @@
 - (void)didFinishUpdate;
 
 @optional
+/**
+ *  This method is called if an update fails for any given reason.
+ *
+ */
 - (void)updateFailed:(NSString*)status errorCode:(RigDfuError_t)error;
 
 @end
