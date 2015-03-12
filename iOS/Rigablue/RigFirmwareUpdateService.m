@@ -236,6 +236,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
         char * val = (char*)disModelNumberChacteristic.value.bytes;
         NSString *modelNumberString = [NSString stringWithUTF8String:val];
         if ([modelNumberString isEqualToString:SECURE_DFU_MODEL_NUMBER]) {
+            NSLog(@"Secure DFU detected");
             isSecureDfu = YES;
         }
     }
