@@ -5,3 +5,5 @@
 xcshareddata/
 xcuserdata/
 project.xcworkspace/
+bin/
+gen/
