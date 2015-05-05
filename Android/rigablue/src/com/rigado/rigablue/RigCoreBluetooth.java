@@ -237,6 +237,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
     private synchronized void read(IRigDataRequest request) {
         if(mOpsQueue.isEmpty() && !mIsDataOpInProgress) {
+            mIsDataOpInProgress = true;
             doOp(request);
         } else {
             mOpsQueue.add(request);
@@ -245,6 +246,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
     private synchronized void write(IRigDataRequest request) {
         if(mOpsQueue.isEmpty() && !mIsDataOpInProgress) {
+            mIsDataOpInProgress = true;
             doOp(request);
         } else {
             if(request instanceof RigWriteRequest) {
