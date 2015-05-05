@@ -170,7 +170,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
         mIsDiscovering = false;
 
-        if(!mDiscoveryFuture.isDone()) {
+        if((null != mDiscoveryFuture) && !mDiscoveryFuture.isDone()) {
             mDiscoveryFuture.cancel(true);
         }
 
