@@ -84,6 +84,11 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
         return mIsDiscoveryComplete;
     }
 
+    // sometimes we don't need the discovery
+    public void setDiscoveryComplete() {
+        mIsDiscoveryComplete = true;
+    }
+
     public void runDiscovery() {
         RigLog.d("__runDiscovery__");
         mSerivceIndex = 0;
