@@ -257,6 +257,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
     }
 
     private synchronized void doOp(IRigDataRequest request) {
+    	mIsDataOpInProgress = true;
         request.post(mBluetoothLeService);
     }
 
