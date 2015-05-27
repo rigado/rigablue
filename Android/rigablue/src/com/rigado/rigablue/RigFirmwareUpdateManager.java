@@ -16,11 +16,6 @@ import java.util.UUID;
  * Created by stutzenbergere on 11/17/14.
  */
 
-enum FirmwareUpdateTypeEnum {
-    UpdateType_C9LightString,
-    UpdateType_Foliage
-}
-
 enum DfuOpCodeEnum {
     DfuOpCode_Reserved_0,
     DfuOpCode_Start,
@@ -102,7 +97,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
     public boolean updateFirmware(RigLeBaseDevice device, InputStream firmwareImage, BluetoothGattCharacteristic activateCharacteristic,
     		byte[] activateCommand) {
-        //BufferedReader radioStreamReader = new BinaryReader(new InputStreamReader(radioImageStream));
         RigLog.i("__RigFirmwareUpdateManager.updateFirmware__");
         mUpdateDevice = device;
         try {
@@ -112,13 +106,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         } catch(IOException e) {
             RigLog.e("IOException occurred while reading binary image data!");
         }
-
-//        mImage = new byte[mControllerImageSize];
-//        System.arraycopy(mControllerImage, 0, mImage, 0, mControllerImageSize);
-
-        //TODO: Remove this
-//        UUID lumenplayServiceUuid = UUID.fromString(LumenplayServiceUuidString);
-//        UUID lumenplayControlPointUuid = UUID.fromString(LumenplayControlPointUuidString);
 
         mFirmwareUpdateService = new RigFirmwareUpdateService();
         mFirmwareUpdateService.setObserver(this);
@@ -327,13 +314,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         if(mPacketNumber == mTotalPackets) {
             RigLog.i("Sending last packet: " + mPacketNumber);
             mIsLastPacket = true;
-//            packet = new byte[mLastPacketSize];
+
             packetSize = mLastPacketSize;
-//            System.arraycopy(mImage, (mPacketNumber - 1) * BytesInOnePacket, packet, 0, mLastPacketSize);
         } else {
             RigLog.i("Sending packet: " + mPacketNumber + "/" + mTotalPackets);
-//            packet = new byte[BytesInOnePacket];
-//            System.arraycopy(mImage, (mPacketNumber - 1) * BytesInOnePacket, packet, 0, BytesInOnePacket);
         }
         
         packet = new byte[packetSize];
@@ -358,8 +342,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
     private void activateFirmware() {
         RigLog.d("__RigFirmwareUpdateManager.activateFirmware__");
-        byte [] cmd = { (byte)DfuOpCodeEnum.DfuOpCode_ActivateFirmwareImage.ordinal() };
-        if(mState == FirmwareManagerStateEnum.State_ActivatingStmUpdaterImage) {
+        byte[] cmd = {(byte) DfuOpCodeEnum.DfuOpCode_ActivateFirmwareImage.ordinal()};
+        if (mState == FirmwareManagerStateEnum.State_ActivatingStmUpdaterImage) {
             mDidActivateFirmware = true;
         }
 
@@ -368,21 +352,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.setShouldReconnectState(false);
         mFirmwareUpdateService.setShouldAlwaysReconnectState(false);
         mFirmwareUpdateService.completeUpdate();
-        
+
         mFirmwareUpdateService.writeDataToControlPoint(cmd);
         mObserver.updateStatus("Activating device software", 0);
     }
-
-//    private void scheduleReconnect() {
-//        RigLog.d("__RigFirmwareUpdateManager.scheduleReconnect__");
-//        Handler mHandler = new Handler(Looper.getMainLooper());
-//        mHandler.postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                    activateStmUpdateImageTimerFired();
-//                }
-//        }, 4000);
-//    }
     
     @Override
     public void didConnectPeripheral() {
@@ -451,14 +424,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void didDisconnectPeripheral() {
         RigLog.d("__RigFirmwareUpdateManager.didDisconnectDevice__");
-
-//        if(mState == FirmwareManagerStateEnum.State_TransferringStmUpdateImage) {
-//            mState = FirmwareManagerStateEnum.State_DiscoverFirmwareServiceCharacteristics;
-//            resetFlags();
-//        } else if(mState == FirmwareManagerStateEnum.State_TransferringRadioImage) {
-//            mState = FirmwareManagerStateEnum.State_ReconnectAfterStmUpdate;
-//            resetFlags();
-//        }
     }
 
     @Override
