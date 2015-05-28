@@ -10,20 +10,31 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 /**
- * Created by stutzenbergere on 11/16/14.
+ *  RigBluetoothGattCallback.java
+ *
+ *  @copyright (c) Rigado, LLC. All rights reserved.
+ *
+ *  Source code licensed under BMD-200 Software License Agreement.
+ *  You should have received a copy with purchase of BMD-200 product.
+ *  If not, contact info@rigado.com for for a copy.
+ */
+
+/**
+ * @author Eric Stutzenberger
+ * @version 1.0
+ *
+ * This class is a callback method handler for BluetoothGatt events.
  */
 
 public class RigBluetoothGattCallback extends BluetoothGattCallback {
 
     private IRigCoreListener mRigCoreListener;
     private HashMap<String, BluetoothGatt> mBluetoothGattHashMap;
-//    private HashMap<String, BluetoothGattCallback> mBluetoothGattCallbackHashMap;
 
     public RigBluetoothGattCallback(IRigCoreListener listener, HashMap<String, BluetoothGatt> bluetoothGattHashMap,
                                     HashMap<String, BluetoothGattCallback> bluetoothGattCallbackHashMap) {
         mRigCoreListener = listener;
         mBluetoothGattHashMap = bluetoothGattHashMap;
-//        mBluetoothGattCallbackHashMap = bluetoothGattCallbackHashMap;
     }
 
     @SuppressWarnings("unused")

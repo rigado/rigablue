@@ -25,26 +25,45 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Service for managing connection and data communication with a GATT server hosted on a
+ *  RigService.java
+ *
+ *  @copyright (c) Rigado, LLC. All rights reserved.
+ *
+ *  Source code licensed under BMD-200 Software License Agreement.
+ *  You should have received a copy with purchase of BMD-200 product.
+ *  If not, contact info@rigado.com for for a copy.
+ */
+
+/**
+ * @author Eric Stutzenberger
+ * @version 1.0
+ *
+ * Service class for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
  */
 public class RigService {
-    //private final static String TAG = BluetoothLeService.class.getSimpleName();
-
     private Context mContext;
-//    private static String mPackageName;
     private BluetoothManager mBluetoothManager;
     private BluetoothAdapter mBluetoothAdapter;
     private HashMap<String, BluetoothGatt> mBluetoothGattHashMap;
     private HashMap<String, BluetoothGattCallback> mBluetoothGattCallbackHashMap;
     private IRigCoreListener mRigCoreListener;
 
-    public RigService(String packageName, Context context, IRigCoreListener iRigCoreListener) {
+    /**
+     * Constructs a RigService object.
+     * @param context The application context for this object
+     * @param iRigCoreListener The observer of this object
+     */
+    public RigService(Context context, IRigCoreListener iRigCoreListener) {
         mContext = context;
-//        mPackageName = packageName;
         mRigCoreListener = iRigCoreListener;
     }
 
+    /**
+     * Clears the device cache for the low level bluetooth operations.
+     * @param gatt The Gatt object for which to clear the cache
+     * @return  If the refresh method is found, the cache clear result is returned; false otherwise.
+     */
     private boolean refreshDeviceCache(BluetoothGatt gatt){
         RigLog.d("refreshDeviceCache");
         try {
@@ -70,8 +89,8 @@ public class RigService {
         // For API level 18 and above, get a reference to BluetoothAdapter through
         // BluetoothManager.
 
-        mBluetoothGattHashMap = new HashMap<String, BluetoothGatt>();
-        mBluetoothGattCallbackHashMap = new HashMap<String, BluetoothGattCallback>();
+        mBluetoothGattHashMap = new HashMap<>();
+        mBluetoothGattCallbackHashMap = new HashMap<>();
         if (mBluetoothManager == null) {
             mBluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
             if (mBluetoothManager == null) {
@@ -89,6 +108,11 @@ public class RigService {
         return true;
     }
 
+    /**
+     * Returns the current connection state for the device
+     * @param device The device for which to retrieve the connection state
+     * @return The connection state
+     */
     public int getConnectionStateForDevice(BluetoothDevice device) {
         BluetoothGatt gatt = mBluetoothGattHashMap.get(device.getAddress());
         return gatt.getConnectionState(device);
@@ -191,7 +215,7 @@ public class RigService {
      * asynchronously through the {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
      * callback.
      *
-     * @param characteristic The characteristic to read from.
+     * @param characteristic The characteristic to read
      */
     public synchronized void readCharacteristic(final String address, final BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
@@ -208,6 +232,13 @@ public class RigService {
         mBluetoothGattHashMap.get(address).readCharacteristic(characteristic);
     }
 
+    /**
+     * Request a write on a the {@code BluetoothGattCharacteristic}. The write result is reported
+     * asynchronously through the {@code BluetoothGattCallback#onCharacteristicWrite(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
+     * callback.
+     *
+     * @param characteristic The characteristic to write
+     */
     public synchronized void writeCharacteristic(final String address, final BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
             RigLog.w("BluetoothAdapter not initialized or device already disconnected");
@@ -227,10 +258,10 @@ public class RigService {
     }
 
     /**
-     * Enables or disables notification on a give characteristic.
+     * Enables or disables notification on a the characteristic.
      *
-     * @param characteristic Characteristic to act on.
-     * @param enabled        If true, enable notification.  False otherwise.
+     * @param characteristic Characteristic to act on
+     * @param enabled        If true, enable notification; false otherwise
      */
     public synchronized void setCharacteristicNotification(final String address, final BluetoothGattCharacteristic characteristic, final boolean enabled) {
         if (mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {

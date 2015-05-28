@@ -4,7 +4,22 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 
 /**
- * Created by stutzenbergere on 11/18/14.
+ *  RigReadRequest.java
+ *
+ *  @copyright (c) Rigado, LLC. All rights reserved.
+ *
+ *  Source code licensed under BMD-200 Software License Agreement.
+ *  You should have received a copy with purchase of BMD-200 product.
+ *  If not, contact info@rigado.com for for a copy.
+ */
+
+/**
+ * @author Eric Stutzenberger
+ * @version 1.0
+ *
+ * This class provides a Data Request implementation for request a read of a characteristics value.
+ * It is used by RigCoreBluetooth to manage synchronous data requests to the low level
+ * Bluetooth APIs.
  */
 public class RigReadRequest implements IRigDataRequest {
 

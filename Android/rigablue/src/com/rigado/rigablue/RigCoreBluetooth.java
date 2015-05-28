@@ -17,26 +17,34 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Created by Ilya_Bogdan on 7/8/2013.
+ *  RigCoreBluetooth.java
+ *
+ *  @copyright (c) Rigado, LLC. All rights reserved.
+ *
+ *  Source code licensed under BMD-200 Software License Agreement.
+ *  You should have received a copy with purchase of BMD-200 product.
+ *  If not, contact info@rigado.com for for a copy.
+ */
+
+/**
+ * @author Eric Stutzenberger
+ * @version 1.0
+ *
+ * This class manages interactions with the BluetoothGatt objects representing device connections.
  */
 public class RigCoreBluetooth implements IRigCoreListener {
 
     private static final String RigCoreBluetoothLibraryVersion = "Rigablue Library v1";
 
     private BluetoothAdapter mBluetoothAdapter;
-    //private Handler mHandler;
     private Context mContext;
     private RigService mBluetoothLeService;
     private IRigCoreBluetoothConnectionObserver mConnectionObserver;
     private IRigCoreBluetoothDiscoveryObserver mDiscoveryObserver;
     private volatile boolean mIsDataOpInProgress;
-    //private volatile boolean mIsDiscoverGood;
-    //private volatile boolean mIsConnectGood;
     private volatile boolean mIsDiscovering;
-    //private volatile boolean mDiscoveryDidTimeout;
     private UUID[] mUUIDList;
-    //private final Semaphore mLock = new Semaphore(1, true);
-    private Queue<IRigDataRequest> mOpsQueue = new ConcurrentLinkedQueue<IRigDataRequest>();
+    private Queue<IRigDataRequest> mOpsQueue = new ConcurrentLinkedQueue<>();
     private BluetoothDevice mConnectingDevice;
 
     private static RigCoreBluetooth instance = null;
@@ -50,13 +58,10 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
     RigCoreBluetooth() {
         mContext = null;
-        //mIsDiscoverGood = false;
-        //mIsConnectGood = false;
         mIsDiscovering = false;
         mIsDataOpInProgress = false;
         mDiscoveryObserver = null;
         mConnectionObserver = null;
-        //mHandler = new Handler();
     }
 
     public static RigCoreBluetooth getInstance()
@@ -110,10 +115,10 @@ public class RigCoreBluetooth implements IRigCoreListener {
         this.mContext = context;
     }
 
-    public void init(String packageName) {
+    public void init() {
         RigLog.d("__RigCoreBluetooth.init__");
 
-        mBluetoothLeService = new RigService(packageName, mContext, this);
+        mBluetoothLeService = new RigService(mContext, this);
         mBluetoothLeService.initialize();
         mContext.registerReceiver(mBluetoothStateReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
         final BluetoothManager bluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
@@ -145,8 +150,6 @@ public class RigCoreBluetooth implements IRigCoreListener {
             RigLog.e("Discovery started while already running!");
             return;
         }
-        //mDiscoveryDidTimeout = false;
-        //mIsDiscoverGood = false;
 
         // Stops scanning after a pre-defined scan period.
         if (timeout > 0) {
@@ -177,17 +180,6 @@ public class RigCoreBluetooth implements IRigCoreListener {
         if (mBluetoothAdapter != null) {
             mBluetoothAdapter.stopLeScan(mLeScanCallback);
         }
-        /*new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                mIsDiscovering = false;
-
-                if (mDiscoveryDidTimeout) {
-                        mDiscoveryObserver.discoveryFinishedByTimeout();
-                }
-            }
-        }).start();*/
     }
 
     void connectPeripheral(final BluetoothDevice device, long timeout) {
@@ -274,8 +266,6 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
         @Override
         public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-            //RigLog.d("RigCoreBluetooth.onLeScan");
-            //mIsDiscoverGood = true;
             boolean found = false;
             List<UUID> uuidScanList = parseUUIDs(scanRecord);
             if (mUUIDList != null) {
@@ -297,28 +287,14 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
             if (found) {
                 mDiscoveryObserver.didDiscoverDevice(device, rssi, scanRecord);
-
-                //TODO: Update to print out UUIDs from scan list rather than the device as the full list has not yet been discovered
-                /*StringBuilder stringBuilder = new StringBuilder();
-                
-                if (device.getUuids() != null) {
-                    RigLog.i("UUID count = " + device.getUuids().length);
-                    for (ParcelUuid uuid : device.getUuids()) {
-                        RigLog.i("UUID = " + uuid.toString());
-                        RigLog.i("UUID(1) = " + uuid.getUuid().getMostSignificantBits() + ", " + uuid.getUuid().getLeastSignificantBits());
-                        stringBuilder.append(uuid.toString()).append(". ");
-                    }
-                } else {
-                    RigLog.i("No UUIDS");
-                }*/
-                RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());// + ". UUID: " + stringBuilder.toString());
+                RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());
 
             }
         }
     };
 
     private List<UUID> parseUUIDs(final byte[] advertisedData) {
-        List<UUID> uuids = new ArrayList<UUID>();
+        List<UUID> uuids = new ArrayList<>();
 
         int offset = 0;
         while (offset < (advertisedData.length - 2)) {
@@ -453,14 +429,13 @@ public class RigCoreBluetooth implements IRigCoreListener {
         RigLog.d("__RigCoreBluetooth.onActionGattFail__");
         RigLog.e("Fail: " + bluetoothDevice.getAddress());
         disconnectPeripheral(bluetoothDevice);
-        //mConnectionObserver.didFailToConnectDevice(bluetoothDevice);
+        mConnectionObserver.didFailToConnectDevice(bluetoothDevice);
     }
 
     @Override
     public void onActionGattServicesDiscovered(BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattServicesDiscovered__");
         RigLog.d("Discovered: " + bluetoothDevice.getAddress());
-        //mIsConnectGood = true;
         mConnectionObserver.didConnectDevice(bluetoothDevice);
     }
 
@@ -500,7 +475,6 @@ public class RigCoreBluetooth implements IRigCoreListener {
     public void onActionGattDescriptorWrite(BluetoothGattDescriptor descriptor, BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattDescriptorWrite__");
         mIsDataOpInProgress = false;
-        /* This should be called when the notification state changes */
         RigLeBaseDevice baseDevice = getRigLeBaseDeviceForBluetoothDevice(bluetoothDevice);
         if (baseDevice != null) {
             baseDevice.didUpdateNotificationState(bluetoothDevice, descriptor.getCharacteristic());

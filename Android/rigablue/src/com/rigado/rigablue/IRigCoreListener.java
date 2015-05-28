@@ -5,17 +5,30 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 
 /**
- * Created by Ilya_Bogdan on 9/2/2014.
+ *  IRigCoreListener.java
+ *
+ *  @copyright (c) Rigado, LLC. All rights reserved.
+ *
+ *  Source code licensed under BMD-200 Software License Agreement.
+ *  You should have received a copy with purchase of BMD-200 product.
+ *  If not, contact info@rigado.com for for a copy.
+ */
+
+/**
+ * @author Eric Stutzenberger
+ * @version 1.0
+ *
+ * This interface listens to events coming directly from the low level Bluetooth interface
+ * on Android.  It should not be directly implemented by applications using Rigablue.
  */
 public interface IRigCoreListener {
-
-    public void onActionGattReadRemoteRssi(BluetoothDevice bluetoothDevice, int rssi);
-    public void onActionGattConnected(BluetoothDevice bluetoothDevice);
-    public void onActionGattDisconnected(BluetoothDevice bluetoothDevice);
-    public void onActionGattFail(BluetoothDevice bluetoothDevice);
-    public void onActionGattServicesDiscovered(BluetoothDevice bluetoothDevice);
-    public void onActionGattDataAvailable(BluetoothGattCharacteristic characteristic, BluetoothDevice bluetoothDevice);
-    public void onActionGattDataNotification(BluetoothGattCharacteristic characteristic, BluetoothDevice bluetoothDevice);
-    public void onActionGattDescriptorWrite(BluetoothGattDescriptor descriptor, BluetoothDevice bluetoothDevice);
-    public void onActionGattCharWrite(BluetoothDevice bluetoothDevice, BluetoothGattCharacteristic characteristic);
+    void onActionGattReadRemoteRssi(BluetoothDevice bluetoothDevice, int rssi);
+    void onActionGattConnected(BluetoothDevice bluetoothDevice);
+    void onActionGattDisconnected(BluetoothDevice bluetoothDevice);
+    void onActionGattFail(BluetoothDevice bluetoothDevice);
+    void onActionGattServicesDiscovered(BluetoothDevice bluetoothDevice);
+    void onActionGattDataAvailable(BluetoothGattCharacteristic characteristic, BluetoothDevice bluetoothDevice);
+    void onActionGattDataNotification(BluetoothGattCharacteristic characteristic, BluetoothDevice bluetoothDevice);
+    void onActionGattDescriptorWrite(BluetoothGattDescriptor descriptor, BluetoothDevice bluetoothDevice);
+    void onActionGattCharWrite(BluetoothDevice bluetoothDevice, BluetoothGattCharacteristic characteristic);
 }

@@ -8,7 +8,22 @@ import android.bluetooth.BluetoothProfile;
 import java.util.UUID;
 
 /**
- * Created by stutzenbergere on 11/17/14.
+ *  RigFirmwareUpdateService.java
+ *
+ *  @copyright (c) Rigado, LLC. All rights reserved.
+ *
+ *  Source code licensed under BMD-200 Software License Agreement.
+ *  You should have received a copy with purchase of BMD-200 product.
+ *  If not, contact info@rigado.com for for a copy.
+ */
+
+/**
+ * @author Eric Stutzenberger
+ * @version 1.0
+ *
+ * This class provides glueing of the Rigado DFU service to the firmware update manager.  It is
+ * responsible for interfacing with the Device being updated and providing feedback to the firmware
+ * update manager object.
  */
 public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver, IRigLeBaseDeviceObserver{
 

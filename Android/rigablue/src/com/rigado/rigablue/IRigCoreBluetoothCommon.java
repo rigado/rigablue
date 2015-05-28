@@ -1,9 +1,32 @@
 package com.rigado.rigablue;
 
 /**
- * Created by Ilya_Bogdan on 9/4/2014.
+ *  IRigCoreBluetoothCommon.java
+ *
+ *  @copyright (c) Rigado, LLC. All rights reserved.
+ *
+ *  Source code licensed under BMD-200 Software License Agreement.
+ *  You should have received a copy with purchase of BMD-200 product.
+ *  If not, contact info@rigado.com for for a copy.
+ */
+
+/**
+ * Interface covering method common to RigCoreBluetooth.
+ *
+ * @author Eric Stutzenberger
+ * @verion 1.0
  */
 public interface IRigCoreBluetoothCommon {
+    /**
+     * This callback method is executed when the power state of the Bluetooth interface changes.
+     *
+     * @param enabled If true, Bluetooth interface is enabled, disabled otherwise
+     */
     public void bluetoothPowerStateChanged(boolean enabled);
+
+    /**
+     * This callback method is executed if Bluetooth Low Energy is not supported on the device
+     * or if the Android manifest is missing the appropriate bluetooth permissions.
+     */
     public void bluetoothDoesNotSupported();
 }
