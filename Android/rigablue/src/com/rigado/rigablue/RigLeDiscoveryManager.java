@@ -17,12 +17,12 @@ import java.util.concurrent.Semaphore;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This class provides a way for apps to discovery available Bluetooth devices and read the
  * advertisement data present in their broadcasts.  This class is a singleton and it is only
  * accessed through the public static class method getInstance().
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public class RigLeDiscoveryManager implements IRigCoreBluetoothDiscoveryObserver {
 

@@ -18,12 +18,12 @@ import java.util.UUID;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This class provides glueing of the Rigado DFU service to the firmware update manager.  It is
  * responsible for interfacing with the Device being updated and providing feedback to the firmware
  * update manager object.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver, IRigLeBaseDeviceObserver{
 

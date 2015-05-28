@@ -13,10 +13,10 @@ import android.bluetooth.BluetoothGattCharacteristic;
  */
 
 /**
+ * This interface provides methods for getting state updates from RigLeBaseDevice objects.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
- *
- * This interface provides methods for getting state updates from RigLeBaseDevice objects.
  */
 public interface IRigLeBaseDeviceObserver {
     /**

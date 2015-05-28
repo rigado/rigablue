@@ -20,10 +20,10 @@ import java.util.HashMap;
  */
 
 /**
+ * This class is a callback method handler for BluetoothGatt events.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
- *
- * This class is a callback method handler for BluetoothGatt events.
  */
 
 public class RigBluetoothGattCallback extends BluetoothGattCallback {

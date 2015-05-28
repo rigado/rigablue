@@ -11,11 +11,11 @@ package com.rigado.rigablue;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This interface provides methods for dealing with state changes of the Bluetooth device
  * during firmware updates.  It should not be implemented by applications using Rigablue.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public interface IRigFirmwareUpdateServiceObserver {
     /**

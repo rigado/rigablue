@@ -27,10 +27,10 @@ import java.util.concurrent.TimeUnit;
  */
 
 /**
+ * This class manages interactions with the BluetoothGatt objects representing device connections.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
- *
- * This class manages interactions with the BluetoothGatt objects representing device connections.
  */
 public class RigCoreBluetooth implements IRigCoreListener {
 

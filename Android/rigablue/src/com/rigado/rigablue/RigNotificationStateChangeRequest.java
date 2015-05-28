@@ -14,12 +14,12 @@ import android.bluetooth.BluetoothGattCharacteristic;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This class provides a Data Request implementation for request changes in notification
  * state for a characteristic.  It is used by RigCoreBluetooth to manage synchronous data requests
  * to the low level Bluetooth APIs.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public class RigNotificationStateChangeRequest implements IRigDataRequest {
 

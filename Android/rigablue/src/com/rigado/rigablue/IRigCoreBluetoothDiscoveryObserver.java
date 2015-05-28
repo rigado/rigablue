@@ -13,11 +13,12 @@ import android.bluetooth.BluetoothDevice;
  */
 
 /**
+ * This interface provides methods for device discovery operations performed by the low
+ * level Bluetooth stack.  It should not be implemented by applications using Rigablue.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
  *
- * This interface provides methods for device discovery operations performed by the low
- * level Bluetooth stack.  It should not be implemented by applications using Rigablue.
  */
 public interface IRigCoreBluetoothDiscoveryObserver extends IRigCoreBluetoothCommon {
     /**

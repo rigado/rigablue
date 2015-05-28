@@ -11,10 +11,10 @@ package com.rigado.rigablue;
  */
 
 /**
+ * This interface provides methods for updating the UI status during a firmware update.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
- *
- * This interface provides methods for updating the UI status during a firmware update.
  */
 public interface IRigFirmwareUpdateManagerObserver {
 

@@ -13,10 +13,10 @@ import android.bluetooth.BluetoothDevice;
  */
 
 /**
+ * This class provides data storage for available Bluetooth devices.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
- *
- * This class provides data storage for available Bluetooth devices.
  */
 public class RigAvailableDeviceData {
 

@@ -20,11 +20,11 @@ import java.util.UUID;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This class provides and object representation of a Bluetooth device with all of its available
  * services and characteristics.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
 

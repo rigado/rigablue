@@ -15,11 +15,12 @@ import android.bluetooth.BluetoothGattDescriptor;
  */
 
 /**
+ * This interface listens to events coming directly from the low level Bluetooth interface
+ * on Android.  It should not be directly implemented by applications using Rigablue.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
  *
- * This interface listens to events coming directly from the low level Bluetooth interface
- * on Android.  It should not be directly implemented by applications using Rigablue.
  */
 public interface IRigCoreListener {
     void onActionGattReadRemoteRssi(BluetoothDevice bluetoothDevice, int rssi);

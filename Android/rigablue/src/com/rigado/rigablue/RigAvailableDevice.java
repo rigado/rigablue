@@ -13,11 +13,11 @@ import android.bluetooth.BluetoothDevice;
  */
 
 /**
+ * This class provides information about advertising Bluetooth devices which match the
+ * discovery request parameters provided to the RigLeDiscoveryManager.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
- *
- * This class provides information about advertising Bluetooth devices which match the
- * discovery request parameters provided to the RigLeDiscoveryManager
  */
 public class RigAvailableDevice {
 

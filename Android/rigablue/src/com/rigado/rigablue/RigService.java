@@ -35,11 +35,11 @@ import java.util.List;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * Service class for managing connection and data communication with a GATT server hosted on a
  * given Bluetooth LE device.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public class RigService {
     private Context mContext;

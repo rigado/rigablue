@@ -14,7 +14,7 @@ package com.rigado.rigablue;
  * Interface covering method common to RigCoreBluetooth.
  *
  * @author Eric Stutzenberger
- * @verion 1.0
+ * @version 1.0
  */
 public interface IRigCoreBluetoothCommon {
     /**

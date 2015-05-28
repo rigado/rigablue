@@ -13,10 +13,10 @@ import android.util.Log;
  */
 
 /**
+ * This class provides logging functionality for Rigablue.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
- *
- * This class provides logging functionality for Rigablue.
  */
 public class RigLog {
 

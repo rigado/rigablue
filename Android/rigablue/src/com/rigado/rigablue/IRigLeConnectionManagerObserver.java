@@ -13,10 +13,10 @@ import android.bluetooth.BluetoothDevice;
  */
 
 /**
+ * This interface provides methods for handling device connection events.
+ *
  * @author Eric Stutzenberger
  * @version 1.0
- *
- * This inteface provides methods for handling device connection events.
  */
 public interface IRigLeConnectionManagerObserver {
     /**

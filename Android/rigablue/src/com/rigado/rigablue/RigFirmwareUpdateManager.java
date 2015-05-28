@@ -23,11 +23,11 @@ import java.util.UUID;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This class managers the entire firmware update process based on the provided input images and
  * bootloader reset command.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 
 enum DfuOpCodeEnum {

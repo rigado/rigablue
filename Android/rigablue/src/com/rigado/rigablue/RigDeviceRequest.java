@@ -11,12 +11,12 @@ package com.rigado.rigablue;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This class provides a wrapper for data pertaining to device requests.  Objects of this class
  * contain search paramaters that are then supplied to the RigLeDiscoveryManager.
+ *
  * @see RigLeDiscoveryManager
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public class RigDeviceRequest {
 

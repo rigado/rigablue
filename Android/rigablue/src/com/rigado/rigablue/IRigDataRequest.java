@@ -11,11 +11,11 @@ package com.rigado.rigablue;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This interface provides a function for post operation requests to the low level Bluetooth
  * functions.  It should not be directly implemented by applications using Rigablue.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public interface IRigDataRequest {
     /**

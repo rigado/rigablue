@@ -13,12 +13,13 @@ import android.bluetooth.BluetoothGattCharacteristic;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This interface provides callback methods for the low level bluetooth manager regarding
  * device characteristic state transitions.  It should not be implemented directly by
  * applications using this library.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
+ *
  */
 public interface IRigCoreBluetoothDeviceObserver {
     /**

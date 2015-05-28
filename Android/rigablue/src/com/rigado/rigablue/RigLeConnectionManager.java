@@ -16,12 +16,12 @@ import java.util.concurrent.Semaphore;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This class provides methods for managing connections to available Bluetooth devices.  This
  * class is a singleton and it is only accessed through the public static class method
  * getInstance().
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public class RigLeConnectionManager implements IRigCoreBluetoothConnectionObserver {
 

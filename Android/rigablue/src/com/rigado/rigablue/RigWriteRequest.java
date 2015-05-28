@@ -14,12 +14,12 @@ import android.bluetooth.BluetoothGattCharacteristic;
  */
 
 /**
- * @author Eric Stutzenberger
- * @version 1.0
- *
  * This class provides a Data Request implementation for writing data to the value of a
  * characteristic.  It is used by RigCoreBluetooth to manage synchronous data requests
  * to the low level Bluetooth APIs.
+ *
+ * @author Eric Stutzenberger
+ * @version 1.0
  */
 public class RigWriteRequest implements IRigDataRequest {
 
