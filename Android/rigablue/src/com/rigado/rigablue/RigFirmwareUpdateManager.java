@@ -23,13 +23,13 @@ import java.util.UUID;
  */
 
 /**
- * This class managers the entire firmware update process based on the provided input images and
- * bootloader reset command.
- *
  * @author Eric Stutzenberger
  * @version 1.0
  */
 
+/**
+ * Enum for command codes sent to and received from the bootloader.
+ */
 enum DfuOpCodeEnum {
     DfuOpCode_Reserved_0,
     DfuOpCode_Start,
@@ -44,6 +44,9 @@ enum DfuOpCodeEnum {
     DfuOpCode_EraseSizeRequest
 }
 
+/**
+ * Enum for tracking the current state of the firmware update.
+ */
 enum FirmwareManagerStateEnum {
     State_Init,
     State_UserUnpluggedDeviceAwaitingReconnect,
@@ -60,6 +63,10 @@ enum FirmwareManagerStateEnum {
     State_FinishedRadioImageTransfer
 }
 
+/**
+ * This class manages the entire firmware update process based on the provided input images and
+ * bootloader reset command.
+ */
 public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver, IRigLeConnectionManagerObserver,
                                                 IRigFirmwareUpdateServiceObserver {
     private static final int PacketReceivedNotificationRequest = 8;
@@ -79,38 +86,135 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     private RigFirmwareUpdateService mFirmwareUpdateService;
     private FirmwareManagerStateEnum mState;
 
+    /**
+     * Array to hold the firmware image being sent to the bootloader
+     */
     byte [] mImage;
+
+    /**
+     * The size of the firmware image.
+     */
     int mImageSize;
 
+    /**
+     * State variable which is set to true once the firmware size has been successfully transmitted
+     * to the bootloader.
+     */
     boolean mIsFileSizeWritten;
+
+    /**
+     * State variable which is set to true once the init packet has been sent to the bootloader.
+     */
     boolean mIsInitPacketSent;
+
+    /**
+     * State variable which is set to true once packet notifications have been enabled.  Note:
+     * Packet Notifications are a specific response that is sent AS a notification from the
+     * bootloader.  After a configurable number of data packets have been sent to the bootloader,
+     * the bootloader will send a packet notification containing the total number of bytes sent
+     * so far.  This allows the appliation to determine if all of the data sent thus far has been
+     * received by the bootloader.
+     */
     boolean mIsPacketNotificationEnabled;
+
+    /**
+     * State variable set to true once the firmware image is being sent to the bootloader.
+     */
     boolean mIsReceivingFirmwareImage;
+
+    /**
+     * State variable set to true when the update manager is about to send the last firmware image
+     * packet.
+     */
     boolean mIsLastPacket;
+
+
     boolean mShouldStopSendingPackets;
+    /**
+     * This state is no longer used and will eventually be removed.
+     */
     boolean mShouldWaitForErasedSize;
-    boolean mDidDisconnectToErase;
+
+    /**
+     * State variable set to true when the activate firmware command has been successfully sent.
+     */
     boolean mDidActivateFirmware;
+
+    /**
+     * This state is no longer used and will eventually be removed.
+     */
     boolean mDidForceEraseAfterStmUpdateImageRan;
 
+    /**
+     * The total number of firmware packets to be sent.
+     */
     int mTotalPackets;
+
+    /**
+     * The current packet number.
+     */
     int mPacketNumber;
+
+    /**
+     * The total bytes sent so far.
+     */
     int mTotalBytesSent;
+
+    /**
+     * This variable is no longer used and will be removed.
+     */
     int mTotalBytesErased;
+
+    /**
+     * The size of the last packet that will be sent.
+     */
     int mLastPacketSize;
 
+    /**
+     * The observer object for this class.
+     */
     private IRigFirmwareUpdateManagerObserver mObserver;
 
+    /**
+     * #RigFirmwareUpdateManager needs to take over the roll of the connection observer since
+     * invoking the bootloader and performing firmware updates requires a disconnect and
+     * reconnection to the device being updated.  Once the firmware update is completed (or if it
+     * fails), the previous connection observer will be restored.
+     */
     IRigLeConnectionManagerObserver mOldConnectionObserver;
+
+    /**
+     * The device being updated.
+     */
     RigLeBaseDevice mUpdateDevice;
+
+    /**
+     * The address of the device when not in bootloader mode.
+     */
     String mInitialDeviceAddress;
 
+    /**
+     * Creates a new firmware update manager.
+     */
     public RigFirmwareUpdateManager() {
     	initStateVariables();
     }
 
-    public boolean updateFirmware(RigLeBaseDevice device, InputStream firmwareImage, BluetoothGattCharacteristic activateCharacteristic,
-    		byte[] activateCommand) {
+    /**
+     * Performs a firmware update.
+     *
+     * @param device The device to update
+     * @param firmwareImage The firmware image to send to the device
+     * @param activateCharacteristic The #BluetoothGattCharacteristic to which the
+     *                               <code>activate command</code> is sent in order to cause the
+     *                               bootloader to start
+     * @param activateCommand The bootloader activation command to write to the
+     *                        activateCharacteristic
+     * @return Returns true if the firmware update started successfully, false otherwise
+     */
+    public boolean updateFirmware(RigLeBaseDevice device, InputStream firmwareImage,
+                                  BluetoothGattCharacteristic activateCharacteristic,
+                                  byte[] activateCommand) {
         RigLog.i("__RigFirmwareUpdateManager.updateFirmware__");
         mUpdateDevice = device;
         try {
@@ -146,12 +250,16 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                 mFirmwareUpdateService.connectDevice();
             }
         } else {
-            return sendEnterBootloaderCommand(activateCharacteristic, activateCommand);
+            sendEnterBootloaderCommand(activateCharacteristic, activateCommand);
+            return true;
         }
 
         return true;
     }
-    
+
+    /**
+     * Initializes the state of the firmware update manager object.
+     */
     private void initStateVariables() {
     	mIsFileSizeWritten = false;
     	mIsInitPacketSent = false;
@@ -167,11 +275,21 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	mImage = null;
     }
 
+    /**
+     * Sets the observer for this instance
+     * @param observer The observer to set
+     */
     public void setObserver(IRigFirmwareUpdateManagerObserver observer) {
         mObserver = observer;
     }
 
-    private boolean sendEnterBootloaderCommand(BluetoothGattCharacteristic characteristic, byte [] command) {
+    /**
+     * Sends the command to put the device in to bootloader mode.
+     *
+     * @param characteristic The characteristic which accepts the bootloader activate command
+     * @param command The command which causes the device to enter the bootloader
+     */
+    private void sendEnterBootloaderCommand(BluetoothGattCharacteristic characteristic, byte [] command) {
         RigLog.d("__RigFirmwareUpdateManager.sendEnterBootloaderCommand__");
 
         RigLeDiscoveryManager dm = RigLeDiscoveryManager.getInstance();
@@ -197,10 +315,12 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
         RigLog.d("Send enter bootloader command");
         mUpdateDevice.writeCharacteristic(characteristic, command);
-
-        return true;
     }
-    
+
+    /**
+     * This method cleans up the state of the firmware update manager in case of a failed
+     * firmware update.
+     */
     private void cleanUpAfterFailure() {
     	RigLeConnectionManager.getInstance().setObserver(mOldConnectionObserver);
     	
@@ -213,7 +333,13 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	
     	initStateVariables();
     }
-    
+
+    /**
+     * Determines the size of the firmware update image.  For the secure bootloader, the true
+     * image size is encoded within the image data and is not simply the size of the array.
+     *
+     * @return The size of the update in bytes
+     */
     private int getImageSize() {
     	int size = mImageSize;
     	if(mFirmwareUpdateService.isSecureDfu()) {
@@ -222,6 +348,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	return size;
     }
 
+    /**
+     * Resets all state flags
+     */
     private void resetFlags() {
         RigLog.d("__RigFirmwareUpdateManager.resetFlags()__");
         mIsFileSizeWritten = false;
@@ -231,12 +360,18 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mTotalBytesSent = 0;
         mIsLastPacket = false;
     }
-    
+
+    /**
+     * Triggers a service discovery
+     */
     private void updateDeviceAndTriggerDiscovery() {
     	mFirmwareUpdateService.setShouldReconnectState(true);
     	mFirmwareUpdateService.triggerServiceDiscovery();
     }
 
+    /**
+     * Sends the size of the firmware image to the bootloader
+     */
     private void writeFileSize() {
         RigLog.d("__RigFirmwareUpdateManager.writeFileSize__");
 
@@ -261,6 +396,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
     }
 
+    /**
+     * Helper function to enable packet notifications
+     */
     private void enablePacketNotification() {
         RigLog.d("__enablePacketNotification__");
         byte [] data = { PacketReceivedNotificationRequest, NumberOfPackets, 0 };
@@ -268,7 +406,12 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.writeDataToControlPoint(data);
         mObserver.updateStatus("Enabling packet notifications", 0);
     }
-    
+
+    /**
+     * Sends the init packet to the secure bootloader.  The init packet contains information
+     * regarding the encryption of the firmware image and which application binaires are being
+     * sent.  Typically, only the application binary is sent.
+     */
     private void sendInitPacket() {
     	RigLog.d("__sendInitPacket__");
     	byte [] initPacketOne = new byte[ImageInitPacketSize/2];
@@ -287,6 +430,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	mFirmwareUpdateService.writeDataToPacketCharacteristic(initPacketTwo);
     }
 
+    /**
+     * Commands the bootloader to prepare for receiving the firmware image.
+     */
     private void receiveFirmwareImage() {
         RigLog.d("__receiveFirmwareImage__");
         byte [] data = { (byte)DfuOpCodeEnum.DfuOpCode_ReceiveFirmwareImage.ordinal() };
@@ -294,6 +440,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.writeDataToControlPoint(data);
     }
 
+    /**
+     * Starts the transfer of the firmware image data.
+     */
     private void startUploadingFile() {
         RigLog.d("__startUploadingFile__");
         int size = getImageSize();
@@ -301,13 +450,16 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         if((size % BytesInOnePacket) != 0) {
             mTotalPackets++;
         }
-        
+
         determineLastPacketSize();
 
         mObserver.updateStatus("Transferring New Device Software", 0);
         sendPacket();
     }
-    
+
+    /**
+     * Helper function to determine the size of the last packet that will be sent.
+     */
     private void determineLastPacketSize() {
     	int imageSizeLocal = getImageSize();
     	if((imageSizeLocal % BytesInOnePacket) == 0) {
@@ -318,6 +470,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	RigLog.d("Last packet size: " + mLastPacketSize);
     }
 
+    /**
+     * Sends the next firmware image packet.
+     */
     private void sendPacket() {
         RigLog.d("__RigFirmwareUpdateManager.sendPacket__");
 
@@ -341,11 +496,15 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         } else {
         	index = (mPacketNumber - 1) * BytesInOnePacket;
         }
-        
+
         System.arraycopy(mImage, index, packet, 0, packetSize);
         mFirmwareUpdateService.writeDataToPacketCharacteristic(packet);
     }
 
+    /**
+     * Instructs the bootloader to validate the firmware image that was sent.  This is called
+     * after the last packet has been received by the bootloader.
+     */
     private void validateFirmware() {
         RigLog.d("__RigFirmwareUpdateManager.validateFirmware__");
         byte [] cmd = { (byte)DfuOpCodeEnum.DfuOpCode_ValidateFirmwareImage.ordinal() };
@@ -354,6 +513,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mObserver.updateStatus("Validating updated device software", 0);
     }
 
+    /**
+     * Instructs the bootloader to active the new firmware image (i.e. run it) and then completes
+     * the update by reassigning the connection observer.
+     */
     private void activateFirmware() {
         RigLog.d("__RigFirmwareUpdateManager.activateFirmware__");
         byte[] cmd = {(byte) DfuOpCodeEnum.DfuOpCode_ActivateFirmwareImage.ordinal()};
@@ -370,12 +533,18 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.writeDataToControlPoint(cmd);
         mObserver.updateStatus("Activating device software", 0);
     }
-    
+
+    /**
+     * Called when the bootloader peripheral is connected.
+     */
     @Override
     public void didConnectPeripheral() {
     	mFirmwareUpdateService.triggerServiceDiscovery();
     }
-    
+
+    /**
+     * Called when the dfu service and characteristics have been discovered.
+     */
 	@Override
     public void didDiscoverCharacteristicsForDFUService() {
         RigLog.d("__RigFirmwareUpdateManager.didDiscoverCharacteristicsForDFUService__");
@@ -393,6 +562,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.enableControlPointNotifications();
     }
 
+    /**
+     * Called when notifications for the control point have been successfully enabled.
+     */
     @Override
     public void didEnableControlPointNotifications() {
         RigLog.d("__RigFirmwareUpdateManager.didEnableControlPointNotifications__");
@@ -405,6 +577,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mObserver.updateStatus("Initializing Device Firmware Update", 0);
     }
 
+    /**
+     * Called anytime a characteristic has been successfully written.
+     */
     @Override
     public void didWriteValueForControlPoint() {
         RigLog.d("__RigFirmwareUpdateManager.didWriteValueForControlPoint__");
@@ -435,11 +610,20 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
     }
 
+    /**
+     * Called when the bootloader peripheral disconnects.  If the firmware update was successful,
+     * then the connection observer will be reassigned and this method will not be invoked.
+     */
     @Override
     public void didDisconnectPeripheral() {
         RigLog.d("__RigFirmwareUpdateManager.didDisconnectDevice__");
     }
 
+    /**
+     * Called when a notification is received on the control point.
+     *
+     * @param value The updated control point value
+     */
     @Override
     public void didUpdateValueForControlPoint(byte [] value) {
         RigLog.d("__RigFirmwareUpdateManager.didUpdateValueForControlPoint__");
@@ -535,6 +719,12 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     /* IRigLeDiscoveryManagerObserver methods */
+
+    /**
+     * Called when the bootloader device has been discovered.
+     *
+     * @param device The available device information for the discovered device
+     */
     @Override
     public void didDiscoverDevice(RigAvailableDeviceData device) {
         RigLog.d("__RigFirmwareUpdateManager.didDiscoverDevice__");
@@ -544,23 +734,39 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         RigLeConnectionManager.getInstance().connectDevice(device, 10000);
     }
 
+    /**
+     * Called if discovery times out before the bootloader device is found.
+     */
     @Override
     public void discoveryDidTimeout() {
         RigLog.d("__RigFirmwareUpdateManager.discoveryDidTimetout__");
         RigLog.e("Did not find DFU device!!");
     }
 
+    /**
+     * Called if bluetooth becomes disabled during a firmware update.
+     * @param enabled The enabled or disabled state of Bluetooth on the Android device.
+     */
     @Override
     public void bluetoothPowerStateChanged(boolean enabled) {
         RigLog.w("__RigFirmwareUpdateManager.bluetoothPowerStateChanged__");
     }
 
+    /**
+     * Call if bluetooth is not supported on this device.
+     */
     @Override
     public void bluetoothDoesNotSupported() {
         RigLog.e("__RigFirmwareUpdateManager.bluetoothLeNotSupported__");
     }
 
     /* IRigLeConnectionManagerObserver methods */
+
+    /**
+     * Called after a successful connection has been made to the bootloader device.
+     *
+     * @param device The newly connected device
+     */
     @Override
     public void didConnectDevice(RigLeBaseDevice device) {
         RigLog.d("__RigFirmwareUpdateManager.didConnectDevice__");
@@ -573,6 +779,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.triggerServiceDiscovery();
     }
 
+    /**
+     * Called if the bootloader device disconnects
+     *
+     * @param btDevice The disconnected Bluetooth Device object
+     */
     @Override
     public void didDisconnectDevice(BluetoothDevice btDevice) {
         if(btDevice.getAddress().equals(mInitialDeviceAddress)) {
@@ -581,11 +792,22 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
     }
 
+    /**
+     * Called if the connection to the bootloader device fails.
+     *
+     * @param device The available device data for the failed connection request
+     */
     @Override
     public void deviceConnectionDidFail(RigAvailableDeviceData device) {
         RigLog.e("RigFirmwareUpdateManager.deviceConnectionDidFail:Connection failed!");
     }
 
+    /**
+     * Called if the connection request to the bootloader device times out before a
+     * successful connection is achieved.
+     *
+     * @param device The available device data for the connection request
+     */
     @Override
     public void deviceConnectionDidTimeout(RigAvailableDeviceData device) {
         RigLog.e("RigFirmwareUpdateManager.deviceConnectionDidTimeout:Connection failed!");
