@@ -140,7 +140,9 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
             device.advertisementData = advData;
             device.rssi = rssi;
             device.discoverTime = availableDevice.discoverTime;
-            [delegate didUpdateDeviceData:device deviceIndex:[discoveredDevices indexOfObject:device]];
+            if ([(id)delegate respondsToSelector:@selector(didUpdateDeviceData:deviceIndex:)]) {
+                [delegate didUpdateDeviceData:device deviceIndex:[discoveredDevices indexOfObject:device]];
+            }
             break;
         }
     }
