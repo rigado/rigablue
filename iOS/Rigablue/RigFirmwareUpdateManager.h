@@ -71,6 +71,7 @@
  *  already in the bootloader, this characteristic parameter may be nil.
  *
  *  @param device            The device for which to perform the firmware update
+ *  @param isPatch			 Set to true if the image is a patch image, otherwise set false
  *  @param firmwareImage     The firmware image to send to the device
  *  @param firmwareImageSize The size of the firmware image
  *  @param characteristic    The command characteristic
@@ -79,7 +80,7 @@
  *
  *  @return YES if successful, NO otherwise
  */
-- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device Image:(NSData*)firmwareImage ImageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
+- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device isPatch:(BOOL)isPatch image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
        activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen;
 
 @end
