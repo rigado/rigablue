@@ -13,6 +13,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "RigLeBaseDevice.h"
 #import "RigDfuError.h"
+#import "RigFirmwareUpdateRequest.h"
 
 @protocol RigFirmwareUpdateManagerDelegate <NSObject>
 /**
@@ -83,4 +84,5 @@
 - (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device isPatch:(BOOL)isPatch image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
        activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen;
 
+- (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest*)request;
 @end

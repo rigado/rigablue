@@ -24,6 +24,8 @@
 		20E3824519019765006BF49D /* RigAvailableDeviceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E3824419019765006BF49D /* RigAvailableDeviceData.m */; };
 		20E382481901A416006BF49D /* RigLeConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E382471901A416006BF49D /* RigLeConnectionManager.m */; };
 		20E3824B1901A5D6006BF49D /* RigCoreBluetoothInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E3824A1901A5D6006BF49D /* RigCoreBluetoothInterface.m */; };
+		5E2D19421BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E2D19411BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m */; settings = {ASSET_TAGS = (); }; };
+		5E2D19431BAB6BD000B38EDE /* RigFirmwareUpdateRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5E2D19401BAB63DD00B38EDE /* RigFirmwareUpdateRequest.h */; };
 		5E7CFFB3196F055400FF6C95 /* RigFirmwareUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E7CFFAF196F055400FF6C95 /* RigFirmwareUpdateService.m */; };
 		5E7CFFB4196F055400FF6C95 /* RigFirmwareUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E7CFFB1196F055400FF6C95 /* RigFirmwareUpdateManager.m */; };
 		5E8443851A5F05080085BD36 /* Rigablue.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5E8443841A5F03C20085BD36 /* Rigablue.h */; };
@@ -48,6 +50,7 @@
 			dstPath = "include/$(PRODUCT_NAME)";
 			dstSubfolderSpec = 16;
 			files = (
+				5E2D19431BAB6BD000B38EDE /* RigFirmwareUpdateRequest.h in CopyFiles */,
 				5E8443851A5F05080085BD36 /* Rigablue.h in CopyFiles */,
 				5EAE38FF19FFF8E90044340E /* RigFirmwareUpdateManager.h in CopyFiles */,
 				5EAE390019FFF8E90044340E /* RigDfuError.h in CopyFiles */,
@@ -84,6 +87,8 @@
 		20E3824C1901A6F7006BF49D /* RigCoreBluetoothDiscoveryObserver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RigCoreBluetoothDiscoveryObserver.h; sourceTree = "<group>"; };
 		20E3824D1901A7BC006BF49D /* RigCoreBluetoothConnectionObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RigCoreBluetoothConnectionObserver.h; sourceTree = "<group>"; };
 		5E25736A196F0D1F007701D7 /* RigDfuError.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = RigDfuError.h; path = Rigablue/RigDfuError.h; sourceTree = "<group>"; };
+		5E2D19401BAB63DD00B38EDE /* RigFirmwareUpdateRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RigFirmwareUpdateRequest.h; path = Rigablue/RigFirmwareUpdateRequest.h; sourceTree = "<group>"; };
+		5E2D19411BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RigFirmwareUpdateRequest.m; path = Rigablue/RigFirmwareUpdateRequest.m; sourceTree = "<group>"; };
 		5E7CFFAF196F055400FF6C95 /* RigFirmwareUpdateService.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RigFirmwareUpdateService.m; path = Rigablue/RigFirmwareUpdateService.m; sourceTree = "<group>"; };
 		5E7CFFB0196F055400FF6C95 /* RigFirmwareUpdateService.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RigFirmwareUpdateService.h; path = Rigablue/RigFirmwareUpdateService.h; sourceTree = "<group>"; };
 		5E7CFFB1196F055400FF6C95 /* RigFirmwareUpdateManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = RigFirmwareUpdateManager.m; path = Rigablue/RigFirmwareUpdateManager.m; sourceTree = "<group>"; };
@@ -184,6 +189,8 @@
 				5E7CFFB1196F055400FF6C95 /* RigFirmwareUpdateManager.m */,
 				5E7CFFB2196F055400FF6C95 /* RigFirmwareUpdateManager.h */,
 				5E25736A196F0D1F007701D7 /* RigDfuError.h */,
+				5E2D19401BAB63DD00B38EDE /* RigFirmwareUpdateRequest.h */,
+				5E2D19411BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m */,
 			);
 			name = DeviceFirmwareUpdate;
 			sourceTree = "<group>";
@@ -291,6 +298,7 @@
 				20E3824519019765006BF49D /* RigAvailableDeviceData.m in Sources */,
 				5E7CFFB3196F055400FF6C95 /* RigFirmwareUpdateService.m in Sources */,
 				20E3824B1901A5D6006BF49D /* RigCoreBluetoothInterface.m in Sources */,
+				5E2D19421BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m in Sources */,
 				20E382481901A416006BF49D /* RigLeConnectionManager.m in Sources */,
 				202A6E351900F2CB0063D759 /* RigDeviceRequest.m in Sources */,
 			);
