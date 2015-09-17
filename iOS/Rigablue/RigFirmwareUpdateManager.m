@@ -21,9 +21,9 @@
 #define IMAGE_START_PACKET_SIZE                 12
 #define IMAGE_INIT_PACKET_IDX                   IMAGE_START_PACKET_SIZE
 #define IMAGE_INIT_PACKET_SIZE                  32
-#define PATCH_INIT_PACKET_IDX                   IMAGE_START_PACKET_SIZE + IMAGE_INIT_PACKET_IDX
+#define PATCH_INIT_PACKET_IDX                   IMAGE_START_PACKET_SIZE + IMAGE_INIT_PACKET_SIZE
 #define PATCH_INIT_PACKET_SIZE                  12
-#define IMAGE_SECURE_DATA_START                 IMAGE_INIT_PACKET_IDX + IMAGE_INIT_PACKET_SIZE + PATCH_INIT_PACKET_SIZE
+#define IMAGE_SECURE_DATA_START                 IMAGE_INIT_PACKET_IDX + IMAGE_INIT_PACKET_SIZE
 
 /* Operation Codes for controlling the DFU */
 #define DFU_START                               1
@@ -34,8 +34,8 @@
 //#define SYSTEM_RESET                            6  /* Available but not used */
 #define ERASE_AND_RESET                         9
 #define ERASE_SIZE_REQUEST                      10
-#define INITIALIZE_PATCH                        11
-#define RECEIVE_PATCH_IMAGE                     12
+#define INITIALIZE_PATCH                        10
+#define RECEIVE_PATCH_IMAGE                     11
 
 #define RESPONSE                                16
 #define PACKET_RECEIVED_NOTIFICATION_REQUEST    8
@@ -231,6 +231,15 @@ typedef enum FirmwareManagerState_enum
     return size;
 }
 
+- (uint32_t)getImageStart
+{
+    if (isPatchUpdate) {
+        return IMAGE_SECURE_DATA_START + PATCH_INIT_PACKET_SIZE;
+    } else {
+        return IMAGE_SECURE_DATA_START;
+    }
+}
+
 - (void)updateDeviceAndTriggerDiscovery
 {
     RigDfuError_t result = DfuError_None;
@@ -262,7 +271,7 @@ typedef enum FirmwareManagerState_enum
         memcpy(data, image.bytes, sizeof(data));
         //TODO: Check if this is actually necessary
         /* EPS - Noticed that breakpoing here kept update from failing.  Invesitgate further later!! */
-        [NSThread sleepForTimeInterval:1.0f];
+        //[NSThread sleepForTimeInterval:1.0f];
         
         result = [firmwareUpdateService writeDataToPacketCharacteristic:data withLen:sizeof(data) shouldGetResponse:NO];
         if (result != DfuError_None) {
@@ -382,7 +391,7 @@ typedef enum FirmwareManagerState_enum
     NSLog(@"__startUploadingFile__");
     uint32_t size = [self getImageSize];
     totalPackets = (size / BYTES_IN_ONE_PACKET);
-    if (size % BYTES_IN_ONE_PACKET) {
+    if (size % BYTES_IN_ONE_PACKET > 0) {
         totalPackets++;
     }
     
@@ -435,9 +444,9 @@ typedef enum FirmwareManagerState_enum
     }
     
     NSRange range;
-    
+    uint32_t imageStart = [self getImageStart];
     if ([firmwareUpdateService isSecureDfu]) {
-        range = NSMakeRange(IMAGE_SECURE_DATA_START + (packetNumber - 1) * BYTES_IN_ONE_PACKET, packetSize);
+        range = NSMakeRange(imageStart + (packetNumber - 1) * BYTES_IN_ONE_PACKET, packetSize);
     } else {
         range = NSMakeRange((packetNumber - 1) * BYTES_IN_ONE_PACKET, packetSize);
     }
@@ -647,7 +656,7 @@ typedef enum FirmwareManagerState_enum
             }
         }
     } else if(opCode == RECEIVED_OPCODE && request == INITIALIZE_PATCH) {
-        if(data[2] == OPERATION_SUCCESS) {
+        if(value[2] == OPERATION_SUCCESS) {
             NSLog(@"Received Notification for INITIALIZE_PATCH");
             isPatchInitPacketSent = YES;
             //At this point, the patching process and the normal update process diverge.  In the normal case, the packet notifications would be
@@ -696,14 +705,14 @@ typedef enum FirmwareManagerState_enum
             [self cleanUpAfterFailure];
         }
     } else if(opCode == RECEIVED_OPCODE && request == RECEIVE_PATCH_IMAGE) {
-        if(data[2] == PATCH_NEED_MORE_DATA) {
+        if(value[2] == PATCH_NEED_MORE_DATA) {
             [delegate updateProgress:((float)(packetNumber * 20) / (float)[self getImageSize])];
             //TODO: Report progress
             if(!shouldStopSendingPackets) {
                //update delegate
                [self sendPacket];
             }
-        } else if(data[2] == OPERATION_SUCCESS) {
+        } else if(value[2] == OPERATION_SUCCESS) {
             [delegate updateProgress:1.0];
             NSLog(@"All patch data sent successfully");
             [delegate updateStatus:@"Successfully Transferred Software.  Validating..." errorCode:DfuError_None];
