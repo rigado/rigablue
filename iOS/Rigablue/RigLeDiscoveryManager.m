@@ -53,7 +53,9 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 
 - (void)startLeInterface
 {
-    [[RigCoreBluetoothInterface sharedInstance] startUpCentralManager];
+    RigCoreBluetoothInterface *cbi = [RigCoreBluetoothInterface sharedInstance];
+    cbi.discoveryObserver = self;
+    [cbi startUpCentralManager];
 }
 
 
