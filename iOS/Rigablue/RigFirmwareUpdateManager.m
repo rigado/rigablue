@@ -231,7 +231,8 @@ typedef enum FirmwareManagerState_enum
     //If already connected to a DFU, then start the update, otherwise send Bootloader activation command
     state = State_DiscoverFirmwareServiceCharacteristics;
     //TODO: iOS does strange things with the advertised name, it is probably better to check on discovered services to see if they match the DFU
-    if ([device.name isEqualToString:@"RigDfu"]) {
+    CBService *dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString]];
+    if (dfuService != nil) {
         if (device.peripheral.state == CBPeripheralStateConnected) {
             if (!device.isDiscoveryComplete) {
                 result = [firmwareUpdateService triggerServiceDiscovery];

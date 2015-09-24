@@ -31,6 +31,7 @@
  */
 - (id)initWithPeripheral:(CBPeripheral*)peripheral advertisementData:(NSDictionary*)advData rssi:(NSNumber*)rssi discoverTime:(NSDate*)time;
 
+- (BOOL)containsUuid:(CBUUID*)uuid;
 /*!
  *  @name Device Data Properties
  */
@@ -53,8 +54,10 @@
  *  This property provides a time stamp for when a device was discovered.  The intended use is to allow the application to remove devices that are really old.
  */
 @property (nonatomic, strong) NSDate *discoverTime;
+
 /*!
- *  @name Creating Available Device Data objects
+ *  This property provides a time stamp for when the device was last seen in a discovery event.
  */
+@property (nonatomic, strong) NSDate *lastSeenTime;
 
 @end

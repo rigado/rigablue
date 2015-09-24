@@ -15,4 +15,5 @@
 - (void)didDiscoverDevice:(CBPeripheral*)peripheral advertisementData:(NSDictionary*)advData rssi:(NSNumber*)rssi;
 - (void)discoveryTimeout;
 - (void)btPoweredOff;
+- (void)btReady;
 @end

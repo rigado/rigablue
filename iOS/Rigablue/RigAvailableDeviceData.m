@@ -21,8 +21,19 @@
         _advertisementData = advData;
         _rssi = rssi;
         _discoverTime = time;
+        _lastSeenTime = time;
     }
     return self;
 }
 
+- (BOOL)containsUuid:(CBUUID *)uuid
+{
+    NSArray *uuidList = [_advertisementData objectForKeyedSubscript:CBAdvertisementDataServiceUUIDsKey];
+    for (CBUUID *u in uuidList) {
+        if ([u isEqual:uuid]) {
+            return YES;
+        }
+    }
+    return NO;
+}
 @end
