@@ -43,6 +43,11 @@ static NSTimer *connectionTimeoutTimer = nil;
     
 }
 
+- (BOOL)isCentralManagerReady
+{
+    return isCentralManagerReady;
+}
+
 - (NSArray*)getConnectedPeripheralsWithServices:(NSArray*)serviceList
 {
     return [manager retrieveConnectedPeripheralsWithServices:serviceList];

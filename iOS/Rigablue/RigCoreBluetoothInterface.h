@@ -21,6 +21,7 @@
 + (id)sharedInstance;
 
 - (void)startUpCentralManager;
+- (BOOL)isCentralManagerReady;
 - (void)startDiscovery:(NSArray*)uuidList timeout:(NSNumber*)timeout allowDuplicates:(BOOL)duplicates;
 - (NSArray*)getConnectedPeripheralsWithServices:(NSArray*)serviceList;
 - (void)stopDiscovery;
