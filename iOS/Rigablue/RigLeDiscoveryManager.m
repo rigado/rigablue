@@ -53,6 +53,8 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 
 - (void)startLeInterface
 {
+    RigCoreBluetoothInterface *rcb = [RigCoreBluetoothInterface sharedInstance];
+    rcb.discoveryObserver = self;
     [[RigCoreBluetoothInterface sharedInstance] startUpCentralManager];
 }
 
@@ -64,6 +66,7 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
     }
     
     if (!btIsReady) {
+        //
         NSLog(@"Central manager not yet ready, delaying request until it is ready");
         delayedRequest = request;
         return;
@@ -156,7 +159,10 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
             device.advertisementData = advData;
             device.rssi = rssi;
             device.lastSeenTime = [NSDate date];
-            [delegate didUpdateDeviceData:device deviceIndex:[discoveredDevices indexOfObject:device]];
+            if ([delegate respondsToSelector:@selector(didUpdateDeviceData:deviceIndex:)]) {
+                [delegate didUpdateDeviceData:device deviceIndex:[discoveredDevices indexOfObject:device]];
+            }
+
             availableDevice = device;
             break;
         }
