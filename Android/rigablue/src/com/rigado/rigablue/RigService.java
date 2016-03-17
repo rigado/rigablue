@@ -23,6 +23,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 /**
  *  RigService.java
@@ -257,6 +258,9 @@ public class RigService {
         }
     }
 
+    private static final UUID CLIENT_CHARACTERISTIC_CONFIGURATION =
+            UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
+
     /**
      * Enables or disables notification on a the characteristic.
      *
@@ -276,15 +280,13 @@ public class RigService {
 
         RigLog.d("setCharacteristicNotification - " + Arrays.toString(characteristic.getValue()));
         mBluetoothGattHashMap.get(address).setCharacteristicNotification(characteristic, enabled);
-        for (BluetoothGattDescriptor descriptor : characteristic.getDescriptors()) {
-            if (descriptor != null) {
-                RigLog.d("descriptor = " + descriptor.getUuid());
-                descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                mBluetoothGattHashMap.get(address).writeDescriptor(descriptor);
-            } else {
-                RigLog.w("descriptor = null");
-            }
-        }
+        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIGURATION);
+        if (descriptor != null) {
+            RigLog.d("descriptor = " + descriptor.getUuid());
+            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            mBluetoothGattHashMap.get(address).writeDescriptor(descriptor);
+        } else {
+            RigLog.w("descriptor = null");
     }
 
     /**
