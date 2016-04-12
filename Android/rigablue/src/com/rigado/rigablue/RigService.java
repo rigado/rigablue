@@ -273,7 +273,7 @@ public class RigService {
             return;
         }
 
-        if(characteristic == null) {
+        if (characteristic == null) {
             RigLog.e("Invalid characteristic; Characteristic is null!");
             return;
         }
@@ -287,6 +287,7 @@ public class RigService {
             mBluetoothGattHashMap.get(address).writeDescriptor(descriptor);
         } else {
             RigLog.w("descriptor = null");
+        }
     }
 
     /**

@@ -8,3 +8,9 @@ project.xcworkspace/
 bin/
 gen/
 build
+
+Android/rigablue/.idea
+Android/rigablue/gradle
+Android/rigablue/.gradle
+*.iml
+Android/rigablue/local.properties
