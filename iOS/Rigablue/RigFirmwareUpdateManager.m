@@ -806,7 +806,7 @@ typedef enum FirmwareManagerState_enum
     else if (opCode == RECEIVED_OPCODE && request == VALIDATE_FIRMWARE_IMAGE) {
         NSLog(@"Firmware validated");
         if (value[2] == OPERATION_SUCCESS) {
-            NSLog(@"Succesful verification and transfer of firmware!");
+            NSLog(@"Successful verification and transfer of firmware!");
             
             //Once the firmware is validated, the firmware transfer is considered successful and the activation command
             //is sent to the DFU.
@@ -867,12 +867,19 @@ typedef enum FirmwareManagerState_enum
     }
 }
 
+- (void)didFailToConnectToBootloader
+{
+    [delegate updateFailed:@"Could not connect to Bootloader." errorCode:DfuError_CouldNotConnect];
+    [self cleanUpAfterFailure];
+}
+
 #pragma mark -
 #pragma mark - RigLeDiscoveryManagerDelegate methods
 - (void)didDiscoverDevice:(RigAvailableDeviceData *)device
 {
     if ([device.peripheral.name isEqual:@"RigDfu"] && device.rssi.integerValue > -65) {
         
+        [[RigLeDiscoveryManager sharedInstance] stopDiscoveringDevices];
         oldDelegate = [RigLeConnectionManager sharedInstance].delegate;
         [RigLeConnectionManager sharedInstance].delegate = self;
         [[RigLeConnectionManager sharedInstance] connectDevice:device connectionTimeout:10.0f];

@@ -49,6 +49,10 @@ extern NSString *kupdateDFUServiceUuidString;
  */
 - (void)didDiscoverCharacteristicsForDFUSerivce;
 
+/**
+ *  This method is called when a connection to RigDFU could not be obtained.
+ */
+- (void)didFailToConnectToBootloader;
 @end
 
 @interface RigFirmwareUpdateService : NSObject

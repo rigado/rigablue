@@ -67,6 +67,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
     id<RigLeConnectionManagerDelegate> oldDelegate;
     
     BOOL                isSecureDfu;
+    BOOL                isConnected;
 }
 
 @synthesize delegate;
@@ -134,6 +135,10 @@ NSString *kDisModelNumberUuidString = @"2a24";
     updateDevice = baseDevice;
     updatePeripheral = updateDevice.peripheral;
     updateDevice.delegate = self;
+    
+    if (updateDevice.peripheral.state == CBPeripheralStateConnected) {
+        isConnected = YES;
+    }
     
     availDevice = [[RigAvailableDeviceData alloc] initWithPeripheral:baseDevice.peripheral advertisementData:NULL rssi:NULL discoverTime:NULL];
     
@@ -398,18 +403,26 @@ NSString *kDisModelNumberUuidString = @"2a24";
         NSLog(@"Connected!  Starting Discovery...");
         updateDevice = device;
         updateDevice.delegate = self;
+        isConnected = YES;
         [updateDevice runDiscovery];
     }
 }
 
 - (void)didDisconnectPeripheral:(CBPeripheral *)peripheral
 {
+    if (!isConnected) {
+        NSLog(@"Warning: Received disconnect but was not recently connected.");
+        return;
+    }
+    
     NSLog(@"Disconnected!");
+    isConnected = NO;
     if (peripheral == updateDevice.peripheral) {
         [updateDFUCharArray removeAllObjects];
         if (shouldReconnectToPeripheral || alwaysReconnectOnDisconnect) {
             NSLog(@"Reconnecting...");
-            if (reconnectAttempts == 10) {
+            reconnectAttempts++;
+            if (reconnectAttempts == 5) {
                 shouldReconnectToPeripheral = NO;
             }
             [NSThread sleepForTimeInterval:.3];
@@ -426,7 +439,23 @@ NSString *kDisModelNumberUuidString = @"2a24";
 
 - (void)deviceConnectionDidTimeout:(RigAvailableDeviceData *)device
 {
-    //TODO: Retry???
+    NSLog(@"Connection Timeout!");
+    if (device.peripheral == updateDevice.peripheral) {
+        [updateDFUCharArray removeAllObjects];
+        if (shouldReconnectToPeripheral || alwaysReconnectOnDisconnect) {
+            NSLog(@"Reconnecting...");
+            reconnectAttempts++;
+            if (reconnectAttempts == 5) {
+                shouldReconnectToPeripheral = NO;
+                alwaysReconnectOnDisconnect = NO;
+            }
+            [NSThread sleepForTimeInterval:.3];
+            availDevice = [[RigAvailableDeviceData alloc] initWithPeripheral:device.peripheral advertisementData:NULL rssi:NULL discoverTime:NULL];
+            [[RigLeConnectionManager sharedInstance] connectDevice:availDevice connectionTimeout:5.0f];
+        } else {
+            [delegate didFailToConnectToBootloader];
+        }
+    }
 }
 
 #pragma mark

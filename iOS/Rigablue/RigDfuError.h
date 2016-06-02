@@ -25,7 +25,8 @@ typedef enum DfuErrorEnum
     DfuError_ImageActivationFailure = -7,
     DfuError_PatchCurrentImageCrcFailure = -8,
     DfuError_PostPatchImageCrcFailure = -9,
-    DfuError_Unknown = -10,
+    DfuError_CouldNotConnect = -10,
+    DfuError_Unknown = -11,
     
 } RigDfuError_t;
 
