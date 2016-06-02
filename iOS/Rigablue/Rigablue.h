@@ -15,5 +15,7 @@
 #import "RigLeBaseDevice.h"
 #import "RigLeDiscoveryManager.h"
 #import "RigLeConnectionManager.h"
+#import "RigFirmwareUpdateManager.h"
+#import "RigDfuError.h"
 
 #endif

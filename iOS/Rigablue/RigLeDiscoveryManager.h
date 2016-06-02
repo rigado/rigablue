@@ -20,7 +20,7 @@
  * @discussion                  This protocol provides an interface for the <code>RigLeDiscoveryManager</code> to send event information back to
  *                              the object that requested the discovery operation.
  */
-@protocol RigLeDiscoveryManagerDelegate
+@protocol RigLeDiscoveryManagerDelegate <NSObject>
 /*!
  *  @method disDiscoverDevice:
  *
