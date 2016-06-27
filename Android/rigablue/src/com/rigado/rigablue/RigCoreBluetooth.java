@@ -74,6 +74,11 @@ public class RigCoreBluetooth implements IRigCoreListener {
         return instance;
     }
 
+    public static void initialize(Context context) {
+        RigCoreBluetooth.getInstance().setContext(context);
+        RigCoreBluetooth.getInstance().init();
+    }
+
     void scheduleConnectionTimeout(long timeout) {
 
         Runnable task = new Runnable() {
