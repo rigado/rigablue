@@ -37,7 +37,7 @@ enum DfuOpCodeEnum {
     DfuOpCode_ReceiveFirmwareImage,
     DfuOpCode_ValidateFirmwareImage,
     DfuOpCode_ActivateFirmwareImage,
-    DfuOpCode_Reserved_6,
+    DfuOpCode_SystemReset,
     DfuOpCode_Reserved_7,
     DfuOpCode_Reserved_8,
     DfuOpCode_EraseAndReset,
@@ -60,7 +60,8 @@ enum FirmwareManagerStateEnum {
     State_WaitReconnectAfterStmUpdateAndInvalidate,
     State_ReconnectAfterStmUpdateFlashErase,
     State_TransferringRadioImage,
-    State_FinishedRadioImageTransfer
+    State_FinishedRadioImageTransfer,
+    State_Cancelled
 }
 
 /**
@@ -199,6 +200,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     String mInitialDeviceAddress;
 
     /**
+     * Internal state variable denoting a cancel has been issued to the bootloader.
+     */
+    boolean mDidSendCancel;
+
+    /**
      * Creates a new firmware update manager.
      */
     public RigFirmwareUpdateManager() {
@@ -260,6 +266,17 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
 
         return true;
+    }
+
+    public void cancelUpdate() {
+        mState = FirmwareManagerStateEnum.State_Cancelled;
+
+        mFirmwareUpdateService.setShouldAlwaysReconnectState(false);
+        mFirmwareUpdateService.setShouldReconnectState(false);
+
+        byte [] data = { (byte)DfuOpCodeEnum.DfuOpCode_SystemReset.ordinal() };
+        mFirmwareUpdateService.writeDataToControlPoint(data);
+        mDidSendCancel = true;
     }
 
     /**
@@ -326,7 +343,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * This method cleans up the state of the firmware update manager in case of a failed
      * firmware update.
      */
-    private void cleanUpAfterFailure() {
+    private void cleanUp() {
     	RigLeConnectionManager.getInstance().setObserver(mOldConnectionObserver);
     	
     	if(mUpdateDevice != null) {
@@ -548,7 +565,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.setShouldAlwaysReconnectState(false);
         mFirmwareUpdateService.setShouldReconnectState(false);
 
-        this.cleanUpAfterFailure();
+        this.cleanUp();
         
         if(o != null) {
             o.updateFailed(error);
@@ -605,6 +622,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void didWriteValueForControlPoint() {
         RigLog.d("__RigFirmwareUpdateManager.didWriteValueForControlPoint__");
+
+        if(mState == FirmwareManagerStateEnum.State_Cancelled && mDidSendCancel) {
+            cleanUp();
+            return;
+        }
 
         if(mShouldWaitForErasedSize) {
             return;
