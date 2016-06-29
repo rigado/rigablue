@@ -86,6 +86,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     private RigFirmwareUpdateService mFirmwareUpdateService;
     private FirmwareManagerStateEnum mState;
 
+    public static final int DiscoveryTimeoutError = -30;
+    public static final int ConnectionFailedError = -31;
+    public static final int ConnectionTimeoutError = -32;
+
+
     /**
      * Array to hold the firmware image being sent to the bootloader
      */
@@ -760,6 +765,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     public void discoveryDidTimeout() {
         RigLog.d("__RigFirmwareUpdateManager.discoveryDidTimetout__");
         RigLog.e("Did not find DFU device!!");
+        handleUpdateError(DiscoveryTimeoutError);
     }
 
     /**
@@ -819,6 +825,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void deviceConnectionDidFail(RigAvailableDeviceData device) {
         RigLog.e("RigFirmwareUpdateManager.deviceConnectionDidFail:Connection failed!");
+        handleUpdateError(ConnectionFailedError);
     }
 
     /**
@@ -831,6 +838,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     public void deviceConnectionDidTimeout(RigAvailableDeviceData device) {
         RigLog.e("RigFirmwareUpdateManager.deviceConnectionDidTimeout:Connection failed!");
         //Try again??
-        RigLeConnectionManager.getInstance().connectDevice(device, 10000);
+        //RigLeConnectionManager.getInstance().connectDevice(device, 10000);
+        //EPS - This change was made to support a client project.  It may not be the correct way to handle this event.
+        handleUpdateError(ConnectionTimeoutError);
     }
 }
