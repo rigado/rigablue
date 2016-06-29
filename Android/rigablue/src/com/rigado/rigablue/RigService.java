@@ -144,23 +144,31 @@ public class RigService {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                    if (mBluetoothGattHashMap.containsKey(address)) {
+                boolean isAlreadyConnected = false;
+
+                if (mBluetoothGattHashMap.containsKey(address)) {
+                    BluetoothDevice btDevice = mBluetoothGattHashMap.get(address).getDevice();
+                    if (mBluetoothManager.getConnectionState(btDevice,
+                            BluetoothProfile.GATT_SERVER) == BluetoothProfile.STATE_CONNECTED) {
                         RigLog.w("Device already connected.");
-                    } else {
-                        RigLog.d("Trying to create a new connection.");
-                        BluetoothGattCallback callback = new RigBluetoothGattCallback(mRigCoreListener, mBluetoothGattHashMap, mBluetoothGattCallbackHashMap);
-                        if(mBluetoothGattCallbackHashMap.containsKey(address)) {
-                            mBluetoothGattCallbackHashMap.remove(address);
-                            mBluetoothGattCallbackHashMap.put(address, callback);
-                        }
-
-                        BluetoothGatt gatt = device.connectGatt(mContext, false, callback);
-                        mBluetoothGattHashMap.put(address, gatt);
-                        if(gatt != null) {
-                            refreshDeviceCache(gatt);
-                        }
-
+                        isAlreadyConnected = true;
                     }
+                }
+
+                if(!isAlreadyConnected) {
+                    RigLog.d("Trying to create a new connection.");
+                    BluetoothGattCallback callback = new RigBluetoothGattCallback(mRigCoreListener, mBluetoothGattHashMap, mBluetoothGattCallbackHashMap);
+                    if (mBluetoothGattCallbackHashMap.containsKey(address)) {
+                        mBluetoothGattCallbackHashMap.remove(address);
+                        mBluetoothGattCallbackHashMap.put(address, callback);
+                    }
+
+                    BluetoothGatt gatt = device.connectGatt(mContext, false, callback);
+                    mBluetoothGattHashMap.put(address, gatt);
+                    if (gatt != null) {
+                        refreshDeviceCache(gatt);
+                    }
+                }
             }
         }).start();
         return true;
@@ -190,6 +198,7 @@ public class RigService {
                 BluetoothGatt gatt = mBluetoothGattHashMap.get(address);
                 if(gatt != null) {
                     mBluetoothGattHashMap.get(address).disconnect();
+
                 }
             }
         }).start();
