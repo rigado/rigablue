@@ -534,6 +534,23 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mObserver.updateStatus("Activating device software", 0);
     }
 
+    @Override
+    private void handleUpdateError(int error) {
+
+        //Set to null when cleanUpAfterFailure is called, store a reference here
+        IRigFirmwareUpdateManagerObserver o = mObserver;
+
+        mFirmwareUpdateService.setShouldAlwaysReconnectState(false);
+        mFirmwareUpdateService.setShouldReconnectState(false);
+
+        this.cleanUpAfterFailure();
+        
+        if(o != null) {
+            o.updateFailed(error);
+        }
+    }
+
+
     /**
      * Called when the bootloader peripheral is connected.
      */
@@ -647,7 +664,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         	if(value[2] == OperationSuccess) {
         		mIsInitPacketSent = true;
         		enablePacketNotification();
-        	}
+        	} else {
+                this.handleUpdateError(value[2]);
+            }
         } else if(opCode == PacketReceivedNotification) {
             mTotalBytesSent = ((value[1] & 0xFF) + ((value[2] & 0xFF) << 8) + ((value[3] & 0xFF) << 16) + ((value[4] & 0xFF) << 24));
 
@@ -671,9 +690,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                 mObserver.updateStatus("Firmware transfer successful.  Validating...", 0);
                 validateFirmware();
             } else {
-                //TODO: Figure out how to recover from this situation
                 RigLog.e("Error during firmware image transfer " + value[2]);
                 mObserver.updateStatus("Error during firmware transfer", value[2]);
+                this.handleUpdateError(value[2]);
             }
         } else if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_ValidateFirmwareImage.ordinal()) {
             if(value[2] == OperationSuccess) {

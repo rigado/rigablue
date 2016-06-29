@@ -39,4 +39,9 @@ public interface IRigFirmwareUpdateManagerObserver {
      * This method is called after the full firmware update process has completed.
      */
     void didFinishUpdate();
+
+    /**
+     * This method is called when an unrecoverable error occurs during a firmware update.
+     */
+    void updateFailed(int error);
 }
