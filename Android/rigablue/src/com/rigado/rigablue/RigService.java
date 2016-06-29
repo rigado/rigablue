@@ -155,6 +155,7 @@ public class RigService {
                         }
 
                         BluetoothGatt gatt = device.connectGatt(mContext, false, callback);
+                        mBluetoothGattHashMap.put(address, gatt);
                         if(gatt != null) {
                             refreshDeviceCache(gatt);
                         }
@@ -177,10 +178,12 @@ public class RigService {
             RigLog.e("BluetoothAdapter not initialized");
             return;
         }
+
         if (mBluetoothGattHashMap.get(address) == null) {
-            RigLog.w(address + "is not connected!");
+            RigLog.w("No outstanding connection request or active connection to " + address);
             return;
         }
+        
         new Thread(new Runnable() {
             @Override
             public void run() {
