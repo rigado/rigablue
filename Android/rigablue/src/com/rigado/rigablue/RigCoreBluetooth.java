@@ -83,9 +83,10 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
         Runnable task = new Runnable() {
             public void run() {
-                RigLog.d("Connection timed out!");
-                disconnectPeripheral(mConnectingDevice);
-                mConnectionObserver.connectionDidTimeout(mConnectingDevice);
+                if(mConnectionFuture != null) {
+                    RigLog.d("Connection timed out!");
+                    disconnectPeripheral(mConnectingDevice);
+                    mConnectionObserver.connectionDidTimeout(mConnectingDevice);}
             }
         };
         mConnectionFuture = connectionWorker.schedule(task, timeout, TimeUnit.MILLISECONDS);
@@ -96,8 +97,10 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
         Runnable task = new Runnable() {
             public void run() {
-                stopDiscovery();
-                mDiscoveryObserver.discoveryFinishedByTimeout();
+                if(mDiscoveryFuture != null) {
+                    stopDiscovery();
+                    mDiscoveryObserver.discoveryFinishedByTimeout();
+                }
             }
         };
         mDiscoveryFuture = discoveryWorker.schedule(task, timeout, TimeUnit.MILLISECONDS);
@@ -180,6 +183,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
         if((null != mDiscoveryFuture) && !mDiscoveryFuture.isDone()) {
             mDiscoveryFuture.cancel(true);
+            mDiscoveryFuture = null;
         }
 
         if (mBluetoothAdapter != null) {
@@ -419,6 +423,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
         RigLog.d("__RigCoreBluetooth.onActionGattConnected__ : " + bluetoothDevice.getAddress());
         if(!mConnectionFuture.isDone()) {
             mConnectionFuture.cancel(true);
+            mConnectionFuture = null;
         }
     }
 
