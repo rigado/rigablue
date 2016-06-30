@@ -556,7 +556,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mObserver.updateStatus("Activating device software", 0);
     }
 
-    @Override
     private void handleUpdateError(int error) {
 
         //Set to null when cleanUpAfterFailure is called, store a reference here
