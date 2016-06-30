@@ -299,6 +299,7 @@ public class RigService {
             mBluetoothGattHashMap.get(address).writeDescriptor(descriptor);
         } else {
             RigLog.w("descriptor = null");
+        }
     }
 
     /**
