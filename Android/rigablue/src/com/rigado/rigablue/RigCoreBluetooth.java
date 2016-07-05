@@ -361,7 +361,9 @@ public class RigCoreBluetooth implements IRigCoreListener {
                 switch (state) {
                     case BluetoothAdapter.STATE_OFF: {
                         RigLog.w("Bluetooth off");
-                        mDiscoveryObserver.bluetoothPowerStateChanged(false);
+                        if(mDiscoveryObserver!=null) {
+                            mDiscoveryObserver.bluetoothPowerStateChanged(false);
+                        }
                         break;
                     }
                     case BluetoothAdapter.STATE_TURNING_OFF: {
@@ -370,7 +372,9 @@ public class RigCoreBluetooth implements IRigCoreListener {
                     }
                     case BluetoothAdapter.STATE_ON: {
                         RigLog.w("Bluetooth on");
-                        mDiscoveryObserver.bluetoothPowerStateChanged(true);
+                        if(mDiscoveryObserver!=null) {
+                            mDiscoveryObserver.bluetoothPowerStateChanged(true);
+                        }
                         break;
                     }
                     case BluetoothAdapter.STATE_TURNING_ON: {
@@ -385,11 +389,15 @@ public class RigCoreBluetooth implements IRigCoreListener {
     private boolean checkBluetoothState() {
         if (mBluetoothAdapter == null) {
             RigLog.d("RigCoreBluetooth.checkBluetoothState - mBluetoothAdapter == null");
-            mDiscoveryObserver.bluetoothDoesNotSupported();
+            if(mDiscoveryObserver!=null) {
+                mDiscoveryObserver.bluetoothDoesNotSupported();
+            }
             return false;
         } else if (!mBluetoothAdapter.isEnabled()) {
             RigLog.d("RigCoreBluetooth.checkBluetoothState - mBluetoothAdapter is not enabled");
-            mDiscoveryObserver.bluetoothPowerStateChanged(false);
+            if(mDiscoveryObserver!=null) {
+                mDiscoveryObserver.bluetoothPowerStateChanged(false);
+            }
             return false;
         }
         return true;
