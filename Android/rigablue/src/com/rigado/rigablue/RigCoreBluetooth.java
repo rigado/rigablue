@@ -34,7 +34,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class RigCoreBluetooth implements IRigCoreListener {
 
-    private static final String RigCoreBluetoothLibraryVersion = "Rigablue Library v1";
+    private static final String RigCoreBluetoothLibraryVersion = "Rigablue Library v" + BuildConfig.VERSION_NAME;
 
     private BluetoothAdapter mBluetoothAdapter;
     private Context mContext;
@@ -77,6 +77,10 @@ public class RigCoreBluetooth implements IRigCoreListener {
     public static void initialize(Context context) {
         RigCoreBluetooth.getInstance().setContext(context);
         RigCoreBluetooth.getInstance().init();
+    }
+
+    public static String version() {
+        return BuildConfig.VERSION_NAME;
     }
 
     void scheduleConnectionTimeout(long timeout) {
