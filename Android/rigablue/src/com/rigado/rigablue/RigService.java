@@ -179,6 +179,7 @@ public class RigService {
      * is reported asynchronously through the
      * {@code BluetoothGattCallback#onConnectionStateChange(android.bluetooth.BluetoothGatt, int, int)}
      * callback.
+     * @param address The address of the destination device.
      */
     public synchronized void disconnect(final String address) {
         RigLog.d("disconnect");
@@ -228,6 +229,7 @@ public class RigService {
      * asynchronously through the {@code BluetoothGattCallback#onCharacteristicRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
      * callback.
      *
+     * @param address The address of the destination device.
      * @param characteristic The characteristic to read
      */
     public synchronized void readCharacteristic(final String address, final BluetoothGattCharacteristic characteristic) {
@@ -250,6 +252,7 @@ public class RigService {
      * asynchronously through the {@code BluetoothGattCallback#onCharacteristicWrite(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattCharacteristic, int)}
      * callback.
      *
+     * @param address The address of the destination device.
      * @param characteristic The characteristic to write
      */
     public synchronized void writeCharacteristic(final String address, final BluetoothGattCharacteristic characteristic) {
@@ -276,6 +279,7 @@ public class RigService {
     /**
      * Enables or disables notification on a the characteristic.
      *
+     * @param address The address of the destination device.
      * @param characteristic Characteristic to act on
      * @param enabled        If true, enable notification; false otherwise
      */
@@ -306,6 +310,7 @@ public class RigService {
      * Retrieves a list of supported GATT services on the connected device. This should be
      * invoked only after {@code BluetoothGatt#discoverServices()} completes successfully.
      *
+     * @param address The address of the destination device.
      * @return A {@code List} of supported services.
      */
     public List<BluetoothGattService> getSupportedGattServices(final String address) {

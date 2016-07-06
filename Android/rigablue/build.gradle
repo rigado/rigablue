@@ -32,3 +32,15 @@ android {
         }
     }
 }
+
+task javadoc(type: Javadoc) {
+    description "Generates Javadocs"
+    source = android.sourceSets.main.java.srcDirs
+    ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
+    classpath += files(ext.androidJar)
+    classpath += files(android.getBootClasspath())
+    destinationDir = file("./doc/")
+    exclude '**/BuildConfig.java'
+    exclude '**/R.java'
+}
+
