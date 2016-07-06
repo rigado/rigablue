@@ -243,7 +243,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mState = FirmwareManagerStateEnum.State_DiscoverFirmwareServiceCharacteristics;
 
         //TODO: Change this to be based on the available services and not the name
-        if(mUpdateDevice.getName().equals("RigDfu")) {
+        if(mUpdateDevice.getName() != null && mUpdateDevice.getName().equals("RigDfu")) {
             mFirmwareUpdateService.setDevice(mUpdateDevice);
             if(RigCoreBluetooth.getInstance().getDeviceConnectionState(mUpdateDevice.getBluetoothDevice()) ==
                     BluetoothProfile.STATE_CONNECTED) {
