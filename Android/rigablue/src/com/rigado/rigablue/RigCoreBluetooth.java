@@ -207,6 +207,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
     void disconnectPeripheral(BluetoothDevice device) {
         RigLog.d("__RigCoreBluetooth.disconnectPeripheral__");
+        clearQueue();
         if (!checkBluetoothState()) {
             return;
         }
@@ -407,6 +408,12 @@ public class RigCoreBluetooth implements IRigCoreListener {
         mDiscoveryObserver = observer;
     }
 
+    private void clearQueue () {
+        if (mOpsQueue != null) {
+            mOpsQueue.clear();
+        }
+    }
+
     private RigLeBaseDevice getRigLeBaseDeviceForBluetoothDevice(BluetoothDevice btDevice) {
         RigLeBaseDevice baseDevice = null;
         for(RigLeBaseDevice device : RigLeConnectionManager.getInstance().getConnectedDevices()) {
@@ -434,7 +441,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
     @Override
     public void onActionGattDisconnected(BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattDisconnected__ : " + bluetoothDevice.getAddress());
-
+        clearQueue();
         mConnectionObserver.didDisconnectDevice(bluetoothDevice);
     }
 
