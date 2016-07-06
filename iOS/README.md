@@ -6,7 +6,7 @@ Rigablue is an easy to use library for Bluetooth Low Energy (BLE) device integra
 
 ### Include the Rigablue Source in your App
 
-One to work with the Rigablue source is to add its `.xcodeproj` and your own project to a common workspace. We'll assume you have copied this SDK to a working directory.
+One way to work with the Rigablue source is to add its `.xcodeproj` and your own project to a common workspace. We'll assume you have copied this SDK to a working directory.
 
 * In Xcode 7, create a new workspace (File > New > Workspace...) and save it
 * With your new workspace open, add the Rigable project to the workspace (File > Add Files to "MyWorkspace"...)
