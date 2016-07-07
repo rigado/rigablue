@@ -285,7 +285,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#if [ ${CONFIGURATION} == \"Release\" ]; then\nAPPLEDOC_PATH=`which appledoc`\nif [ $APPLEDOC_PATH ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Rigado, LLC\" \\\n--company-id \"com.rigado\" \\\n--output doc \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n#fi;";
+			shellScript = "#if [ ${CONFIGURATION} == \"Release\" ]; then\n#APPLEDOC_PATH=`which appledoc`\n#if [ $APPLEDOC_PATH ]; then\n#$APPLEDOC_PATH \\\n#--project-name ${PRODUCT_NAME} \\\n#--project-company \"Rigado, LLC\" \\\n#--company-id \"com.rigado\" \\\n#--output doc \\\n#--keep-undocumented-objects \\\n#--keep-undocumented-members \\\n#--keep-intermediate-files \\\n#--no-repeat-first-par \\\n#--no-warn-invalid-crossref \\\n#--exit-threshold 2 \\\n#${PROJECT_DIR}/${PRODUCT_NAME}\n#fi;\n#fi;";
 		};
 /* End PBXShellScriptBuildPhase section */
 
