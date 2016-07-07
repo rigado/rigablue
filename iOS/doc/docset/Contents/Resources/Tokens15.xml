@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/RigLeConnectionManagerDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/RigLeConnectionManagerDelegate</TokenIdentifier>
+			<Abstract type="html">This protocol provides events to the object that requested a connection or disconntion.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="15"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeConnectionManagerDelegate/didConnectDevice:</TokenIdentifier>
+			<Abstract type="html">This method is called when a connection is successfully made to a CBPeripheral.  At this point however, no discovery
+of services or characteristics has been performed.  This is acheieved by calling &lt;code&gt;runDiscovery&lt;/code&gt; on the
+object.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+			<Declaration>- (void)didConnectDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The &lt;code&gt;RigLeBaseDevice&lt;/code&gt; object created after a successful connection.
+
+@seealso RigLeBaseDevice</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didConnectDevice:</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeConnectionManagerDelegate/didDisconnectPeripheral:</TokenIdentifier>
+			<Abstract type="html">This method is called when a peripheral has been disconnected.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+			<Declaration>- (void)didDisconnectPeripheral:(CBPeripheral *)peripheral</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The peripheral that was disconnected.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didDisconnectPeripheral:</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeConnectionManagerDelegate/deviceConnectionDidFail:</TokenIdentifier>
+			<Abstract type="html">This method is called when a failure occurs and CoreBluetooth was unable to successfully connect to the device.  Note that
+this method will only be called if the central manager reports the connection failed.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+			<Declaration>- (void)deviceConnectionDidFail:(RigAvailableDeviceData *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device data for which the connection failed.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/deviceConnectionDidFail:</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeConnectionManagerDelegate/deviceConnectionDidTimeout:</TokenIdentifier>
+			<Abstract type="html">This method is called when the timeout value passed to &lt;code&gt;connectDevice:connectionTimeout:&lt;/code&gt; elapses prior to a
+successful connection being made.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+			<Declaration>- (void)deviceConnectionDidTimeout:(RigAvailableDeviceData *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device data for which the connection timed out.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/deviceConnectionDidTimeout:</Anchor>
+            <NodeRef refid="15"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

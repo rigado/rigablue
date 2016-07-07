@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigDeviceRequest.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigDeviceRequest</TokenIdentifier>
+			<Abstract type="html">@class RigDeviceRequest</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+            
+			
+			<NodeRef refid="3"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/RigDeviceRequest/deviceRequestWithUuidList:timeout:delegate:allowDuplicates:</TokenIdentifier>
+			<Abstract type="html">@method deviceRequestWithUuidList:timeout:delegate:allowDuplicates:</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>+ (id)deviceRequestWithUuidList:(NSArray *)uuidList timeout:(float)timeout delegate:(id&lt;RigLeDiscoveryManagerDelegate&gt;)delegate allowDuplicates:(BOOL)allowDuplicates</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>uuidList</Name>
+					<Abstract type="html">List of UUIDs to search for during discovery.</Abstract>
+				</Parameter><Parameter>
+					<Name>timeout</Name>
+					<Abstract type="html">The length of time for which discovery should run; use 0 to run discovery indefinitely.</Abstract>
+				</Parameter><Parameter>
+					<Name>delegate</Name>
+					<Abstract type="html">The delegate object to be notified by the dicovery manager.</Abstract>
+				</Parameter><Parameter>
+					<Name>allowDuplicates</Name>
+					<Abstract type="html">See {@link allowDuplicates} for more information.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">Returns a &lt;code&gt;RigDeviceRequest&lt;/code&gt; object with all approprite fields filled in.</Abstract></ReturnValue>
+			<Anchor>//api/name/deviceRequestWithUuidList:timeout:delegate:allowDuplicates:</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigDeviceRequest/setUuidList:</TokenIdentifier>
+			<Abstract type="html">@property uuidList</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSArray *uuidList</Declaration>
+			
+			
+			<Anchor>//api/name/uuidList</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigDeviceRequest/uuidList</TokenIdentifier>
+			<Abstract type="html">@property uuidList</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSArray *uuidList</Declaration>
+			
+			
+			<Anchor>//api/name/uuidList</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigDeviceRequest/uuidList</TokenIdentifier>
+			<Abstract type="html">@property uuidList</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSArray *uuidList</Declaration>
+			
+			
+			<Anchor>//api/name/uuidList</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigDeviceRequest/setDelegate:</TokenIdentifier>
+			<Abstract type="html">@property discoveryDelegate</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigLeDiscoveryManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigDeviceRequest/delegate</TokenIdentifier>
+			<Abstract type="html">@property discoveryDelegate</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigLeDiscoveryManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigDeviceRequest/delegate</TokenIdentifier>
+			<Abstract type="html">@property discoveryDelegate</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) id&lt;RigLeDiscoveryManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigDeviceRequest/setTimeout:</TokenIdentifier>
+			<Abstract type="html">@property timeout</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property float timeout</Declaration>
+			
+			
+			<Anchor>//api/name/timeout</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigDeviceRequest/timeout</TokenIdentifier>
+			<Abstract type="html">@property timeout</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property float timeout</Declaration>
+			
+			
+			<Anchor>//api/name/timeout</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigDeviceRequest/timeout</TokenIdentifier>
+			<Abstract type="html">@property timeout</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property float timeout</Declaration>
+			
+			
+			<Anchor>//api/name/timeout</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigDeviceRequest/setAllowDuplicates:</TokenIdentifier>
+			<Abstract type="html">@property allowDuplicates</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property BOOL allowDuplicates</Declaration>
+			
+			
+			<Anchor>//api/name/allowDuplicates</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigDeviceRequest/allowDuplicates</TokenIdentifier>
+			<Abstract type="html">@property allowDuplicates</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property BOOL allowDuplicates</Declaration>
+			
+			
+			<Anchor>//api/name/allowDuplicates</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigDeviceRequest/allowDuplicates</TokenIdentifier>
+			<Abstract type="html">@property allowDuplicates</Abstract>
+			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
+			
+			<Declaration>@property BOOL allowDuplicates</Declaration>
+			
+			
+			<Anchor>//api/name/allowDuplicates</Anchor>
+            <NodeRef refid="3"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

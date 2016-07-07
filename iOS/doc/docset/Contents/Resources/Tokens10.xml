@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/RigCoreBluetoothConnectionObserver.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/RigCoreBluetoothConnectionObserver</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothConnectionObserver.h</DeclaredIn>
+            
+			
+			<NodeRef refid="10"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigCoreBluetoothConnectionObserver/didConnectDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothConnectionObserver.h</DeclaredIn>
+			
+			<Declaration>- (void)didConnectDevice:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didConnectDevice:</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigCoreBluetoothConnectionObserver/connectionDidTimeout:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothConnectionObserver.h</DeclaredIn>
+			
+			<Declaration>- (void)connectionDidTimeout:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/connectionDidTimeout:</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigCoreBluetoothConnectionObserver/didDisconnectDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothConnectionObserver.h</DeclaredIn>
+			
+			<Declaration>- (void)didDisconnectDevice:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didDisconnectDevice:</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigCoreBluetoothConnectionObserver/didFailToConnectDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothConnectionObserver.h</DeclaredIn>
+			
+			<Declaration>- (void)didFailToConnectDevice:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didFailToConnectDevice:</Anchor>
+            <NodeRef refid="10"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

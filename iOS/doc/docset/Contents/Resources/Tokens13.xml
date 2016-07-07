@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/RigFirmwareUpdateServiceDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/RigFirmwareUpdateServiceDelegate</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+            
+			
+			<NodeRef refid="13"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didEnableControlPointNotifications</TokenIdentifier>
+			<Abstract type="html">This method is called when notifications have been enabled for the DFU Control Point characteristic.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didEnableControlPointNotifications</Declaration>
+			
+			
+			<Anchor>//api/name/didEnableControlPointNotifications</Anchor>
+            <NodeRef refid="13"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didUpdateValueForControlPoint:</TokenIdentifier>
+			<Abstract type="html">This method is called when a notification is received from the DFU on its Control Point characteristic.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateValueForControlPoint:(uint8_t *)value</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>value</Name>
+					<Abstract type="html">The value array sent by the DFU.  Typically, the value contains an operation code, and
+data depending on the operation code sent to the device.  See RigFirmwareUpdateManager
+for the DFU operation codes.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didUpdateValueForControlPoint:</Anchor>
+            <NodeRef refid="13"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didWriteValueForControlPoint</TokenIdentifier>
+			<Abstract type="html">This method is called when CoreBluetooth alerts the application that a value was properly written to
+the control point characteristic.  This is only issued if a characteristic is written to with a
+type of WriteWithResponse.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didWriteValueForControlPoint</Declaration>
+			
+			
+			<Anchor>//api/name/didWriteValueForControlPoint</Anchor>
+            <NodeRef refid="13"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didConnectPeripheral</TokenIdentifier>
+			<Abstract type="html">This method is called upon establishing a connection with a device.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didConnectPeripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didConnectPeripheral</Anchor>
+            <NodeRef refid="13"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didDiscoverCharacteristicsForDFUSerivce</TokenIdentifier>
+			<Abstract type="html">This method is called after discovery has been performed on the DFU service.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didDiscoverCharacteristicsForDFUSerivce</Declaration>
+			
+			
+			<Anchor>//api/name/didDiscoverCharacteristicsForDFUSerivce</Anchor>
+            <NodeRef refid="13"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didFailToConnectToBootloader</TokenIdentifier>
+			<Abstract type="html">This method is called when a connection to RigDFU could not be obtained.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didFailToConnectToBootloader</Declaration>
+			
+			
+			<Anchor>//api/name/didFailToConnectToBootloader</Anchor>
+            <NodeRef refid="13"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

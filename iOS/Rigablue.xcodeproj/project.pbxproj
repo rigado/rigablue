@@ -24,7 +24,7 @@
 		20E3824519019765006BF49D /* RigAvailableDeviceData.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E3824419019765006BF49D /* RigAvailableDeviceData.m */; };
 		20E382481901A416006BF49D /* RigLeConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E382471901A416006BF49D /* RigLeConnectionManager.m */; };
 		20E3824B1901A5D6006BF49D /* RigCoreBluetoothInterface.m in Sources */ = {isa = PBXBuildFile; fileRef = 20E3824A1901A5D6006BF49D /* RigCoreBluetoothInterface.m */; };
-		5E2D19421BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E2D19411BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m */; settings = {ASSET_TAGS = (); }; };
+		5E2D19421BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E2D19411BAB63DD00B38EDE /* RigFirmwareUpdateRequest.m */; };
 		5E2D19431BAB6BD000B38EDE /* RigFirmwareUpdateRequest.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 5E2D19401BAB63DD00B38EDE /* RigFirmwareUpdateRequest.h */; };
 		5E7CFFB3196F055400FF6C95 /* RigFirmwareUpdateService.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E7CFFAF196F055400FF6C95 /* RigFirmwareUpdateService.m */; };
 		5E7CFFB4196F055400FF6C95 /* RigFirmwareUpdateManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E7CFFB1196F055400FF6C95 /* RigFirmwareUpdateManager.m */; };
@@ -204,7 +204,7 @@
 			buildPhases = (
 				202A6DFE1900EB2E0063D759 /* Sources */,
 				202A6DFF1900EB2E0063D759 /* Frameworks */,
-				20F5F5CC19116D370024B1CC /* ShellScript */,
+				20F5F5CC19116D370024B1CC /* Run Script */,
 				202A6E001900EB2E0063D759 /* CopyFiles */,
 			);
 			buildRules = (
@@ -249,6 +249,7 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
+				Base,
 			);
 			mainGroup = 202A6DF91900EB2E0063D759;
 			productRefGroup = 202A6E031900EB2E0063D759 /* Products */;
@@ -272,18 +273,19 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		20F5F5CC19116D370024B1CC /* ShellScript */ = {
+		20F5F5CC19116D370024B1CC /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#if [ ${CONFIGURATION} == \"Release\" ]; then\nAPPLEDOC_PATH=`which appledoc`\nif [ $APPLEDOC_PATH ]; then\n$APPLEDOC_PATH \\\n--project-name ${PRODUCT_NAME} \\\n--project-company \"Rigado, LLC\" \\\n--company-id \"com.rigado\" \\\n--output ${PRODUCT_NAME}Docs \\\n--keep-undocumented-objects \\\n--keep-undocumented-members \\\n--keep-intermediate-files \\\n--no-repeat-first-par \\\n--no-warn-invalid-crossref \\\n--exit-threshold 2 \\\n${PROJECT_DIR}/${PRODUCT_NAME}\nfi;\n#fi;";
+			shellScript = "#if [ ${CONFIGURATION} == \"Release\" ]; then\n#APPLEDOC_PATH=`which appledoc`\n#if [ $APPLEDOC_PATH ]; then\n#$APPLEDOC_PATH \\\n#--project-name ${PRODUCT_NAME} \\\n#--project-company \"Rigado, LLC\" \\\n#--company-id \"com.rigado\" \\\n#--output doc \\\n#--keep-undocumented-objects \\\n#--keep-undocumented-members \\\n#--keep-intermediate-files \\\n#--no-repeat-first-par \\\n#--no-warn-invalid-crossref \\\n#--exit-threshold 2 \\\n#${PROJECT_DIR}/${PRODUCT_NAME}\n#fi;\n#fi;";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -393,6 +395,7 @@
 		202A6E261900EB2E0063D759 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.1.0;
 				DSTROOT = /tmp/Rigablue.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Rigablue/Rigablue-Prefix.pch";
@@ -406,6 +409,7 @@
 		202A6E271900EB2E0063D759 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CURRENT_PROJECT_VERSION = 1.1.0;
 				DSTROOT = /tmp/Rigablue.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Rigablue/Rigablue-Prefix.pch";

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigLeDiscoveryManager.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigLeDiscoveryManager</TokenIdentifier>
+			<Abstract type="html">* @class RigLeDiscoveryManager
+*
+* @discussion                  This class provides an interface to discover devices.</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="9"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/setIsDiscoveryRunning:</TokenIdentifier>
+			<Abstract type="html">@property isDiscoveryRunning</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isDiscoveryRunning</Declaration>
+			
+			
+			<Anchor>//api/name/isDiscoveryRunning</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/isDiscoveryRunning</TokenIdentifier>
+			<Abstract type="html">@property isDiscoveryRunning</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isDiscoveryRunning</Declaration>
+			
+			
+			<Anchor>//api/name/isDiscoveryRunning</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigLeDiscoveryManager/isDiscoveryRunning</TokenIdentifier>
+			<Abstract type="html">@property isDiscoveryRunning</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isDiscoveryRunning</Declaration>
+			
+			
+			<Anchor>//api/name/isDiscoveryRunning</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/RigLeDiscoveryManager/sharedInstance</TokenIdentifier>
+			<Abstract type="html">@method sharedInstance</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>+ (id)sharedInstance</Declaration>
+			
+			<ReturnValue><Abstract type="html">RigLeDiscoveryManager instance</Abstract></ReturnValue>
+			<Anchor>//api/name/sharedInstance</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/startLeInterface</TokenIdentifier>
+			<Abstract type="html">@method startLeInterface</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)startLeInterface</Declaration>
+			
+			
+			<Anchor>//api/name/startLeInterface</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/discoverDevices:</TokenIdentifier>
+			<Abstract type="html">@method discoverDevices:</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)discoverDevices:(RigDeviceRequest *)request</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>request</Name>
+					<Abstract type="html">A RigDeviceRequest object containing information about devices that should be discovered.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/discoverDevices:</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/findConnectedDevices:</TokenIdentifier>
+			<Abstract type="html">@method findConnectedDevices:</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)findConnectedDevices:(RigDeviceRequest *)request</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>request</Name>
+					<Abstract type="html">A RigDeviceRequest object containing information about devices for which to search.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/findConnectedDevices:</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/stopDiscoveringDevices</TokenIdentifier>
+			<Abstract type="html">@method stopDiscoveringDevices</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)stopDiscoveringDevices</Declaration>
+			
+			
+			<Anchor>//api/name/stopDiscoveringDevices</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/retrieveDiscoveredDevices</TokenIdentifier>
+			<Abstract type="html">@method retrieveDiscoveredDevices</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)retrieveDiscoveredDevices</Declaration>
+			
+			<ReturnValue><Abstract type="html">NSArray filled with &lt;i&gt;RigAvailableDeviceData&lt;/i&gt; objects.</Abstract></ReturnValue>
+			<Anchor>//api/name/retrieveDiscoveredDevices</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/clearDiscoveredDevices</TokenIdentifier>
+			<Abstract type="html">@method clearDiscoveredDevices</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)clearDiscoveredDevices</Declaration>
+			
+			
+			<Anchor>//api/name/clearDiscoveredDevices</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/removeAvailableDevice:</TokenIdentifier>
+			<Abstract type="html">@method removeAvailableDevice:</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)removeAvailableDevice:(RigAvailableDeviceData *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The &lt;i&gt;RigAvailableDeviceData&lt;/i&gt; object to remove from the discovered devices list.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/removeAvailableDevice:</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/init</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
+			
+			<Declaration>- (id)init</Declaration>
+			
+			
+			<Anchor>//api/name/init</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/startDiscovery:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)startDiscovery:(RigDeviceRequest *)request</Declaration>
+			
+			
+			<Anchor>//api/name/startDiscovery:</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/didDiscoverDevice:advertisementData:rssi:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didDiscoverDevice:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advData rssi:(NSNumber *)rssi</Declaration>
+			
+			
+			<Anchor>//api/name/didDiscoverDevice:advertisementData:rssi:</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/discoveryTimeout</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)discoveryTimeout</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryTimeout</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/btPoweredOff</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)btPoweredOff</Declaration>
+			
+			
+			<Anchor>//api/name/btPoweredOff</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeDiscoveryManager/btReady</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
+			
+			<Declaration>- (void)btReady</Declaration>
+			
+			
+			<Anchor>//api/name/btReady</Anchor>
+            <NodeRef refid="9"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

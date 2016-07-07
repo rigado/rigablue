@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/RigCoreBluetoothDiscoveryObserver.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/RigCoreBluetoothDiscoveryObserver</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothDiscoveryObserver.h</DeclaredIn>
+            
+			
+			<NodeRef refid="11"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigCoreBluetoothDiscoveryObserver/didDiscoverDevice:advertisementData:rssi:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothDiscoveryObserver.h</DeclaredIn>
+			
+			<Declaration>- (void)didDiscoverDevice:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advData rssi:(NSNumber *)rssi</Declaration>
+			
+			
+			<Anchor>//api/name/didDiscoverDevice:advertisementData:rssi:</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigCoreBluetoothDiscoveryObserver/discoveryTimeout</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothDiscoveryObserver.h</DeclaredIn>
+			
+			<Declaration>- (void)discoveryTimeout</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryTimeout</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigCoreBluetoothDiscoveryObserver/btPoweredOff</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothDiscoveryObserver.h</DeclaredIn>
+			
+			<Declaration>- (void)btPoweredOff</Declaration>
+			
+			
+			<Anchor>//api/name/btPoweredOff</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigCoreBluetoothDiscoveryObserver/btReady</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigCoreBluetoothDiscoveryObserver.h</DeclaredIn>
+			
+			<Declaration>- (void)btReady</Declaration>
+			
+			
+			<Anchor>//api/name/btReady</Anchor>
+            <NodeRef refid="11"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

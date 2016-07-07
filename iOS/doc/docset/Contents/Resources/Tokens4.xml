@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigFirmwareUpdateManager.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigFirmwareUpdateManager</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="4"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">This delegate does not have to be set but if it is, then progress updates will be reported to the App.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/delegate</TokenIdentifier>
+			<Abstract type="html">This delegate does not have to be set but if it is, then progress updates will be reported to the App.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateManager/delegate</TokenIdentifier>
+			<Abstract type="html">This delegate does not have to be set but if it is, then progress updates will be reported to the App.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/init</TokenIdentifier>
+			<Abstract type="html">Initializes a new instance of RigFirmwareUpdateManager.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (id)init</Declaration>
+			
+			<ReturnValue><Abstract type="html">A firmware update manager instance</Abstract></ReturnValue>
+			<Anchor>//api/name/init</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:</TokenIdentifier>
+			<Abstract type="html">Begins a firmware update for the given device.  If a device is not currently running the bootloader, a command to enter
+the bootloader must be provided.  If it is already in the bootloader, then the command may be nil and the command len 0.
+Additionally, the calling code must provide a characteristic on the device to which the command will be sent.  Again, if
+already in the bootloader, this characteristic parameter may be nil.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)updateFirmware:(RigLeBaseDevice *)device isPatch:(BOOL)isPatch image:(NSData *)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic *)characteristic activateCommand:(uint8_t *)command activateCommandLen:(uint8_t)commandLen</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device for which to perform the firmware update</Abstract>
+				</Parameter><Parameter>
+					<Name>isPatch</Name>
+					<Abstract type="html">Set to true if the image is a patch image, otherwise set false</Abstract>
+				</Parameter><Parameter>
+					<Name>firmwareImage</Name>
+					<Abstract type="html">The firmware image to send to the device</Abstract>
+				</Parameter><Parameter>
+					<Name>firmwareImageSize</Name>
+					<Abstract type="html">The size of the firmware image</Abstract>
+				</Parameter><Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The command characteristic</Abstract>
+				</Parameter><Parameter>
+					<Name>command</Name>
+					<Abstract type="html">The command to send to the device to activate the bootloader</Abstract>
+				</Parameter><Parameter>
+					<Name>commandLen</Name>
+					<Abstract type="html">The length of the bootloader activation command</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">YES if successful, NO otherwise</Abstract></ReturnValue>
+			<Anchor>//api/name/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/performUpdate:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest *)request</Declaration>
+			
+			
+			<Anchor>//api/name/performUpdate:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/initStateVariables</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)initStateVariables</Declaration>
+			
+			
+			<Anchor>//api/name/initStateVariables</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/cleanUpAfterFailure</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)cleanUpAfterFailure</Declaration>
+			
+			
+			<Anchor>//api/name/cleanUpAfterFailure</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/getImageSize</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (uint32_t)getImageSize</Declaration>
+			
+			
+			<Anchor>//api/name/getImageSize</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/getImageStart</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (uint32_t)getImageStart</Declaration>
+			
+			
+			<Anchor>//api/name/getImageStart</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/updateDeviceAndTriggerDiscovery</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)updateDeviceAndTriggerDiscovery</Declaration>
+			
+			
+			<Anchor>//api/name/updateDeviceAndTriggerDiscovery</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/writeFileSize</TokenIdentifier>
+			<Abstract type="html">Simply sends the size of the firmware image to the DFU.  This is expect after enabling packet notifications through a command to the control point.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)writeFileSize</Declaration>
+			
+			
+			<Anchor>//api/name/writeFileSize</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/enablePacketNotifications</TokenIdentifier>
+			<Abstract type="html">Enables notifications to be sent back as packets are received.  Note that this is a notification sent from the DFU on the control point
+and not an enablement of notifications on the Packet characteristic.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)enablePacketNotifications</Declaration>
+			
+			
+			<Anchor>//api/name/enablePacketNotifications</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/sendInitPacket</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)sendInitPacket</Declaration>
+			
+			
+			<Anchor>//api/name/sendInitPacket</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/sendPatchInitPacket</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)sendPatchInitPacket</Declaration>
+			
+			
+			<Anchor>//api/name/sendPatchInitPacket</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/receiveFirmwareImage</TokenIdentifier>
+			<Abstract type="html">Send this command prepares the DFU to receive the firmware image.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)receiveFirmwareImage</Declaration>
+			
+			
+			<Anchor>//api/name/receiveFirmwareImage</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/startUploadingFile</TokenIdentifier>
+			<Abstract type="html">Initiates send firmware data to the DFU.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)startUploadingFile</Declaration>
+			
+			
+			<Anchor>//api/name/startUploadingFile</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/deterimeLastPacketSize</TokenIdentifier>
+			<Abstract type="html">Determines the size of the last packet that will be sent.  The firmware image is transferred in equal size packets,
+usually 20 bytes in size to minimize transfer time, except for the last packet if necessary.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)deterimeLastPacketSize</Declaration>
+			
+			
+			<Anchor>//api/name/deterimeLastPacketSize</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/sendPacket</TokenIdentifier>
+			<Abstract type="html">Sends one packet of data to the DFU.  If the packet being sent is the last packet, then the size
+is based on the size calculated in the call to determineLastPacketSize.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)sendPacket</Declaration>
+			
+			
+			<Anchor>//api/name/sendPacket</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/validateFirmware</TokenIdentifier>
+			<Abstract type="html">Sends the command to cause the DFU to validate the firmware.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)validateFirmware</Declaration>
+			
+			
+			<Anchor>//api/name/validateFirmware</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/activateFirmware</TokenIdentifier>
+			<Abstract type="html">Sends the command to activate the newly uploaded firmware.  This will cause the device to exit the DFU and start the application.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)activateFirmware</Declaration>
+			
+			
+			<Anchor>//api/name/activateFirmware</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didConnectPeripheral</TokenIdentifier>
+			<Abstract type="html">This method is sent from the delegate protocol once the device is registered as connected by CoreBluetooth.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didConnectPeripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didConnectPeripheral</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didDiscoverCharacteristicsForDFUSerivce</TokenIdentifier>
+			<Abstract type="html">This method is sent from the delegate protocol once device service and characteristic discovery is complete.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didDiscoverCharacteristicsForDFUSerivce</Declaration>
+			
+			
+			<Anchor>//api/name/didDiscoverCharacteristicsForDFUSerivce</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didEnableControlPointNotifications</TokenIdentifier>
+			<Abstract type="html">This is called after successfully enabling notifications for the control point</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didEnableControlPointNotifications</Declaration>
+			
+			
+			<Anchor>//api/name/didEnableControlPointNotifications</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didWriteValueForControlPoint</TokenIdentifier>
+			<Abstract type="html">This is called after succussfully writing data to the control point with a WriteWithResponse attribute</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didWriteValueForControlPoint</Declaration>
+			
+			
+			<Anchor>//api/name/didWriteValueForControlPoint</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didUpdateValueForControlPoint:</TokenIdentifier>
+			<Abstract type="html">Called when a notification arrives from the DFU</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateValueForControlPoint:(uint8_t *)value</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>value</Name>
+					<Abstract type="html">The data sent by the DFU</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didUpdateValueForControlPoint:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didFailToConnectToBootloader</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didFailToConnectToBootloader</Declaration>
+			
+			
+			<Anchor>//api/name/didFailToConnectToBootloader</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didDiscoverDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didDiscoverDevice:(RigAvailableDeviceData *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didDiscoverDevice:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/bluetoothNotPowered</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)bluetoothNotPowered</Declaration>
+			
+			
+			<Anchor>//api/name/bluetoothNotPowered</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/discoveryDidTimeout</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)discoveryDidTimeout</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryDidTimeout</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didConnectDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didConnectDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didConnectDevice:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didDisconnectPeripheral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didDisconnectPeripheral:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didDisconnectPeripheral:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/deviceConnectionDidFail:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)deviceConnectionDidFail:(RigAvailableDeviceData *)device</Declaration>
+			
+			
+			<Anchor>//api/name/deviceConnectionDidFail:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/deviceConnectionDidTimeout:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)deviceConnectionDidTimeout:(RigAvailableDeviceData *)device</Declaration>
+			
+			
+			<Anchor>//api/name/deviceConnectionDidTimeout:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/discoveryDidCompleteForDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)discoveryDidCompleteForDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryDidCompleteForDevice:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didUpdateNotifyStateForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didUpdateNotifyStateForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didUpdateValueForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didUpdateValueForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didWriteValueForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didWriteValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didWriteValueForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

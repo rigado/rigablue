@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>RigFirmwareUpdateManager Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">Rigablue </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Rigado, LLC</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/delegate">delegate</option>
+		
+	</optgroup>
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/activateFirmware">- activateFirmware</option>
+		
+		<option value="//api/name/bluetoothNotPowered">- bluetoothNotPowered</option>
+		
+		<option value="//api/name/cleanUpAfterFailure">- cleanUpAfterFailure</option>
+		
+		<option value="//api/name/deterimeLastPacketSize">- deterimeLastPacketSize</option>
+		
+		<option value="//api/name/deviceConnectionDidFail:">- deviceConnectionDidFail:</option>
+		
+		<option value="//api/name/deviceConnectionDidTimeout:">- deviceConnectionDidTimeout:</option>
+		
+		<option value="//api/name/didConnectDevice:">- didConnectDevice:</option>
+		
+		<option value="//api/name/didConnectPeripheral">- didConnectPeripheral</option>
+		
+		<option value="//api/name/didDisconnectPeripheral:">- didDisconnectPeripheral:</option>
+		
+		<option value="//api/name/didDiscoverCharacteristicsForDFUSerivce">- didDiscoverCharacteristicsForDFUSerivce</option>
+		
+		<option value="//api/name/didDiscoverDevice:">- didDiscoverDevice:</option>
+		
+		<option value="//api/name/didEnableControlPointNotifications">- didEnableControlPointNotifications</option>
+		
+		<option value="//api/name/didFailToConnectToBootloader">- didFailToConnectToBootloader</option>
+		
+		<option value="//api/name/didUpdateNotifyStateForCharacteristic:forDevice:">- didUpdateNotifyStateForCharacteristic:forDevice:</option>
+		
+		<option value="//api/name/didUpdateValueForCharacteristic:forDevice:">- didUpdateValueForCharacteristic:forDevice:</option>
+		
+		<option value="//api/name/didUpdateValueForControlPoint:">- didUpdateValueForControlPoint:</option>
+		
+		<option value="//api/name/didWriteValueForCharacteristic:forDevice:">- didWriteValueForCharacteristic:forDevice:</option>
+		
+		<option value="//api/name/didWriteValueForControlPoint">- didWriteValueForControlPoint</option>
+		
+		<option value="//api/name/discoveryDidCompleteForDevice:">- discoveryDidCompleteForDevice:</option>
+		
+		<option value="//api/name/discoveryDidTimeout">- discoveryDidTimeout</option>
+		
+		<option value="//api/name/enablePacketNotifications">- enablePacketNotifications</option>
+		
+		<option value="//api/name/getImageSize">- getImageSize</option>
+		
+		<option value="//api/name/getImageStart">- getImageStart</option>
+		
+		<option value="//api/name/init">- init</option>
+		
+		<option value="//api/name/initStateVariables">- initStateVariables</option>
+		
+		<option value="//api/name/performUpdate:">- performUpdate:</option>
+		
+		<option value="//api/name/receiveFirmwareImage">- receiveFirmwareImage</option>
+		
+		<option value="//api/name/sendInitPacket">- sendInitPacket</option>
+		
+		<option value="//api/name/sendPacket">- sendPacket</option>
+		
+		<option value="//api/name/sendPatchInitPacket">- sendPatchInitPacket</option>
+		
+		<option value="//api/name/startUploadingFile">- startUploadingFile</option>
+		
+		<option value="//api/name/updateDeviceAndTriggerDiscovery">- updateDeviceAndTriggerDiscovery</option>
+		
+		<option value="//api/name/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:">- updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:</option>
+		
+		<option value="//api/name/validateFirmware">- validateFirmware</option>
+		
+		<option value="//api/name/writeFileSize">- writeFileSize</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">RigFirmwareUpdateManager Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>RigFirmwareUpdateManager.h<br />RigFirmwareUpdateManager.m</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="method-title"><code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This delegate does not have to be set but if it is, then progress updates will be reported to the App.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (weak, nonatomic) id&lt;RigFirmwareUpdateManagerDelegate&gt; delegate</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/init" title="init"></a>
+	<h3 class="method-title"><code><a href="#//api/name/init">&ndash;&nbsp;init</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initializes a new instance of RigFirmwareUpdateManager.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)init</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>A firmware update manager instance</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:" title="updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:">&ndash;&nbsp;updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Begins a firmware update for the given device.  If a device is not currently running the bootloader, a command to enter
+the bootloader must be provided.  If it is already in the bootloader, then the command may be nil and the command len 0.
+Additionally, the calling code must provide a characteristic on the device to which the command will be sent.  Again, if
+already in the bootloader, this characteristic parameter may be nil.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)updateFirmware:(RigLeBaseDevice *)<em>device</em> isPatch:(BOOL)<em>isPatch</em> image:(NSData *)<em>firmwareImage</em> imageSize:(uint32_t)<em>firmwareImageSize</em> activateChar:(CBCharacteristic *)<em>characteristic</em> activateCommand:(uint8_t *)<em>command</em> activateCommandLen:(uint8_t)<em>commandLen</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>device</code></th>
+						<td><p>The device for which to perform the firmware update</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>isPatch</code></th>
+						<td><p>Set to true if the image is a patch image, otherwise set false</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>firmwareImage</code></th>
+						<td><p>The firmware image to send to the device</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>firmwareImageSize</code></th>
+						<td><p>The size of the firmware image</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>characteristic</code></th>
+						<td><p>The command characteristic</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>command</code></th>
+						<td><p>The command to send to the device to activate the bootloader</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>commandLen</code></th>
+						<td><p>The length of the bootloader activation command</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>YES if successful, NO otherwise</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/performUpdate:" title="performUpdate:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/performUpdate:">&ndash;&nbsp;performUpdate:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest *)<em>request</em></code></div>
+
+		    
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initStateVariables" title="initStateVariables"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initStateVariables">&ndash;&nbsp;initStateVariables</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)initStateVariables</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/cleanUpAfterFailure" title="cleanUpAfterFailure"></a>
+	<h3 class="method-title"><code><a href="#//api/name/cleanUpAfterFailure">&ndash;&nbsp;cleanUpAfterFailure</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)cleanUpAfterFailure</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getImageSize" title="getImageSize"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getImageSize">&ndash;&nbsp;getImageSize</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (uint32_t)getImageSize</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getImageStart" title="getImageStart"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getImageStart">&ndash;&nbsp;getImageStart</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (uint32_t)getImageStart</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/updateDeviceAndTriggerDiscovery" title="updateDeviceAndTriggerDiscovery"></a>
+	<h3 class="method-title"><code><a href="#//api/name/updateDeviceAndTriggerDiscovery">&ndash;&nbsp;updateDeviceAndTriggerDiscovery</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)updateDeviceAndTriggerDiscovery</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/writeFileSize" title="writeFileSize"></a>
+	<h3 class="method-title"><code><a href="#//api/name/writeFileSize">&ndash;&nbsp;writeFileSize</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Simply sends the size of the firmware image to the DFU.  This is expect after enabling packet notifications through a command to the control point.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)writeFileSize</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/enablePacketNotifications" title="enablePacketNotifications"></a>
+	<h3 class="method-title"><code><a href="#//api/name/enablePacketNotifications">&ndash;&nbsp;enablePacketNotifications</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Enables notifications to be sent back as packets are received.  Note that this is a notification sent from the DFU on the control point
+and not an enablement of notifications on the Packet characteristic.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)enablePacketNotifications</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sendInitPacket" title="sendInitPacket"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sendInitPacket">&ndash;&nbsp;sendInitPacket</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)sendInitPacket</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sendPatchInitPacket" title="sendPatchInitPacket"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sendPatchInitPacket">&ndash;&nbsp;sendPatchInitPacket</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)sendPatchInitPacket</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/receiveFirmwareImage" title="receiveFirmwareImage"></a>
+	<h3 class="method-title"><code><a href="#//api/name/receiveFirmwareImage">&ndash;&nbsp;receiveFirmwareImage</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Send this command prepares the DFU to receive the firmware image.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)receiveFirmwareImage</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/startUploadingFile" title="startUploadingFile"></a>
+	<h3 class="method-title"><code><a href="#//api/name/startUploadingFile">&ndash;&nbsp;startUploadingFile</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initiates send firmware data to the DFU.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)startUploadingFile</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/deterimeLastPacketSize" title="deterimeLastPacketSize"></a>
+	<h3 class="method-title"><code><a href="#//api/name/deterimeLastPacketSize">&ndash;&nbsp;deterimeLastPacketSize</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Determines the size of the last packet that will be sent.  The firmware image is transferred in equal size packets,
+usually 20 bytes in size to minimize transfer time, except for the last packet if necessary.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)deterimeLastPacketSize</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/sendPacket" title="sendPacket"></a>
+	<h3 class="method-title"><code><a href="#//api/name/sendPacket">&ndash;&nbsp;sendPacket</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sends one packet of data to the DFU.  If the packet being sent is the last packet, then the size
+is based on the size calculated in the call to determineLastPacketSize.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)sendPacket</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/validateFirmware" title="validateFirmware"></a>
+	<h3 class="method-title"><code><a href="#//api/name/validateFirmware">&ndash;&nbsp;validateFirmware</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sends the command to cause the DFU to validate the firmware.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)validateFirmware</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/activateFirmware" title="activateFirmware"></a>
+	<h3 class="method-title"><code><a href="#//api/name/activateFirmware">&ndash;&nbsp;activateFirmware</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Sends the command to activate the newly uploaded firmware.  This will cause the device to exit the DFU and start the application.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)activateFirmware</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didConnectPeripheral" title="didConnectPeripheral"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didConnectPeripheral">&ndash;&nbsp;didConnectPeripheral</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method is sent from the <a href="#//api/name/delegate">delegate</a> protocol once the device is registered as connected by CoreBluetooth.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didConnectPeripheral</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didDiscoverCharacteristicsForDFUSerivce" title="didDiscoverCharacteristicsForDFUSerivce"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didDiscoverCharacteristicsForDFUSerivce">&ndash;&nbsp;didDiscoverCharacteristicsForDFUSerivce</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This method is sent from the <a href="#//api/name/delegate">delegate</a> protocol once device service and characteristic discovery is complete.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didDiscoverCharacteristicsForDFUSerivce</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didEnableControlPointNotifications" title="didEnableControlPointNotifications"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didEnableControlPointNotifications">&ndash;&nbsp;didEnableControlPointNotifications</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This is called after successfully enabling notifications for the control point</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didEnableControlPointNotifications</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didWriteValueForControlPoint" title="didWriteValueForControlPoint"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didWriteValueForControlPoint">&ndash;&nbsp;didWriteValueForControlPoint</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>This is called after succussfully writing data to the control point with a WriteWithResponse attribute</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didWriteValueForControlPoint</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didUpdateValueForControlPoint:" title="didUpdateValueForControlPoint:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didUpdateValueForControlPoint:">&ndash;&nbsp;didUpdateValueForControlPoint:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Called when a notification arrives from the DFU</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didUpdateValueForControlPoint:(uint8_t *)<em>value</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>value</code></th>
+						<td><p>The data sent by the DFU</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigFirmwareUpdateManager.m</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didFailToConnectToBootloader" title="didFailToConnectToBootloader"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didFailToConnectToBootloader">&ndash;&nbsp;didFailToConnectToBootloader</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)didFailToConnectToBootloader</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didDiscoverDevice:" title="didDiscoverDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didDiscoverDevice:">&ndash;&nbsp;didDiscoverDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)didDiscoverDevice:(RigAvailableDeviceData *)<em>device</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/bluetoothNotPowered" title="bluetoothNotPowered"></a>
+	<h3 class="method-title"><code><a href="#//api/name/bluetoothNotPowered">&ndash;&nbsp;bluetoothNotPowered</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)bluetoothNotPowered</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/discoveryDidTimeout" title="discoveryDidTimeout"></a>
+	<h3 class="method-title"><code><a href="#//api/name/discoveryDidTimeout">&ndash;&nbsp;discoveryDidTimeout</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)discoveryDidTimeout</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didConnectDevice:" title="didConnectDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didConnectDevice:">&ndash;&nbsp;didConnectDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)didConnectDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didDisconnectPeripheral:" title="didDisconnectPeripheral:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didDisconnectPeripheral:">&ndash;&nbsp;didDisconnectPeripheral:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)didDisconnectPeripheral:(CBPeripheral *)<em>peripheral</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/deviceConnectionDidFail:" title="deviceConnectionDidFail:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/deviceConnectionDidFail:">&ndash;&nbsp;deviceConnectionDidFail:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)deviceConnectionDidFail:(RigAvailableDeviceData *)<em>device</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/deviceConnectionDidTimeout:" title="deviceConnectionDidTimeout:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/deviceConnectionDidTimeout:">&ndash;&nbsp;deviceConnectionDidTimeout:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)deviceConnectionDidTimeout:(RigAvailableDeviceData *)<em>device</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/discoveryDidCompleteForDevice:" title="discoveryDidCompleteForDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/discoveryDidCompleteForDevice:">&ndash;&nbsp;discoveryDidCompleteForDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)discoveryDidCompleteForDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didUpdateNotifyStateForCharacteristic:forDevice:" title="didUpdateNotifyStateForCharacteristic:forDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didUpdateNotifyStateForCharacteristic:forDevice:">&ndash;&nbsp;didUpdateNotifyStateForCharacteristic:forDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)<em>characteristic</em> forDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didUpdateValueForCharacteristic:forDevice:" title="didUpdateValueForCharacteristic:forDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didUpdateValueForCharacteristic:forDevice:">&ndash;&nbsp;didUpdateValueForCharacteristic:forDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)didUpdateValueForCharacteristic:(CBCharacteristic *)<em>characteristic</em> forDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didWriteValueForCharacteristic:forDevice:" title="didWriteValueForCharacteristic:forDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didWriteValueForCharacteristic:forDevice:">&ndash;&nbsp;didWriteValueForCharacteristic:forDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)didWriteValueForCharacteristic:(CBCharacteristic *)<em>characteristic</em> forDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 Rigado, LLC. All rights reserved. Updated: 2016-07-07</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

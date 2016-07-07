@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigLeBaseDevice.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigLeBaseDevice</TokenIdentifier>
+			<Abstract type="html">@class RigLeBaseDevice</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+            
+			
+			<NodeRef refid="7"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/initWithPeripheral:</TokenIdentifier>
+			<Abstract type="html">Initialize a base device object with the provide peripheral.  Use this rather than the base init method.</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (id)initWithPeripheral:(CBPeripheral *)peripheral</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The peripheral to initiailize this object against.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">Returns new base device oject.</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithPeripheral:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/runDiscovery</TokenIdentifier>
+			<Abstract type="html">@method runDiscovery</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)runDiscovery</Declaration>
+			
+			
+			<Anchor>//api/name/runDiscovery</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getSerivceList</TokenIdentifier>
+			<Abstract type="html">@method getServiceList</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getSerivceList</Declaration>
+			
+			<ReturnValue><Abstract type="html">List of discovered services.</Abstract></ReturnValue>
+			<Anchor>//api/name/getSerivceList</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getServiceWithUuid:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (CBService *)getServiceWithUuid:(CBUUID *)uuid</Declaration>
+			
+			
+			<Anchor>//api/name/getServiceWithUuid:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getCharacteristicWithUuid:forService:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (CBCharacteristic *)getCharacteristicWithUuid:(CBUUID *)uuid forService:(CBService *)service</Declaration>
+			
+			
+			<Anchor>//api/name/getCharacteristicWithUuid:forService:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/enableNotificationsForCharacteristic:</TokenIdentifier>
+			<Abstract type="html">@method enableNotificationsForCharacteristic:</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)enableNotificationsForCharacteristic:(CBCharacteristic *)characteristic</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The characteristic on which to enable notifications.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">Returns YES if the request was successful.  If NO is returned, then it is likely that the characteristic does not have the notify property enabled.
+However, even if this function returns YES, notifications are not guaranteed to be enabled.  CoreBluetooth must issue the appropriate callback.
+Rigablue will forward this callback to the delete with the &lt;code&gt;didUpdateNotifyStateForCharacteristic&lt;/code&gt; message.</Abstract></ReturnValue>
+			<Anchor>//api/name/enableNotificationsForCharacteristic:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/setAdvertisementData:</TokenIdentifier>
+			<Abstract type="html">@method setAdvertisementData</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)setAdvertisementData:(NSDictionary *)advData</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>advData</Name>
+					<Abstract type="html">The advertisement data to associate with this base device object.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/setAdvertisementData:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getAdvertisementData</TokenIdentifier>
+			<Abstract type="html">@method getAdvertisementData</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (NSDictionary *)getAdvertisementData</Declaration>
+			
+			<ReturnValue><Abstract type="html">nil if advertisement data not set; else the advertisement data array</Abstract></ReturnValue>
+			<Anchor>//api/name/getAdvertisementData</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/setPeripheral:</TokenIdentifier>
+			<Abstract type="html">@property peripheral</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral</TokenIdentifier>
+			<Abstract type="html">@property peripheral</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigLeBaseDevice/peripheral</TokenIdentifier>
+			<Abstract type="html">@property peripheral</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/setName:</TokenIdentifier>
+			<Abstract type="html">@property name</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/name</TokenIdentifier>
+			<Abstract type="html">@property name</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigLeBaseDevice/name</TokenIdentifier>
+			<Abstract type="html">@property name</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSString *name</Declaration>
+			
+			
+			<Anchor>//api/name/name</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/setIsDiscoveryComplete:</TokenIdentifier>
+			<Abstract type="html">@property isDiscoveryComplete</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isDiscoveryComplete</Declaration>
+			
+			
+			<Anchor>//api/name/isDiscoveryComplete</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/isDiscoveryComplete</TokenIdentifier>
+			<Abstract type="html">@property isDiscoveryComplete</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isDiscoveryComplete</Declaration>
+			
+			
+			<Anchor>//api/name/isDiscoveryComplete</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigLeBaseDevice/isDiscoveryComplete</TokenIdentifier>
+			<Abstract type="html">@property isDiscoveryComplete</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (readonly) BOOL isDiscoveryComplete</Declaration>
+			
+			
+			<Anchor>//api/name/isDiscoveryComplete</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/setDelegate:</TokenIdentifier>
+			<Abstract type="html">@property delegate</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, weak) id&lt;RigLeBaseDeviceDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/delegate</TokenIdentifier>
+			<Abstract type="html">@property delegate</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, weak) id&lt;RigLeBaseDeviceDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigLeBaseDevice/delegate</TokenIdentifier>
+			<Abstract type="html">@property delegate</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, weak) id&lt;RigLeBaseDeviceDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/runDiscoveryForServices:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
+			
+			<Declaration>- (void)runDiscoveryForServices:(NSArray *)serviceList</Declaration>
+			
+			
+			<Anchor>//api/name/runDiscoveryForServices:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didDiscoverServices:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral:didDiscoverServices:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didDiscoverCharacteristicsForService:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral:didDiscoverCharacteristicsForService:error:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didUpdateNotificationStateForCharacteristic:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral:didUpdateNotificationStateForCharacteristic:error:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didWriteValueForCharacteristic:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral:didWriteValueForCharacteristic:error:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/peripheral:didUpdateValueForCharacteristic:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.m</DeclaredIn>
+			
+			<Declaration>- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral:didUpdateValueForCharacteristic:error:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>
