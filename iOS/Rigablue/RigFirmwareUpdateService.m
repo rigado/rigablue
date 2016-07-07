@@ -16,10 +16,22 @@
 
 #define SECURE_DFU_MODEL_NUMBER @"Rigado Secure DFU"
 
-NSString *kupdateDFUServiceUuidString = @"00001530-1212-efde-1523-785feabcd123";
-NSString *kupdateDFUControlPointUuidString = @"00001531-1212-efde-1523-785feabcd123";
-NSString *kupdateDFUPacketCharUuidString = @"00001532-1212-efde-1523-785feabcd123";
+NSString *kupdateDFUServiceUuidString;
+NSString *kupdateDFUControlPointUuidString;
+NSString *kupdateDFUPacketCharUuidString;
 NSString *kupdateDFUReportCharUuidString = @"00001533-1212-efde-1523-785feabcd123";
+
+// 200 Eval Board UUIDs named EvalDemo
+NSString *k200EvalBoardName = @"EvalDemo";
+NSString *kupdateDFUServiceUuidString200 = @"00001530-1212-efde-1523-785feabcd123";
+NSString *kupdateDFUControlPointUuidString200 = @"00001531-1212-efde-1523-785feabcd123";
+NSString *kupdateDFUPacketCharUuidString200 = @"00001532-1212-efde-1523-785feabcd123";
+
+// 300 Eval Board UUIDs named RB-Demo
+NSString *k300EvalBoardName = @"RB-Demo";
+NSString *kupdateDFUServiceUuidString300 = @"41c89030-1756-4c30-93cc-a8fcc2fb0202";
+NSString *kupdateDFUControlPointUuidString300 = @"41c89032-1756-4c30-93cc-a8fcc2fb0202";
+NSString *kupdateDFUPacketCharUuidString300 = @"41c89031-1756-4c30-93cc-a8fcc2fb0202";
 
 NSString *kDisUuidString = @"180A";
 NSString *kDisFirmwareVersionUuidString = @"2a26";
@@ -80,10 +92,6 @@ NSString *kDisModelNumberUuidString = @"2a24";
     if (self) {
         oldDelegate = [RigLeConnectionManager sharedInstance].delegate;
         [RigLeConnectionManager sharedInstance].delegate = self;
-        updateDFUServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString];
-        updateDFUControlPointUuid = [CBUUID UUIDWithString:kupdateDFUControlPointUuidString];
-        updateDFUPacketCharUuid = [CBUUID UUIDWithString:kupdateDFUPacketCharUuidString];
-        updateDFUReportCharUuid = [CBUUID UUIDWithString:kupdateDFUReportCharUuidString];
         
         disUuid = [CBUUID UUIDWithString:kDisUuidString];
         disFirmwareVersionUuid = [CBUUID UUIDWithString:kDisFirmwareVersionUuidString];
@@ -122,7 +130,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
     shouldReconnectToPeripheral = YES;
     reconnectAttempts = 0;
     [[RigLeConnectionManager sharedInstance] disconnectDevice:updateDevice];
-
+    
     return DfuError_None;
 }
 
@@ -131,6 +139,22 @@ NSString *kDisModelNumberUuidString = @"2a24";
     if (baseDevice == nil) {
         return DfuError_BadDevice;
     }
+    if ([baseDevice.peripheral.name isEqual:k300EvalBoardName]) {
+        kupdateDFUServiceUuidString = kupdateDFUServiceUuidString300;
+        kupdateDFUControlPointUuidString = kupdateDFUControlPointUuidString300;
+        kupdateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString300;
+    } else if ([baseDevice.peripheral.name isEqualToString:k200EvalBoardName]){
+        // This could be an else statement
+        // if we want to have a default UUID value
+        kupdateDFUServiceUuidString = kupdateDFUServiceUuidString200;
+        kupdateDFUControlPointUuidString = kupdateDFUControlPointUuidString200;
+        kupdateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString200;
+    }
+    
+    updateDFUServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString];
+    updateDFUControlPointUuid = [CBUUID UUIDWithString:kupdateDFUControlPointUuidString];
+    updateDFUPacketCharUuid = [CBUUID UUIDWithString:kupdateDFUPacketCharUuidString];
+    updateDFUReportCharUuid = [CBUUID UUIDWithString:kupdateDFUReportCharUuidString];
     
     updateDevice = baseDevice;
     updatePeripheral = updateDevice.peripheral;
@@ -465,7 +489,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
     NSLog(@"Discovery complete!");
     updateDevice = device;
     [self assignServicesAndCharacteristics];
-
+    
     NSLog(@"Starting update!");
     [delegate didDiscoverCharacteristicsForDFUService];
 }
@@ -492,4 +516,5 @@ NSString *kDisModelNumberUuidString = @"2a24";
         [delegate didWriteValueForControlPoint];
     }
 }
+
 @end
