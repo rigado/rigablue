@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/RigFirmwareUpdateManagerDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/RigFirmwareUpdateManagerDelegate</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="12"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateManagerDelegate/updateProgress:</TokenIdentifier>
+			<Abstract type="html">This method is called during a firmware update to report total progress to the applition.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (void)updateProgress:(float)progress</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>progress</Name>
+					<Abstract type="html">The update progress between 0 and 1</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/updateProgress:</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateManagerDelegate/updateStatus:errorCode:</TokenIdentifier>
+			<Abstract type="html">Reports a status of the firmware update to the App.  This is a string that can be displayed to the user
+along with an error code if applicable.  Assuming all is well, error should be DfuError_None.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (void)updateStatus:(NSString *)status errorCode:(RigDfuError_t)error</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>status</Name>
+					<Abstract type="html">The status</Abstract>
+				</Parameter><Parameter>
+					<Name>error</Name>
+					<Abstract type="html">The error code</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/updateStatus:errorCode:</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateManagerDelegate/didFinishUpdate</TokenIdentifier>
+			<Abstract type="html">This is called when a firmware update is complete and the new firmware is activated on the device.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (void)didFinishUpdate</Declaration>
+			
+			
+			<Anchor>//api/name/didFinishUpdate</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateManagerDelegate/updateFailed:errorCode:</TokenIdentifier>
+			<Abstract type="html">This method is called if an update fails for any given reason.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (void)updateFailed:(NSString *)status errorCode:(RigDfuError_t)error</Declaration>
+			
+			
+			<Anchor>//api/name/updateFailed:errorCode:</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

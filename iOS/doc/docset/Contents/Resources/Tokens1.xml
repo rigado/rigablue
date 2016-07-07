@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigAvailableDeviceData.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigAvailableDeviceData</TokenIdentifier>
+			<Abstract type="html">This is a storage class that contains data pertaining to devices discovery through the CoreBluetooth discovery operation.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+            
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/cl/RigLeDiscoveryManager</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<NodeRef refid="1"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/initWithPeripheral:advertisementData:rssi:discoverTime:</TokenIdentifier>
+			<Abstract type="html">This method is used to initialize available devices using the input paramemters.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>- (id)initWithPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advData rssi:(NSNumber *)rssi discoverTime:(NSDate *)time</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>peripheral</Name>
+					<Abstract type="html">The peripheral object for this device data.</Abstract>
+				</Parameter><Parameter>
+					<Name>advData</Name>
+					<Abstract type="html">The advertisement data as provided by CoreBluetooth.</Abstract>
+				</Parameter><Parameter>
+					<Name>rssi</Name>
+					<Abstract type="html">The RSSI as indicated upon discovery.</Abstract>
+				</Parameter><Parameter>
+					<Name>time</Name>
+					<Abstract type="html">The time at which the discovery of this device was reported by CoreBluetooth.</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">Returns an instance of &lt;i&gt;RigAvailableDeviceData&lt;/i&gt;.</Abstract></ReturnValue>
+			<Anchor>//api/name/initWithPeripheral:advertisementData:rssi:discoverTime:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/containsUuid:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)containsUuid:(CBUUID *)uuid</Declaration>
+			
+			
+			<Anchor>//api/name/containsUuid:</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/setAdvertisementData:</TokenIdentifier>
+			<Abstract type="html">This property contains the advertisement data provided by CoreBluetooth upon discovery.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDictionary *advertisementData</Declaration>
+			
+			
+			<Anchor>//api/name/advertisementData</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/advertisementData</TokenIdentifier>
+			<Abstract type="html">This property contains the advertisement data provided by CoreBluetooth upon discovery.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDictionary *advertisementData</Declaration>
+			
+			
+			<Anchor>//api/name/advertisementData</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigAvailableDeviceData/advertisementData</TokenIdentifier>
+			<Abstract type="html">This property contains the advertisement data provided by CoreBluetooth upon discovery.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDictionary *advertisementData</Declaration>
+			
+			
+			<Anchor>//api/name/advertisementData</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/setPeripheral:</TokenIdentifier>
+			<Abstract type="html">This property contains the CBPeripheral object provided by CoreBluetooth upon discovery.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/peripheral</TokenIdentifier>
+			<Abstract type="html">This property contains the CBPeripheral object provided by CoreBluetooth upon discovery.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigAvailableDeviceData/peripheral</TokenIdentifier>
+			<Abstract type="html">This property contains the CBPeripheral object provided by CoreBluetooth upon discovery.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBPeripheral *peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/peripheral</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/setRssi:</TokenIdentifier>
+			<Abstract type="html">This property contains the RSSI as provided at time of discovery.  It does not update unless the device is re-discovered through a discovery session.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSNumber *rssi</Declaration>
+			
+			
+			<Anchor>//api/name/rssi</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/rssi</TokenIdentifier>
+			<Abstract type="html">This property contains the RSSI as provided at time of discovery.  It does not update unless the device is re-discovered through a discovery session.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSNumber *rssi</Declaration>
+			
+			
+			<Anchor>//api/name/rssi</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigAvailableDeviceData/rssi</TokenIdentifier>
+			<Abstract type="html">This property contains the RSSI as provided at time of discovery.  It does not update unless the device is re-discovered through a discovery session.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSNumber *rssi</Declaration>
+			
+			
+			<Anchor>//api/name/rssi</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/setDiscoverTime:</TokenIdentifier>
+			<Abstract type="html">This property provides a time stamp for when a device was discovered.  The intended use is to allow the application to remove devices that are really old.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDate *discoverTime</Declaration>
+			
+			
+			<Anchor>//api/name/discoverTime</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/discoverTime</TokenIdentifier>
+			<Abstract type="html">This property provides a time stamp for when a device was discovered.  The intended use is to allow the application to remove devices that are really old.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDate *discoverTime</Declaration>
+			
+			
+			<Anchor>//api/name/discoverTime</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigAvailableDeviceData/discoverTime</TokenIdentifier>
+			<Abstract type="html">This property provides a time stamp for when a device was discovered.  The intended use is to allow the application to remove devices that are really old.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDate *discoverTime</Declaration>
+			
+			
+			<Anchor>//api/name/discoverTime</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/setLastSeenTime:</TokenIdentifier>
+			<Abstract type="html">This property provides a time stamp for when the device was last seen in a discovery event.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDate *lastSeenTime</Declaration>
+			
+			
+			<Anchor>//api/name/lastSeenTime</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigAvailableDeviceData/lastSeenTime</TokenIdentifier>
+			<Abstract type="html">This property provides a time stamp for when the device was last seen in a discovery event.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDate *lastSeenTime</Declaration>
+			
+			
+			<Anchor>//api/name/lastSeenTime</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigAvailableDeviceData/lastSeenTime</TokenIdentifier>
+			<Abstract type="html">This property provides a time stamp for when the device was last seen in a discovery event.</Abstract>
+			<DeclaredIn>RigAvailableDeviceData.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSDate *lastSeenTime</Declaration>
+			
+			
+			<Anchor>//api/name/lastSeenTime</Anchor>
+            <NodeRef refid="1"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

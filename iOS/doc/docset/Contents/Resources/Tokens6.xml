@@ -1,0 +1,548 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigFirmwareUpdateService.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigFirmwareUpdateService</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+            
+			
+			<NodeRef refid="6"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate for the FirmwareUpdateService should be set prior to starting firmware updates.  See
+RigFirmwareUpdateManager.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateServiceDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate for the FirmwareUpdateService should be set prior to starting firmware updates.  See
+RigFirmwareUpdateManager.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateServiceDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateService/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate for the FirmwareUpdateService should be set prior to starting firmware updates.  See
+RigFirmwareUpdateManager.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (weak, nonatomic) id&lt;RigFirmwareUpdateServiceDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/setShouldReconnectToPeripheral:</TokenIdentifier>
+			<Abstract type="html">If this is set to YES, then if a disconnect occurs, a connection will automatically be reattempted for
+up to 10 tries.  This property allows for indiviual reconnection control.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic) BOOL shouldReconnectToPeripheral</Declaration>
+			
+			
+			<Anchor>//api/name/shouldReconnectToPeripheral</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/shouldReconnectToPeripheral</TokenIdentifier>
+			<Abstract type="html">If this is set to YES, then if a disconnect occurs, a connection will automatically be reattempted for
+up to 10 tries.  This property allows for indiviual reconnection control.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic) BOOL shouldReconnectToPeripheral</Declaration>
+			
+			
+			<Anchor>//api/name/shouldReconnectToPeripheral</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateService/shouldReconnectToPeripheral</TokenIdentifier>
+			<Abstract type="html">If this is set to YES, then if a disconnect occurs, a connection will automatically be reattempted for
+up to 10 tries.  This property allows for indiviual reconnection control.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic) BOOL shouldReconnectToPeripheral</Declaration>
+			
+			
+			<Anchor>//api/name/shouldReconnectToPeripheral</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/setAlwaysReconnectOnDisconnect:</TokenIdentifier>
+			<Abstract type="html">If this is set to YES, then anytime a disconnect occurs for the update device, a reconnect will be issued.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic) BOOL alwaysReconnectOnDisconnect</Declaration>
+			
+			
+			<Anchor>//api/name/alwaysReconnectOnDisconnect</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/alwaysReconnectOnDisconnect</TokenIdentifier>
+			<Abstract type="html">If this is set to YES, then anytime a disconnect occurs for the update device, a reconnect will be issued.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic) BOOL alwaysReconnectOnDisconnect</Declaration>
+			
+			
+			<Anchor>//api/name/alwaysReconnectOnDisconnect</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateService/alwaysReconnectOnDisconnect</TokenIdentifier>
+			<Abstract type="html">If this is set to YES, then anytime a disconnect occurs for the update device, a reconnect will be issued.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic) BOOL alwaysReconnectOnDisconnect</Declaration>
+			
+			
+			<Anchor>//api/name/alwaysReconnectOnDisconnect</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/init</TokenIdentifier>
+			<Abstract type="html">Initializes the update service object.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (id)init</Declaration>
+			
+			<ReturnValue><Abstract type="html">A new instance of an update service.</Abstract></ReturnValue>
+			<Anchor>//api/name/init</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/setDevice:</TokenIdentifier>
+			<Abstract type="html">Sets the device to be used for the firmware update.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)setDevice:(RigLeBaseDevice *)baseDevice</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>baseDevice</Name>
+					<Abstract type="html">The device to use</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">DfuError_None on success, an error otherwise</Abstract></ReturnValue>
+			<Anchor>//api/name/setDevice:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didWriteValueForCharacteristic:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didWriteValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/didWriteValueForCharacteristic:error:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didUpdateValueForCharacteristic:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/didUpdateValueForCharacteristic:error:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didUpdateNotifyStateForCharacteristic:error:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error</Declaration>
+			
+			
+			<Anchor>//api/name/didUpdateNotifyStateForCharacteristic:error:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/completeUpdate</TokenIdentifier>
+			<Abstract type="html">This method finishes a firmware update by cleaning up and disconnecting from the device.  It MUST be called
+after the firmware image is successfully transferred and activated.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)completeUpdate</Declaration>
+			
+			
+			<Anchor>//api/name/completeUpdate</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/connectPeripheral</TokenIdentifier>
+			<Abstract type="html">Connects to the update device.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)connectPeripheral</Declaration>
+			
+			<ReturnValue><Abstract type="html">DfuError_None if successful, an error otherwise.</Abstract></ReturnValue>
+			<Anchor>//api/name/connectPeripheral</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/triggerServiceDiscovery</TokenIdentifier>
+			<Abstract type="html">Starts a service discovery on the update device. This is useful if the device is already in the DFU and does not
+first need to be reset to activate the bootloader.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)triggerServiceDiscovery</Declaration>
+			
+			<ReturnValue><Abstract type="html">DfuError_None if successful, an error otherwise.</Abstract></ReturnValue>
+			<Anchor>//api/name/triggerServiceDiscovery</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/disconnectPeripheral</TokenIdentifier>
+			<Abstract type="html">Disconnects from the update device.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)disconnectPeripheral</Declaration>
+			
+			<ReturnValue><Abstract type="html">DfuError_None if successful, an error otherwise.</Abstract></ReturnValue>
+			<Anchor>//api/name/disconnectPeripheral</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/isSecureDfu</TokenIdentifier>
+			<Abstract type="html">Reports if the connected firmware update service is a secure dfu service.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (BOOL)isSecureDfu</Declaration>
+			
+			<ReturnValue><Abstract type="html">YES if secure dfu; NO otherwise</Abstract></ReturnValue>
+			<Anchor>//api/name/isSecureDfu</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/determineSecureDfuStatus</TokenIdentifier>
+			<Abstract type="html">This is called if the bootloader device has already been connected with a complete discovery already performed.
+In this case, the DIS data needs to be examined to see if the connection is to a secure DFU.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (void)determineSecureDfuStatus</Declaration>
+			
+			<ReturnValue><Abstract type="html">nothing</Abstract></ReturnValue>
+			<Anchor>//api/name/determineSecureDfuStatus</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/writeDataToControlPoint:withLen:shouldGetResponse:</TokenIdentifier>
+			<Abstract type="html">Writes data to the DFU Control Point characteristic.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)writeDataToControlPoint:(const uint8_t *)data withLen:(uint8_t)len shouldGetResponse:(BOOL)getResponse</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>data</Name>
+					<Abstract type="html">The data to write</Abstract>
+				</Parameter><Parameter>
+					<Name>len</Name>
+					<Abstract type="html">Data length</Abstract>
+				</Parameter><Parameter>
+					<Name>getResponse</Name>
+					<Abstract type="html">If YES, write data with CBCharacteristicWriteWithResponse,
+if NO, write data with CBCharacteristicWriteWithoutResponse</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">DfuError_None if successful, an error otherwise</Abstract></ReturnValue>
+			<Anchor>//api/name/writeDataToControlPoint:withLen:shouldGetResponse:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/writeDataToPacketCharacteristic:withLen:shouldGetResponse:</TokenIdentifier>
+			<Abstract type="html">Writes data to the DFU Packet characteristic.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)writeDataToPacketCharacteristic:(const uint8_t *)data withLen:(uint8_t)len shouldGetResponse:(BOOL)getResponse</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>data</Name>
+					<Abstract type="html">The data to write</Abstract>
+				</Parameter><Parameter>
+					<Name>len</Name>
+					<Abstract type="html">Data Length</Abstract>
+				</Parameter><Parameter>
+					<Name>getResponse</Name>
+					<Abstract type="html">If YES, write data with CBCharacteristicWriteWithResponse,
+if NO, write data with CBCharacteristicWriteWithoutResponse</Abstract>
+				</Parameter>
+			</Parameters>
+			<ReturnValue><Abstract type="html">DfuError_None if successful, an error otherwise</Abstract></ReturnValue>
+			<Anchor>//api/name/writeDataToPacketCharacteristic:withLen:shouldGetResponse:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/enableControlPointNotifications</TokenIdentifier>
+			<Abstract type="html">Enables notifications for the DFU Control Point characteristic.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)enableControlPointNotifications</Declaration>
+			
+			<ReturnValue><Abstract type="html">DfuError_None if successful, an error otherwise</Abstract></ReturnValue>
+			<Anchor>//api/name/enableControlPointNotifications</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/disableControlPointNotifications</TokenIdentifier>
+			<Abstract type="html">Disables notifications for the DFU Control Point characteristic.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)disableControlPointNotifications</Declaration>
+			
+			<ReturnValue><Abstract type="html">DfuError_None if successful, an error otherwise</Abstract></ReturnValue>
+			<Anchor>//api/name/disableControlPointNotifications</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/reconnectPeripheral</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (RigDfuError_t)reconnectPeripheral</Declaration>
+			
+			
+			<Anchor>//api/name/reconnectPeripheral</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/assignServicesAndCharacteristics</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)assignServicesAndCharacteristics</Declaration>
+			
+			
+			<Anchor>//api/name/assignServicesAndCharacteristics</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/addCharacteristics:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)addCharacteristics:(NSArray *)characteristics</Declaration>
+			
+			
+			<Anchor>//api/name/addCharacteristics:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/updateDisChacteristics:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)updateDisChacteristics:(NSArray *)characteristics</Declaration>
+			
+			
+			<Anchor>//api/name/updateDisChacteristics:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/getCharacteristicUuids</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getCharacteristicUuids</Declaration>
+			
+			
+			<Anchor>//api/name/getCharacteristicUuids</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/getCharacteristicArray</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getCharacteristicArray</Declaration>
+			
+			
+			<Anchor>//api/name/getCharacteristicArray</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didDiscoverDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)didDiscoverDevice:(RigAvailableDeviceData *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didDiscoverDevice:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/discoveryDidTimeout</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)discoveryDidTimeout</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryDidTimeout</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/bluetoothNotPowered</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)bluetoothNotPowered</Declaration>
+			
+			
+			<Anchor>//api/name/bluetoothNotPowered</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didConnectDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)didConnectDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didConnectDevice:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didDisconnectPeripheral:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)didDisconnectPeripheral:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didDisconnectPeripheral:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/deviceConnectionDidFail:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)deviceConnectionDidFail:(RigAvailableDeviceData *)device</Declaration>
+			
+			
+			<Anchor>//api/name/deviceConnectionDidFail:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/deviceConnectionDidTimeout:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)deviceConnectionDidTimeout:(RigAvailableDeviceData *)device</Declaration>
+			
+			
+			<Anchor>//api/name/deviceConnectionDidTimeout:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/discoveryDidCompleteForDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)discoveryDidCompleteForDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryDidCompleteForDevice:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didUpdateValueForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didUpdateValueForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didUpdateNotifyStateForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didUpdateNotifyStateForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/didWriteValueForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
+			
+			<Declaration>- (void)didWriteValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			
+			
+			<Anchor>//api/name/didWriteValueForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

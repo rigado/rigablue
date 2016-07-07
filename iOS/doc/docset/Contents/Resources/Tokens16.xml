@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/RigLeDiscoveryManagerDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/RigLeDiscoveryManagerDelegate</TokenIdentifier>
+			<Abstract type="html">@protocol RigLeDiscoveryManagerDelegate</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="16"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeDiscoveryManagerDelegate/didDiscoverDevice:</TokenIdentifier>
+			<Abstract type="html">@method disDiscoverDevice:</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)didDiscoverDevice:(RigAvailableDeviceData *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">A &lt;code&gt;RigAvailableDeviceData&lt;/code&gt; object.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didDiscoverDevice:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeDiscoveryManagerDelegate/discoveryDidTimeout</TokenIdentifier>
+			<Abstract type="html">@method discoveryDidTimeout</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)discoveryDidTimeout</Declaration>
+			
+			
+			<Anchor>//api/name/discoveryDidTimeout</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeDiscoveryManagerDelegate/bluetoothNotPowered</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)bluetoothNotPowered</Declaration>
+			
+			
+			<Anchor>//api/name/bluetoothNotPowered</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeDiscoveryManagerDelegate/didUpdateDeviceData:deviceIndex:</TokenIdentifier>
+			<Abstract type="html">@method didUpdateDeviceData:</Abstract>
+			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateDeviceData:(RigAvailableDeviceData *)device deviceIndex:(NSUInteger)index</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device data which changed.</Abstract>
+				</Parameter><Parameter>
+					<Name>index</Name>
+					<Abstract type="html">The index of the device data in the discovered devices array provided by &lt;code&gt;retrieveDiscoveredDevices&lt;/code&gt;.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didUpdateDeviceData:deviceIndex:</Anchor>
+            <NodeRef refid="16"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

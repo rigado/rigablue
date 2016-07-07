@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Protocols/RigLeBaseDeviceDelegate.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intf/RigLeBaseDeviceDelegate</TokenIdentifier>
+			<Abstract type="html">@protocol RigLeBaseDeviceDelegate</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+            
+			
+			<NodeRef refid="14"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/discoveryDidCompleteForDevice:</TokenIdentifier>
+			<Abstract type="html">@method discoveryDidCompleteForDevice:</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)discoveryDidCompleteForDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The &lt;code&gt;RigLeBaseDevice&lt;/code&gt; object for which discovery has finished.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/discoveryDidCompleteForDevice:</Anchor>
+            <NodeRef refid="14"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didUpdateValueForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html">@method didUpdateValueForCharacteristic:</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The characteristic for which the value was read.</Abstract>
+				</Parameter><Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device to which this characteristic belongs.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didUpdateValueForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="14"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didUpdateNotifyStateForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html">@method didUpdateNotifyStateForCharacteristic:</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The characteristic for which notifications were enabled.</Abstract>
+				</Parameter><Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device to which this characteristic belongs.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didUpdateNotifyStateForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="14"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didWriteValueForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html">@method didWriteValueForCharacteristic:</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)didWriteValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The characteristic that was written.</Abstract>
+				</Parameter><Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device to which this characteristic belongs.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didWriteValueForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="14"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

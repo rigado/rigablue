@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigLeConnectionManager.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigLeConnectionManager</TokenIdentifier>
+			<Abstract type="html">This class provide control of connections to and disconnections from discovery CBPeripheral devices.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+            
+			
+			<NodeRef refid="8"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/RigLeConnectionManager/sharedInstance</TokenIdentifier>
+			<Abstract type="html">This method provides access to the singleton instance of the &lt;code&gt;RigLeConnectionManager&lt;/code&gt;.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+			<Declaration>+ (instancetype)sharedInstance</Declaration>
+			
+			<ReturnValue><Abstract type="html">Returns the singleton instance of the &lt;code&gt;RigLeConnectionManager&lt;/code&gt;.</Abstract></ReturnValue>
+			<Anchor>//api/name/sharedInstance</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/connectDevice:connectionTimeout:</TokenIdentifier>
+			<Abstract type="html">This method connects to a device discovered during a discovery session.  The delegate will be notified of events related to the
+connection through the &lt;code&gt;RigLeConnectionManagerDelegate&lt;/code&gt; protocol.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+			<Declaration>- (void)connectDevice:(RigAvailableDeviceData *)device connectionTimeout:(float)timeout</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device data for which a connection should be made.</Abstract>
+				</Parameter><Parameter>
+					<Name>timeout</Name>
+					<Abstract type="html">The amount of time for which the connection should be attempted.  Pass 0 for infinite connection time.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/connectDevice:connectionTimeout:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/disconnectDevice:</TokenIdentifier>
+			<Abstract type="html">This method disconnects a device. The delegate will be notified of events related to the connection through
+the RigLeConnectionManagerDelegate protocol.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+			<Declaration>- (void)disconnectDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device to be disconnected.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/disconnectDevice:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/getConnectedDevices</TokenIdentifier>
+			<Abstract type="html">This method retrieves a list of devices currently connected through CoreBluetooth.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getConnectedDevices</Declaration>
+			
+			<ReturnValue><Abstract type="html">A list of devices connected through CoreBluetooth</Abstract></ReturnValue>
+			<Anchor>//api/name/getConnectedDevices</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/setDelegate:</TokenIdentifier>
+			<Abstract type="html">The delegate object for the connection manager.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/intf/RigLeConnectionManagerDelegate</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>@property (nonatomic, weak) id&lt;RigLeConnectionManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate object for the connection manager.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/intf/RigLeConnectionManagerDelegate</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>@property (nonatomic, weak) id&lt;RigLeConnectionManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigLeConnectionManager/delegate</TokenIdentifier>
+			<Abstract type="html">The delegate object for the connection manager.</Abstract>
+			<DeclaredIn>RigLeConnectionManager.h</DeclaredIn>
+			
+	<RelatedTokens>
+		<TokenIdentifier>//apple_ref/occ/intf/RigLeConnectionManagerDelegate</TokenIdentifier>
+		
+	</RelatedTokens>
+	
+			<Declaration>@property (nonatomic, weak) id&lt;RigLeConnectionManagerDelegate&gt; delegate</Declaration>
+			
+			
+			<Anchor>//api/name/delegate</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/init</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
+			
+			<Declaration>- (id)init</Declaration>
+			
+			
+			<Anchor>//api/name/init</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/didConnectDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didConnectDevice:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didConnectDevice:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/didDisconnectDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didDisconnectDevice:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didDisconnectDevice:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/connectionDidTimeout:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
+			
+			<Declaration>- (void)connectionDidTimeout:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/connectionDidTimeout:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/didFailToConnectDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
+			
+			<Declaration>- (void)didFailToConnectDevice:(CBPeripheral *)peripheral</Declaration>
+			
+			
+			<Anchor>//api/name/didFailToConnectDevice:</Anchor>
+            <NodeRef refid="8"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>

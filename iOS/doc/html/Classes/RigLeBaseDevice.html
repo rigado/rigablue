@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+
+	<title>RigLeBaseDevice Class Reference</title>
+
+	<link rel="stylesheet" href="../css/style.css">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
+	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+</head>
+<body class="appledoc">
+	<header>
+		<div class="container" class="hide-in-xcode">
+			
+			<h1 id="library-title">
+				<a href="../index.html">Rigablue </a>
+			</h1>
+
+			<p id="developer-home">
+				<a href="../index.html">Rigado, LLC</a>
+			</p>
+			
+		</div>
+	</header>
+
+	<aside>
+		<div class="container">
+			<nav>
+				<ul id="header-buttons" role="toolbar">
+					<li><a href="../index.html">Index</a></li>
+<li><a href="../hierarchy.html">Hierarchy</a></li>
+
+					<li id="on-this-page" role="navigation">
+						<label>
+							On This Page
+
+							<div class="chevron">
+								<div class="chevy chevron-left"></div>
+								<div class="chevy chevron-right"></div>
+							</div>
+
+							<select id="jump-to">
+	<option value="top">Jump To&#133;</option>
+	
+	<option value="overview">Overview</option>
+	
+
+	
+	
+	<option value="tasks">Tasks</option>
+	
+	
+
+	
+	
+	<optgroup label="Properties">
+		
+		<option value="//api/name/delegate">delegate</option>
+		
+		<option value="//api/name/isDiscoveryComplete">isDiscoveryComplete</option>
+		
+		<option value="//api/name/name">name</option>
+		
+		<option value="//api/name/peripheral">peripheral</option>
+		
+	</optgroup>
+	
+
+	
+
+	
+	<optgroup label="Instance Methods">
+		
+		<option value="//api/name/enableNotificationsForCharacteristic:">- enableNotificationsForCharacteristic:</option>
+		
+		<option value="//api/name/getAdvertisementData">- getAdvertisementData</option>
+		
+		<option value="//api/name/getCharacteristicWithUuid:forService:">- getCharacteristicWithUuid:forService:</option>
+		
+		<option value="//api/name/getSerivceList">- getSerivceList</option>
+		
+		<option value="//api/name/getServiceWithUuid:">- getServiceWithUuid:</option>
+		
+		<option value="//api/name/initWithPeripheral:">- initWithPeripheral:</option>
+		
+		<option value="//api/name/peripheral:didDiscoverCharacteristicsForService:error:">- peripheral:didDiscoverCharacteristicsForService:error:</option>
+		
+		<option value="//api/name/peripheral:didDiscoverServices:">- peripheral:didDiscoverServices:</option>
+		
+		<option value="//api/name/peripheral:didUpdateNotificationStateForCharacteristic:error:">- peripheral:didUpdateNotificationStateForCharacteristic:error:</option>
+		
+		<option value="//api/name/peripheral:didUpdateValueForCharacteristic:error:">- peripheral:didUpdateValueForCharacteristic:error:</option>
+		
+		<option value="//api/name/peripheral:didWriteValueForCharacteristic:error:">- peripheral:didWriteValueForCharacteristic:error:</option>
+		
+		<option value="//api/name/runDiscovery">- runDiscovery</option>
+		
+		<option value="//api/name/runDiscoveryForServices:">- runDiscoveryForServices:</option>
+		
+		<option value="//api/name/setAdvertisementData:">- setAdvertisementData:</option>
+		
+	</optgroup>
+	
+	
+</select>
+						</label>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</aside>
+
+	<article>
+		<div id="overview_contents" class="container">
+			<div id="content">
+				<main role="main">
+					<h1 class="title">RigLeBaseDevice Class Reference</h1>
+
+					
+					<div class="section section-specification"><table cellspacing="0"><tbody>
+						<tr>
+	<th>Inherits from</th>
+	<td>NSObject</td>
+</tr><tr>
+	<th>Declared in</th>
+	<td>RigLeBaseDevice.h<br />RigLeBaseDevice.m</td>
+</tr>
+						</tbody></table></div>
+					
+
+                    
+					
+					<div class="section section-overview">
+						<a title="Overview" name="overview"></a>
+						<h2 class="subtitle subtitle-overview">Overview</h2>
+						<p>@class RigLeBaseDevice</p><p>This class provides a base class for all connected peripherals.  It stores all services and characteristics for a connected <code>CBPeripheral</code>
+object.  The idea is for specific device classes to extend this class to implement required device functionality.</p>
+					</div>
+					
+					
+
+					
+					
+					<div class="section section-tasks">
+						<a title="Tasks" name="tasks"></a>
+						
+
+						<a title="Creating Base Device Objects" name="task_Creating Base Device Objects"></a>
+						<h2 class="task-title">Creating Base Device Objects</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/initWithPeripheral:" title="initWithPeripheral:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/initWithPeripheral:">&ndash;&nbsp;initWithPeripheral:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>Initialize a base device object with the provide <a href="#//api/name/peripheral">peripheral</a>.  Use this rather than the base init method.</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (id)initWithPeripheral:(CBPeripheral *)<em>peripheral</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>peripheral</code></th>
+						<td><p>The <a href="#//api/name/peripheral">peripheral</a> to initiailize this object against.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Returns new base device oject.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Discovering And Retrieving Devices" name="task_Discovering And Retrieving Devices"></a>
+						<h2 class="task-title">Discovering And Retrieving Devices</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/runDiscovery" title="runDiscovery"></a>
+	<h3 class="method-title"><code><a href="#//api/name/runDiscovery">&ndash;&nbsp;runDiscovery</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method runDiscovery</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)runDiscovery</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method starts the process of discovering available device services.  Once complete, all characteristics will be discovered for each service.
+Once all services and characteristics have been discovered, the <a href="#//api/name/delegate">delegate</a> will be notified with the <code>discoveryDidCompleteForDevice:</code> method.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getSerivceList" title="getSerivceList"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getSerivceList">&ndash;&nbsp;getSerivceList</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method getServiceList</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSArray *)getSerivceList</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>List of discovered services.</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method provides access to the <code>CBService</code> objects discovered during device discovery.  Characteristics can be accessed through these
+service objects.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getServiceWithUuid:" title="getServiceWithUuid:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getServiceWithUuid:">&ndash;&nbsp;getServiceWithUuid:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (CBService *)getServiceWithUuid:(CBUUID *)<em>uuid</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getCharacteristicWithUuid:forService:" title="getCharacteristicWithUuid:forService:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getCharacteristicWithUuid:forService:">&ndash;&nbsp;getCharacteristicWithUuid:forService:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (CBCharacteristic *)getCharacteristicWithUuid:(CBUUID *)<em>uuid</em> forService:(CBService *)<em>service</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/enableNotificationsForCharacteristic:" title="enableNotificationsForCharacteristic:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/enableNotificationsForCharacteristic:">&ndash;&nbsp;enableNotificationsForCharacteristic:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method enableNotificationsForCharacteristic:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)enableNotificationsForCharacteristic:(CBCharacteristic *)<em>characteristic</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>characteristic</code></th>
+						<td><p>The characteristic on which to enable notifications.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>Returns YES if the request was successful.  If NO is returned, then it is likely that the characteristic does not have the notify property enabled.
+However, even if this function returns YES, notifications are not guaranteed to be enabled.  CoreBluetooth must issue the appropriate callback.
+Rigablue will forward this callback to the delete with the <code>didUpdateNotifyStateForCharacteristic</code> message.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/setAdvertisementData:" title="setAdvertisementData:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/setAdvertisementData:">&ndash;&nbsp;setAdvertisementData:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method setAdvertisementData</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)setAdvertisementData:(NSDictionary *)<em>advData</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>advData</code></th>
+						<td><p>The advertisement data to associate with this base device object.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method sets the advertisement data record for the device.  The storage of the advertisement data allows it to be accessed
+once the device has been connected.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/getAdvertisementData" title="getAdvertisementData"></a>
+	<h3 class="method-title"><code><a href="#//api/name/getAdvertisementData">&ndash;&nbsp;getAdvertisementData</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method getAdvertisementData</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (NSDictionary *)getAdvertisementData</code></div>
+
+		    
+			
+
+			
+			<div class="method-subsection return">
+				<h4 class="method-subtitle parameter-title">Return Value</h4>
+				<p>nil if advertisement data not set; else the advertisement data array</p>
+			</div>
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method simply retrieves the advertisement data as set with <code>setAdvertisementData</code>.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						<a title="Base Device properties" name="task_Base Device properties"></a>
+						<h2 class="task-title">Base Device properties</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/peripheral" title="peripheral"></a>
+	<h3 class="method-title"><code><a href="#//api/name/peripheral">&nbsp;&nbsp;peripheral</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@property peripheral</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) CBPeripheral *peripheral</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The <code>CBPeripheral</code> object for this device.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/name" title="name"></a>
+	<h3 class="method-title"><code><a href="#//api/name/name">&nbsp;&nbsp;name</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@property name</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, strong) NSString *name</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The name field from the <a href="#//api/name/peripheral">peripheral</a> object represented by this device object.  This name will be based on the
+advertisement data since it updates more quickly than the name.  However, if the advertisement data is not
+supplied, then the name will be as provide by CoreBluetooth in the CBPeripheral object use to initialize this object.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/isDiscoveryComplete" title="isDiscoveryComplete"></a>
+	<h3 class="method-title"><code><a href="#//api/name/isDiscoveryComplete">&nbsp;&nbsp;isDiscoveryComplete</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@property isDiscoveryComplete</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (readonly) BOOL isDiscoveryComplete</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This boolean value denotes whether or not discovery of services and characteristics for this devices has been completed.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="method-title"><code><a href="#//api/name/delegate">&nbsp;&nbsp;delegate</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@property delegate</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>@property (nonatomic, weak) id&lt;RigLeBaseDeviceDelegate&gt; delegate</code></div>
+
+		    
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>The delegate for this object.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div>
+						</div>
+						
+
+						
+						<h2 class="task-title">Other Methods</h2>
+
+						<div class="task-list">
+							<div class="section-method">
+	<a name="//api/name/runDiscoveryForServices:" title="runDiscoveryForServices:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/runDiscoveryForServices:">&ndash;&nbsp;runDiscoveryForServices:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)runDiscoveryForServices:(NSArray *)<em>serviceList</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/peripheral:didDiscoverServices:" title="peripheral:didDiscoverServices:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/peripheral:didDiscoverServices:">&ndash;&nbsp;peripheral:didDiscoverServices:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)peripheral:(CBPeripheral *)<em>peripheral</em> didDiscoverServices:(NSError *)<em>error</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/peripheral:didDiscoverCharacteristicsForService:error:" title="peripheral:didDiscoverCharacteristicsForService:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/peripheral:didDiscoverCharacteristicsForService:error:">&ndash;&nbsp;peripheral:didDiscoverCharacteristicsForService:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)peripheral:(CBPeripheral *)<em>peripheral</em> didDiscoverCharacteristicsForService:(CBService *)<em>service</em> error:(NSError *)<em>error</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/peripheral:didUpdateNotificationStateForCharacteristic:error:" title="peripheral:didUpdateNotificationStateForCharacteristic:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/peripheral:didUpdateNotificationStateForCharacteristic:error:">&ndash;&nbsp;peripheral:didUpdateNotificationStateForCharacteristic:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)peripheral:(CBPeripheral *)<em>peripheral</em> didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)<em>characteristic</em> error:(NSError *)<em>error</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/peripheral:didWriteValueForCharacteristic:error:" title="peripheral:didWriteValueForCharacteristic:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/peripheral:didWriteValueForCharacteristic:error:">&ndash;&nbsp;peripheral:didWriteValueForCharacteristic:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)peripheral:(CBPeripheral *)<em>peripheral</em> didWriteValueForCharacteristic:(CBCharacteristic *)<em>characteristic</em> error:(NSError *)<em>error</em></code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/peripheral:didUpdateValueForCharacteristic:error:" title="peripheral:didUpdateValueForCharacteristic:error:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/peripheral:didUpdateValueForCharacteristic:error:">&ndash;&nbsp;peripheral:didUpdateValueForCharacteristic:error:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (void)peripheral:(CBPeripheral *)<em>peripheral</em> didUpdateValueForCharacteristic:(CBCharacteristic *)<em>characteristic</em> error:(NSError *)<em>error</em></code></div>
+
+		    
+		</div>
+	</div>
+</div>
+						</div>
+						
+					</div>
+					
+					
+
+                    
+                    
+          
+				</main>
+
+				<footer>
+					<div class="footer-copyright">
+						
+						<p class="copyright">Copyright &copy; 2016 Rigado, LLC. All rights reserved. Updated: 2016-07-07</p>
+						
+						
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+
+	<script src="../js/script.js"></script>
+</body>
+</html>

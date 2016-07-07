@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Tokens version="1.0">
+	<File path="Classes/RigFirmwareUpdateRequest.html">
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/cl/RigFirmwareUpdateRequest</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+            
+			
+			<NodeRef refid="5"/>
+		</Token>
+		
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/RigFirmwareUpdateRequest/updateRequestWithDevice:image:activationChar:activationCommand:maxRssi:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>+ (RigFirmwareUpdateRequest *)updateRequestWithDevice:(RigLeBaseDevice *)device image:(NSData *)image activationChar:(CBCharacteristic *)activateChar activationCommand:(NSData *)activateCommand maxRssi:(int)rssi</Declaration>
+			
+			
+			<Anchor>//api/name/updateRequestWithDevice:image:activationChar:activationCommand:maxRssi:</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/clm/RigFirmwareUpdateRequest/patchRequestWithDevice:image:activationChar:activationCommand:maxRssi:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>+ (RigFirmwareUpdateRequest *)patchRequestWithDevice:(RigLeBaseDevice *)device image:(NSData *)image activationChar:(CBCharacteristic *)activateChar activationCommand:(NSData *)activateCommand maxRssi:(int)rssi</Declaration>
+			
+			
+			<Anchor>//api/name/patchRequestWithDevice:image:activationChar:activationCommand:maxRssi:</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/setUpdateDevice:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RigLeBaseDevice *updateDevice</Declaration>
+			
+			
+			<Anchor>//api/name/updateDevice</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/updateDevice</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RigLeBaseDevice *updateDevice</Declaration>
+			
+			
+			<Anchor>//api/name/updateDevice</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateRequest/updateDevice</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) RigLeBaseDevice *updateDevice</Declaration>
+			
+			
+			<Anchor>//api/name/updateDevice</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/setImage:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSData *image</Declaration>
+			
+			
+			<Anchor>//api/name/image</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/image</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSData *image</Declaration>
+			
+			
+			<Anchor>//api/name/image</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateRequest/image</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSData *image</Declaration>
+			
+			
+			<Anchor>//api/name/image</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/setActivationCharacteristic:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBCharacteristic *activationCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/activationCharacteristic</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/activationCharacteristic</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBCharacteristic *activationCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/activationCharacteristic</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateRequest/activationCharacteristic</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) CBCharacteristic *activationCharacteristic</Declaration>
+			
+			
+			<Anchor>//api/name/activationCharacteristic</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/setActivationCommand:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSData *activationCommand</Declaration>
+			
+			
+			<Anchor>//api/name/activationCommand</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/activationCommand</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSData *activationCommand</Declaration>
+			
+			
+			<Anchor>//api/name/activationCommand</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateRequest/activationCommand</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property (nonatomic, strong) NSData *activationCommand</Declaration>
+			
+			
+			<Anchor>//api/name/activationCommand</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/setIsPatch:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property BOOL isPatch</Declaration>
+			
+			
+			<Anchor>//api/name/isPatch</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/isPatch</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property BOOL isPatch</Declaration>
+			
+			
+			<Anchor>//api/name/isPatch</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateRequest/isPatch</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property BOOL isPatch</Declaration>
+			
+			
+			<Anchor>//api/name/isPatch</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/setMaxRssi:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property int maxRssi</Declaration>
+			
+			
+			<Anchor>//api/name/maxRssi</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/maxRssi</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property int maxRssi</Declaration>
+			
+			
+			<Anchor>//api/name/maxRssi</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateRequest/maxRssi</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
+			
+			<Declaration>@property int maxRssi</Declaration>
+			
+			
+			<Anchor>//api/name/maxRssi</Anchor>
+            <NodeRef refid="5"/>
+		</Token>
+		
+        
+        
+	</File>
+</Tokens>
