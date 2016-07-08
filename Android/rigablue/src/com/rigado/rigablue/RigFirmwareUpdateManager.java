@@ -322,8 +322,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             e.printStackTrace();
         }
 
-        String dfuServiceUuidString = mFirmwareUpdateService.getDfuServiceUuidString();
-        RigDeviceRequest dr = new RigDeviceRequest(new String [] { dfuServiceUuidString }, 0);
+        String[] dfuServiceUuidStrings = mFirmwareUpdateService.getDfuServiceUuidStrings();
+        RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, 0);
         dr.setObserver(this);
         dm.startDiscoverDevices(dr);
         if(mObserver != null) {
@@ -773,7 +773,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void didDiscoverDevice(RigAvailableDeviceData device) {
         RigLog.d("__RigFirmwareUpdateManager.didDiscoverDevice__");
-        RigLog.d("Found dfu device!");
+        RigLog.d("Found dfu device! " + device.toString());
         RigLeDiscoveryManager.getInstance().stopDiscoveringDevices();
         RigLeConnectionManager.getInstance().setObserver(this);
         RigLeConnectionManager.getInstance().connectDevice(device, 10000);
