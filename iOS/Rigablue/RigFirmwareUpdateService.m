@@ -19,13 +19,11 @@
 NSString *kupdateDFUReportCharUuidString = @"00001533-1212-efde-1523-785feabcd123";
 
 // 200 Eval Board UUIDs named EvalDemo
-NSString *k200EvalBoardName = @"EvalDemo";
 NSString *kupdateDFUServiceUuidString200 = @"00001530-1212-efde-1523-785feabcd123";
 NSString *kupdateDFUControlPointUuidString200 = @"00001531-1212-efde-1523-785feabcd123";
 NSString *kupdateDFUPacketCharUuidString200 = @"00001532-1212-efde-1523-785feabcd123";
 
 // 300 Eval Board UUIDs named RB-Demo
-NSString *k300EvalBoardName = @"RB-Demo";
 NSString *kupdateDFUServiceUuidString300 = @"41c89030-1756-4c30-93cc-a8fcc2fb0202";
 NSString *kupdateDFUControlPointUuidString300 = @"41c89032-1756-4c30-93cc-a8fcc2fb0202";
 NSString *kupdateDFUPacketCharUuidString300 = @"41c89031-1756-4c30-93cc-a8fcc2fb0202";
@@ -142,11 +140,12 @@ NSString *kDisModelNumberUuidString = @"2a24";
     if (baseDevice == nil) {
         return DfuError_BadDevice;
     }
-    if ([baseDevice.peripheral.name isEqual:k300EvalBoardName]) {
+    
+    if ([baseDevice getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString300]]) {
         updateDFUServiceUuidString = kupdateDFUServiceUuidString300;
         updateDFUControlPointUuidString = kupdateDFUControlPointUuidString300;
         updateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString300;
-    } else if ([baseDevice.peripheral.name isEqualToString:k200EvalBoardName]) {
+    } else if ([baseDevice getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString200]]) {
         updateDFUServiceUuidString = kupdateDFUServiceUuidString200;
         updateDFUControlPointUuidString = kupdateDFUControlPointUuidString200;
         updateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString200;
