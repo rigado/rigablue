@@ -16,9 +16,6 @@
 
 #define SECURE_DFU_MODEL_NUMBER @"Rigado Secure DFU"
 
-NSString *kupdateDFUServiceUuidString;
-NSString *kupdateDFUControlPointUuidString;
-NSString *kupdateDFUPacketCharUuidString;
 NSString *kupdateDFUReportCharUuidString = @"00001533-1212-efde-1523-785feabcd123";
 
 // 200 Eval Board UUIDs named EvalDemo
@@ -68,6 +65,9 @@ NSString *kDisModelNumberUuidString = @"2a24";
     CBUUID              *updateDFUPacketCharUuid;
     CBUUID              *updateDFUReportCharUuid;
     
+    NSString            *updateDFUControlPointUuidString;
+    NSString            *updateDFUPacketCharUuidString;
+    
     CBService           *updateDFUService;
     CBCharacteristic    *updateDFUControlPointCharacteristic;
     CBCharacteristic    *updateDFUPacketCharacteristic;
@@ -85,6 +85,9 @@ NSString *kDisModelNumberUuidString = @"2a24";
 @synthesize delegate;
 @synthesize shouldReconnectToPeripheral;
 @synthesize alwaysReconnectOnDisconnect;
+@synthesize updateDFUServiceUuidString;
+
+
 
 - (id)init
 {
@@ -140,20 +143,18 @@ NSString *kDisModelNumberUuidString = @"2a24";
         return DfuError_BadDevice;
     }
     if ([baseDevice.peripheral.name isEqual:k300EvalBoardName]) {
-        kupdateDFUServiceUuidString = kupdateDFUServiceUuidString300;
-        kupdateDFUControlPointUuidString = kupdateDFUControlPointUuidString300;
-        kupdateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString300;
-    } else if ([baseDevice.peripheral.name isEqualToString:k200EvalBoardName]){
-        // This could be an else statement
-        // if we want to have a default UUID value
-        kupdateDFUServiceUuidString = kupdateDFUServiceUuidString200;
-        kupdateDFUControlPointUuidString = kupdateDFUControlPointUuidString200;
-        kupdateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString200;
+        updateDFUServiceUuidString = kupdateDFUServiceUuidString300;
+        updateDFUControlPointUuidString = kupdateDFUControlPointUuidString300;
+        updateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString300;
+    } else if ([baseDevice.peripheral.name isEqualToString:k200EvalBoardName]) {
+        updateDFUServiceUuidString = kupdateDFUServiceUuidString200;
+        updateDFUControlPointUuidString = kupdateDFUControlPointUuidString200;
+        updateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString200;
     }
     
-    updateDFUServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString];
-    updateDFUControlPointUuid = [CBUUID UUIDWithString:kupdateDFUControlPointUuidString];
-    updateDFUPacketCharUuid = [CBUUID UUIDWithString:kupdateDFUPacketCharUuidString];
+    updateDFUServiceUuid = [CBUUID UUIDWithString:updateDFUServiceUuidString];
+    updateDFUControlPointUuid = [CBUUID UUIDWithString:updateDFUControlPointUuidString];
+    updateDFUPacketCharUuid = [CBUUID UUIDWithString:updateDFUPacketCharUuidString];
     updateDFUReportCharUuid = [CBUUID UUIDWithString:kupdateDFUReportCharUuidString];
     
     updateDevice = baseDevice;

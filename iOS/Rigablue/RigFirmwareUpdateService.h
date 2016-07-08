@@ -14,8 +14,6 @@
 #import "RigLeBaseDevice.h"
 #import "RigDfuError.h"
 
-extern NSString *kupdateDFUServiceUuidString;
-
 @protocol RigFirmwareUpdateServiceDelegate <NSObject>
 
 /**
@@ -73,6 +71,12 @@ extern NSString *kupdateDFUServiceUuidString;
  *  If this is set to YES, then anytime a disconnect occurs for the update device, a reconnect will be issued.
  */
 @property (nonatomic) BOOL alwaysReconnectOnDisconnect;
+
+/**
+ *  This is the Firmware Update Service UUID for the connected device.
+ */
+@property (strong, nonatomic )NSString *updateDFUServiceUuidString;
+
 
 /**
  *  Initializes the update service object.
