@@ -32,11 +32,6 @@ NSString *kDisUuidString = @"180A";
 NSString *kDisFirmwareVersionUuidString = @"2a26";
 NSString *kDisModelNumberUuidString = @"2a24";
 
-//NSString *kupdateDFUServiceUuidString = @"00001530-eb68-4181-a6df-42562b7fef98";
-//NSString *kupdateDFUControlPointUuidString = @"00001531-eb68-4181-a6df-42562b7fef98";
-//NSString *kupdateDFUPacketCharUuidString = @"00001532-eb68-4181-a6df-42562b7fef98";
-//NSString *kupdateDFUReportCharUuidString = @"00001533-eb68-4181-a6df-42562b7fef98";
-
 @interface RigFirmwareUpdateService() <RigLeBaseDeviceDelegate, RigLeConnectionManagerDelegate, RigLeDiscoveryManagerDelegate>
 
 @end
@@ -62,9 +57,6 @@ NSString *kDisModelNumberUuidString = @"2a24";
     CBUUID              *updateDFUControlPointUuid;
     CBUUID              *updateDFUPacketCharUuid;
     CBUUID              *updateDFUReportCharUuid;
-    
-    NSString            *updateDFUControlPointUuidString;
-    NSString            *updateDFUPacketCharUuidString;
     
     CBService           *updateDFUService;
     CBCharacteristic    *updateDFUControlPointCharacteristic;
@@ -140,20 +132,6 @@ NSString *kDisModelNumberUuidString = @"2a24";
     if (baseDevice == nil) {
         return DfuError_BadDevice;
     }
-    
-    if ([baseDevice getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString300]]) {
-        updateDFUServiceUuidString = kupdateDFUServiceUuidString300;
-        updateDFUControlPointUuidString = kupdateDFUControlPointUuidString300;
-        updateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString300;
-    } else if ([baseDevice getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString200]]) {
-        updateDFUServiceUuidString = kupdateDFUServiceUuidString200;
-        updateDFUControlPointUuidString = kupdateDFUControlPointUuidString200;
-        updateDFUPacketCharUuidString = kupdateDFUPacketCharUuidString200;
-    }
-    
-    updateDFUServiceUuid = [CBUUID UUIDWithString:updateDFUServiceUuidString];
-    updateDFUControlPointUuid = [CBUUID UUIDWithString:updateDFUControlPointUuidString];
-    updateDFUPacketCharUuid = [CBUUID UUIDWithString:updateDFUPacketCharUuidString];
     updateDFUReportCharUuid = [CBUUID UUIDWithString:kupdateDFUReportCharUuidString];
     
     updateDevice = baseDevice;
@@ -175,6 +153,16 @@ NSString *kDisModelNumberUuidString = @"2a24";
 
 - (void)assignServicesAndCharacteristics
 {
+    if ([updateDevice getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString300]]) {
+        updateDFUServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString300];
+        updateDFUControlPointUuid = [CBUUID UUIDWithString:kupdateDFUControlPointUuidString300];
+        updateDFUPacketCharUuid = [CBUUID UUIDWithString:kupdateDFUPacketCharUuidString300];
+    } else if ([updateDevice getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString200]]) {
+        updateDFUServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString200];
+        updateDFUControlPointUuid = [CBUUID UUIDWithString:kupdateDFUControlPointUuidString200];
+        updateDFUPacketCharUuid = [CBUUID UUIDWithString:kupdateDFUPacketCharUuidString200];
+    }
+    for (CBService *service in [updateDevice getSerivceList]) {
     for (CBService *service in [updateDevice getServiceList]) {
         if ([[service UUID] isEqual:updateDFUServiceUuid]) {
             updateDFUService = service;
@@ -190,6 +178,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
     if (disService) {
         [self updateDisChacteristics:disService.characteristics];
     }
+    
 }
 
 - (RigDfuError_t)triggerServiceDiscovery
@@ -271,14 +260,14 @@ NSString *kDisModelNumberUuidString = @"2a24";
     }
 }
 
-- (NSArray*)getCharacteristicUuids
-{
-    NSArray *characteristicUuids = [NSArray arrayWithObjects:updateDFUServiceUuid,
-                                    updateDFUPacketCharUuid,
-                                    updateDFUReportCharUuid, nil];
-    
-    return characteristicUuids;
-}
+//- (NSArray*)getCharacteristicUuids
+//{
+//    NSArray *characteristicUuids = [NSArray arrayWithObjects:updateDFUServiceUuid,
+//                                    updateDFUPacketCharUuid,
+//                                    updateDFUReportCharUuid, nil];
+//
+//    return characteristicUuids;
+//}
 
 - (NSArray*)getCharacteristicArray
 {

@@ -14,6 +14,9 @@
 #import "RigLeBaseDevice.h"
 #import "RigDfuError.h"
 
+extern NSString *kupdateDFUServiceUuidString200;
+extern NSString *kupdateDFUServiceUuidString300;
+
 @protocol RigFirmwareUpdateServiceDelegate <NSObject>
 
 /**
@@ -75,7 +78,7 @@
 /**
  *  This is the Firmware Update Service UUID for the connected device.
  */
-@property (strong, nonatomic )NSString *updateDFUServiceUuidString;
+@property (strong, nonatomic)NSString *updateDFUServiceUuidString;
 
 
 /**
