@@ -106,7 +106,7 @@
  *
  *  @return List of discovered services.
  */
-- (NSArray*)getSerivceList;
+- (NSArray*)getServiceList;
 
 /**
  *  @method enableNotificationsForCharacteristic:

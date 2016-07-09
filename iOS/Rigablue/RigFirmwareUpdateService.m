@@ -146,7 +146,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
 
 - (void)assignServicesAndCharacteristics
 {
-    for (CBService *service in [updateDevice getSerivceList]) {
+    for (CBService *service in [updateDevice getServiceList]) {
         if ([[service UUID] isEqual:updateDFUServiceUuid]) {
             updateDFUService = service;
         } else if([service.UUID isEqual:disUuid]) {
