@@ -33,7 +33,7 @@
  *
  *  @return Returns a <code>RigDeviceRequest</code> object with all approprite fields filled in.
  */
-+ (id)deviceRequestWithUuidList:(NSArray*)uuidList timeout:(float)timeout delegate:(id<RigLeDiscoveryManagerDelegate>)delegate allowDuplicates:(BOOL)allowDuplicates;
++ (instancetype)deviceRequestWithUuidList:(NSArray*)uuidList timeout:(float)timeout delegate:(id<RigLeDiscoveryManagerDelegate>)delegate allowDuplicates:(BOOL)allowDuplicates;
 
 /*!
  *  @name Device Request properties

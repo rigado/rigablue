@@ -29,7 +29,7 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 
 @implementation RigLeDiscoveryManager
 
-- (id)init
+- (instancetype)init
 {
     self = [super init];
     if (self) {
@@ -42,7 +42,7 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
     return self;
 }
 
-+ (id)sharedInstance
++ (instancetype)sharedInstance
 {
     if (instance == nil) {
         instance = [[RigLeDiscoveryManager alloc] init];
