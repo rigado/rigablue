@@ -109,6 +109,7 @@
 - (NSArray*)getSerivceList;
 - (CBService*)getServiceWithUuid:(CBUUID*)uuid;
 - (CBCharacteristic*)getCharacteristicWithUuid:(CBUUID*)uuid forService:(CBService*)service;
+- (NSArray*)getServiceList;
 
 /**
  *  @method enableNotificationsForCharacteristic:

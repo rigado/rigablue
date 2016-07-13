@@ -51,7 +51,7 @@ static int discoveredServicesCount = 0;
     [_peripheral discoverServices:nil];
 }
 
-- (NSArray*)getSerivceList
+- (NSArray*)getServiceList
 {
     return _serviceList;
 }
