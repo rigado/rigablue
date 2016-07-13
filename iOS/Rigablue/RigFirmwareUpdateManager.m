@@ -583,7 +583,7 @@ typedef enum FirmwareManagerState_enum
 /**
  *  This method is sent from the delegate protocol once device service and characteristic discovery is complete.
  */
-- (void)didDiscoverCharacteristicsForDFUSerivce
+- (void)didDiscoverCharacteristicsForDFUService
 {
     if (state == State_TransferringRadioImage) {
         state = State_Init;

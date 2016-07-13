@@ -467,7 +467,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
     [self assignServicesAndCharacteristics];
 
     NSLog(@"Starting update!");
-    [delegate didDiscoverCharacteristicsForDFUSerivce];
+    [delegate didDiscoverCharacteristicsForDFUService];
 }
 
 - (void)didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device

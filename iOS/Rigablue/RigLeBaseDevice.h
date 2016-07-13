@@ -106,7 +106,6 @@
  *
  *  @return List of discovered services.
  */
-- (NSArray*)getSerivceList;
 - (CBService*)getServiceWithUuid:(CBUUID*)uuid;
 - (CBCharacteristic*)getCharacteristicWithUuid:(CBUUID*)uuid forService:(CBService*)service;
 - (NSArray*)getServiceList;
