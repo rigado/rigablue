@@ -13,7 +13,7 @@
 
 @implementation RigDeviceRequest
 
-+ (id)deviceRequestWithUuidList:(NSArray*)uuidList timeout:(float)timeout delegate:(id<RigLeDiscoveryManagerDelegate>)delegate allowDuplicates:(BOOL)allowDuplicates
++ (instancetype)deviceRequestWithUuidList:(NSArray*)uuidList timeout:(float)timeout delegate:(id<RigLeDiscoveryManagerDelegate>)delegate allowDuplicates:(BOOL)allowDuplicates
 {
     RigDeviceRequest *request = [[RigDeviceRequest alloc] init];
     

@@ -47,7 +47,7 @@ extern NSString *kupdateDFUServiceUuidString;
 /**
  *  This method is called after discovery has been performed on the DFU service.
  */
-- (void)didDiscoverCharacteristicsForDFUSerivce;
+- (void)didDiscoverCharacteristicsForDFUService;
 
 /**
  *  This method is called when a connection to RigDFU could not be obtained.

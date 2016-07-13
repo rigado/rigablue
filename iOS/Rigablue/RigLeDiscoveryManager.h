@@ -87,7 +87,7 @@
  *  @return                     RigLeDiscoveryManager instance
  *
  */
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 
 /*!
  *  @method startLeInterface
