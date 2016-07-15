@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -27,15 +29,26 @@ import java.util.UUID;
  */
 public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver,
                                                  IRigLeBaseDeviceObserver {
-	private static final String kupdateDfuServiceUuidString = "00001530-1212-efde-1523-785feabcd123";
-    private static final String kupdateDfuControlPointUuidString = "00001531-1212-efde-1523-785feabcd123";
-    private static final String kupdateDfuPacketCharUuidString = "00001532-1212-efde-1523-785feabcd123";
-  
-	private static final String kDisUuidString = "0000180a-0000-1000-8000-00805f9b34fb";
-    private static final String kDisFwVersionUuidString = "00002a27-0000-1000-8000-00805f9b34fb";
+
+	private static final String kupdateDfuServiceUuidStringBMD200 = "00001530-1212-efde-1523-785feabcd123";
+    private static final String kupdateDfuControlPointUuidStringBMD200 = "00001531-1212-efde-1523-785feabcd123";
+    private static final String kupdateDfuPacketCharUuidStringBMD200 = "00001532-1212-efde-1523-785feabcd123";
+
+    private static final String kupdateDfuServiceUuidStringBMD300 = "41c89030-1756-4c30-93cc-a8fcc2fb0202";
+    private static final String kupdateDfuControlPointUuidStringBMD300 = "41c89032-1756-4c30-93cc-a8fcc2fb0202";
+    private static final String kupdateDfuPacketCharUuidStringBMD300 = "41c89031-1756-4c30-93cc-a8fcc2fb0202";
+
+    private static final String kDisUuidString = "0000180a-0000-1000-8000-00805f9b34fb";
+    private static final String kDisFwVersionUuidString = "00002a26-0000-1000-8000-00805f9b34fb";
     private static final String kDisModelNumberUuidString = "00002a24-0000-1000-8000-00805f9b34fb";
     
     private static final String kSecureBootloaderModelNumber = "Rigado Secure DFU";
+
+    // UUID strings matching the device we want to update. Each will be assigned to one of the device-specific
+    // strings above upon connection (e.g., kupdateDfuServiceUuidStringBMD200)
+    private String mUpdateDfuServiceUuidString = null;
+    private String mUpdateDfuControlPointUuidString = null;
+    private String mUpdateDfuPacketCharUuidString = null;
 
     /**
      * The available device data for the bootloader device.
@@ -144,10 +157,20 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
 
     /**
-     * @return Returns The UUID String of the device firmware update service
+     * @deprecated
+     * @return the UUID String of the device firmware update service for the BMD-200
      */
     public String getDfuServiceUuidString() {
-    	return kupdateDfuServiceUuidString;
+    	return kupdateDfuServiceUuidStringBMD200;
+    }
+
+    /**
+     * @return the UUID Strings of the firmware update services. Each module family
+     *         may have a different service UUID.
+     */
+    public String[] getDfuServiceUuidStrings() {
+        String[] uuids = { kupdateDfuServiceUuidStringBMD200, kupdateDfuServiceUuidStringBMD300 };
+        return uuids;
     }
 
     /**
@@ -237,9 +260,18 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
      * @return Returns true if successful; false otherwise
      */
     public boolean getServiceAndCharacteristics() {
-        UUID dfuServiceUuid = UUID.fromString(kupdateDfuServiceUuidString);
-        UUID controlPointUuid = UUID.fromString(kupdateDfuControlPointUuidString);
-        UUID packetUuid = UUID.fromString(kupdateDfuPacketCharUuidString);
+        setDfuUUIDsFromDevice(mUpdateDevice);
+
+        if (mUpdateDfuServiceUuidString == null ||
+                mUpdateDfuControlPointUuidString == null ||
+                mUpdateDfuPacketCharUuidString == null) {
+            RigLog.e("DFU UUIDs have not been set");
+            return false;
+        }
+
+        UUID dfuServiceUuid = UUID.fromString(mUpdateDfuServiceUuidString);
+        UUID controlPointUuid = UUID.fromString(mUpdateDfuControlPointUuidString);
+        UUID packetUuid = UUID.fromString(mUpdateDfuPacketCharUuidString);
         
         UUID disServiceUuid = UUID.fromString(kDisUuidString);
         UUID disFwVersionUuid = UUID.fromString(kDisFwVersionUuidString);
@@ -380,8 +412,7 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
         RigLeConnectionManager.getInstance().setObserver(mOldConnectionObserver);
     }
 
-    //IRigLeConnectionManagerObserver methods
-
+    //region IRigLeConnectionManagerObserver methods
     /**
      * Called when a device connects.  If it is the update device, then it starts service and
      * characteristic discovery.
@@ -450,9 +481,9 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
             }
         }
     }
+    //endregion
 
-    //IRigLeBaseDeviceObserver methods
-
+    //region IRigLeBaseDeviceObserver methods
     /**
      * Called when the value for a characteristic changes due to a read request or notification.
      * @param device The device for which the characteristic value updated
@@ -506,5 +537,32 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
         }
         mUpdateDevice.setObserver(this);
         mObserver.didDiscoverCharacteristicsForDFUService();
+    }
+    //endregion
+
+    private void setDfuUUIDsFromDevice (RigLeBaseDevice device) {
+        List<BluetoothGattService> fwServices = device.getServiceList();
+        for (BluetoothGattService service: fwServices) {
+            String uuidString = service.getUuid().toString();
+            if (kupdateDfuServiceUuidStringBMD200.equals(uuidString)) {
+                mUpdateDfuServiceUuidString = kupdateDfuServiceUuidStringBMD200;
+                mUpdateDfuControlPointUuidString = kupdateDfuControlPointUuidStringBMD200;
+                mUpdateDfuPacketCharUuidString = kupdateDfuPacketCharUuidStringBMD200;
+                return;
+            } else if (kupdateDfuServiceUuidStringBMD300.equals(uuidString)) {
+                mUpdateDfuServiceUuidString = kupdateDfuServiceUuidStringBMD300;
+                mUpdateDfuControlPointUuidString = kupdateDfuControlPointUuidStringBMD300;
+                mUpdateDfuPacketCharUuidString = kupdateDfuPacketCharUuidStringBMD300;
+                return;
+            }
+        }
+        RigLog.d("Cannot set DFU UUIDs; no matching service found.");
+        clearDfuUUIDs();
+    }
+
+    private void clearDfuUUIDs() {
+        mUpdateDfuServiceUuidString = null;
+        mUpdateDfuControlPointUuidString = null;
+        mUpdateDfuPacketCharUuidString = null;
     }
 }
