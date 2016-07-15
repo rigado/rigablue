@@ -192,8 +192,9 @@ typedef enum FirmwareManagerState_enum
         RigLeDiscoveryManager *dm = [RigLeDiscoveryManager sharedInstance];
         
         firmwareUpdateService.shouldReconnectToPeripheral = NO;
-        CBUUID *dfuServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString];
-        NSArray *uuidList = [NSArray arrayWithObject:dfuServiceUuid];
+        CBUUID *dfuServiceUuid200 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString200];
+        CBUUID *dfuServiceUuid300 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString300];
+        NSArray *uuidList = @[dfuServiceUuid200, dfuServiceUuid300];
         RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:uuidList timeout:DFU_SEARCH_TIMEOUT delegate:self allowDuplicates:NO];
         [dm discoverDevices:dr];
         [delegate updateStatus:@"Searching for Update Service..." errorCode:DfuError_None];
@@ -231,7 +232,10 @@ typedef enum FirmwareManagerState_enum
     //If already connected to a DFU, then start the update, otherwise send Bootloader activation command
     state = State_DiscoverFirmwareServiceCharacteristics;
     //TODO: iOS does strange things with the advertised name, it is probably better to check on discovered services to see if they match the DFU
-    CBService *dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:kupdateDFUServiceUuidString]];
+    CBService *dfuService;
+    if (firmwareUpdateService.updateDFUServiceUuidString) {
+        dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:firmwareUpdateService.updateDFUServiceUuidString]];
+    }
     if (dfuService != nil) {
         if (device.peripheral.state == CBPeripheralStateConnected) {
             if (!device.isDiscoveryComplete) {
@@ -262,8 +266,9 @@ typedef enum FirmwareManagerState_enum
         RigLeDiscoveryManager *dm = [RigLeDiscoveryManager sharedInstance];
         
         firmwareUpdateService.shouldReconnectToPeripheral = NO;
-        CBUUID *dfuServiceUuid = [CBUUID UUIDWithString:kupdateDFUServiceUuidString];
-        NSArray *uuidList = [NSArray arrayWithObject:dfuServiceUuid];
+        CBUUID *dfuServiceUuid200 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString200];
+        CBUUID *dfuServiceUuid300 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString300];
+        NSArray *uuidList = @[dfuServiceUuid200, dfuServiceUuid300];
         RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:uuidList timeout:DFU_SEARCH_TIMEOUT delegate:self allowDuplicates:NO];
         [dm discoverDevices:dr];
         [delegate updateStatus:@"Searching for Update Service..." errorCode:DfuError_None];
