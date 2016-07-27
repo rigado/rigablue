@@ -91,7 +91,7 @@ public class RigLeConnectionManager implements IRigCoreBluetoothConnectionObserv
      * Initiates a connection to the device.  After timeout, if the connection request has not
      * completed successfully, the connection request will be cancelled.
      * @param device The device to connect with
-     * @param timeout The amount of time, in milliseconds, to give the connection request befor it
+     * @param timeout The amount of time, in milliseconds, to give the connection request before it
      *                is cancelled.
      */
     public void connectDevice(RigAvailableDeviceData device, int timeout) {

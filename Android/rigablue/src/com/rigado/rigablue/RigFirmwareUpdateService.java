@@ -38,9 +38,9 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     private static final String kupdateDfuControlPointUuidStringBMD300 = "41c89032-1756-4c30-93cc-a8fcc2fb0202";
     private static final String kupdateDfuPacketCharUuidStringBMD300 = "41c89031-1756-4c30-93cc-a8fcc2fb0202";
 
-    private static final String kDisUuidString = "0000180a-0000-1000-8000-00805f9b34fb";
-    private static final String kDisFwVersionUuidString = "00002a26-0000-1000-8000-00805f9b34fb";
-    private static final String kDisModelNumberUuidString = "00002a24-0000-1000-8000-00805f9b34fb";
+    public static final String kDisUuidString = "0000180a-0000-1000-8000-00805f9b34fb";
+    public static final String kDisFwVersionUuidString = "00002a26-0000-1000-8000-00805f9b34fb";
+    public static final String kDisModelNumberUuidString = "00002a24-0000-1000-8000-00805f9b34fb";
     
     private static final String kSecureBootloaderModelNumber = "Rigado Secure DFU";
 
@@ -533,7 +533,7 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
         mUpdateDevice = device;
         if(!getServiceAndCharacteristics()) {
             RigLog.e("Connected to invalid device!");
-            //TODO: Disconnect???
+
         }
         mUpdateDevice.setObserver(this);
         mObserver.didDiscoverCharacteristicsForDFUService();

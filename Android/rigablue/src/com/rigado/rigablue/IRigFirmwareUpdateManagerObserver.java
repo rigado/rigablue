@@ -42,7 +42,7 @@ public interface IRigFirmwareUpdateManagerObserver {
 
     /**
      * This method is called when an unrecoverable error occurs during a firmware update.
-     * @param error An error number.  If non-zero, then an error has occurred.
+     * @param error An instance of RigDfuError
      */
-    void updateFailed(int error);
+    void updateFailed(RigDfuError error);
 }
