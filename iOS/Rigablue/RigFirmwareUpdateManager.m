@@ -134,13 +134,36 @@ typedef enum FirmwareManagerState_enum
     image = nil;
 }
 
-- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device isPatch:(BOOL)isPatch image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
-       activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen
+- (BOOL)checkImageForPatch:(NSData*)firmwareImage {
+    // create data object with first 16 bytes of firmware image
+    NSData *key = [firmwareImage subdataWithRange:NSMakeRange(0, 16)];
+    NSUInteger count = key.length/sizeof(UInt8);
+    
+    //convert patchKey to NSData and compare
+    uint8_t patch_key[] = {
+        0xac, 0xb3, 0x37, 0xe8, 0xd0, 0xeb, 0x40, 0x90,
+        0xa4, 0xf3, 0xbb, 0x85, 0x7a, 0x5b, 0x2a, 0xf6
+    };
+    NSData *keyPatchData = [NSData dataWithBytes:patch_key length:count];
+    
+    return ([keyPatchData isEqualToData:key] ? YES : NO);
+}
+
+- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
+                activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen
 {
     RigDfuError_t result = DfuError_None;
     NSLog(@"__updateFirmware__");
 
-    isPatchUpdate = isPatch; 
+    isPatchUpdate = NO;
+    imageSize = firmwareImageSize;
+    image = firmwareImage;
+    
+    if ([self checkImageForPatch:firmwareImage]) {
+        isPatchUpdate = YES;
+        imageSize = firmwareImageSize - 16;
+        image = [firmwareImage subdataWithRange:NSMakeRange(16, imageSize)];
+    }
     
     // Create the firmware update service object and assigned this object as the delegate
     firmwareUpdateService = [[RigFirmwareUpdateService alloc] init];
@@ -149,10 +172,6 @@ typedef enum FirmwareManagerState_enum
     if (result != DfuError_None) {
         return result;
     }
-    
-    //Intialize firmware image variables
-    imageSize = firmwareImageSize;
-    image = firmwareImage;
     
     //Set to automatically reconnect.  This will force iOS to connect again immediately after receving an advertisement packet from the peripheral after
     //activating the bootloader.

@@ -81,8 +81,8 @@
  *
  *  @return YES if successful, NO otherwise
  */
-- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device isPatch:(BOOL)isPatch image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
-       activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen;
+- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
+                activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen;
 
 - (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest*)request;
 @end
