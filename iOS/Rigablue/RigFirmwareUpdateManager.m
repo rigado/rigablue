@@ -134,7 +134,7 @@ typedef enum FirmwareManagerState_enum
     image = nil;
 }
 
-- (BOOL)checkImageForPatch:(NSData*)firmwareImage {
+- (BOOL)firmwareImageIsPatch:(NSData*)firmwareImage {
     // create data object with first 16 bytes of firmware image
     NSData *key = [firmwareImage subdataWithRange:NSMakeRange(0, 16)];
     NSUInteger count = key.length/sizeof(UInt8);
@@ -146,7 +146,7 @@ typedef enum FirmwareManagerState_enum
     };
     NSData *keyPatchData = [NSData dataWithBytes:patch_key length:count];
     
-    return ([keyPatchData isEqualToData:key] ? YES : NO);
+    return [keyPatchData isEqualToData:key];
 }
 
 - (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
@@ -159,7 +159,7 @@ typedef enum FirmwareManagerState_enum
     imageSize = firmwareImageSize;
     image = firmwareImage;
     
-    if ([self checkImageForPatch:firmwareImage]) {
+    if ([self firmwareImageIsPatch:firmwareImage]) {
         isPatchUpdate = YES;
         imageSize = firmwareImageSize - 16;
         image = [firmwareImage subdataWithRange:NSMakeRange(16, imageSize)];
