@@ -229,76 +229,12 @@ typedef enum FirmwareManagerState_enum
 
 - (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest*)request
 {
-    RigDfuError_t result = DfuError_None;
-    RigLeBaseDevice *device;
-    NSLog(@"__performUpdate__");
-    
-    isPatchUpdate = request.isPatch;
-    device = request.updateDevice;
-    
-    // Create the firmware update service object and assigned this object as the delegate
-    firmwareUpdateService = [[RigFirmwareUpdateService alloc] init];
-    firmwareUpdateService.delegate = self;
-    result = [firmwareUpdateService setDevice:request.updateDevice];
-    if (result != DfuError_None) {
-        return result;
-    }
-    
-    //Intialize firmware image variables
-    imageSize = (uint32_t)request.image.length;
-    image = request.image;
-    
-    //Set to automatically reconnect.  This will force iOS to connect again immediately after receving an advertisement packet from the peripheral after
-    //activating the bootloader.
-    firmwareUpdateService.shouldReconnectToPeripheral = YES;
-    state = State_Init;
-    
-    //If already connected to a DFU, then start the update, otherwise send Bootloader activation command
-    state = State_DiscoverFirmwareServiceCharacteristics;
-    //TODO: iOS does strange things with the advertised name, it is probably better to check on discovered services to see if they match the DFU
-    CBService *dfuService;
-    if (firmwareUpdateService.updateDFUServiceUuidString) {
-        dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:firmwareUpdateService.updateDFUServiceUuidString]];
-    }
-    if (dfuService != nil) {
-        if (device.peripheral.state == CBPeripheralStateConnected) {
-            if (!device.isDiscoveryComplete) {
-                result = [firmwareUpdateService triggerServiceDiscovery];
-                if (result != DfuError_None) {
-                    return result;
-                }
-            } else {
-                [firmwareUpdateService determineSecureDfuStatus];
-                result = [firmwareUpdateService enableControlPointNotifications];
-                if (result != DfuError_None) {
-                    return result;
-                }
-            }
-        } else {
-            result = [firmwareUpdateService connectPeripheral];
-            if (result != DfuError_None) {
-                return result;
-            }
-        }
-    } else {
-        if (request.activationCharacteristic == nil || device == nil || device.peripheral == nil || request.activationCommand == nil) {
-            NSLog(@"Invalid parameter provided!");
-            return DfuError_InvalidParameter;
-        }
-        [device.peripheral writeValue:request.activationCommand forCharacteristic:request.activationCharacteristic type:CBCharacteristicWriteWithoutResponse];
-        
-        RigLeDiscoveryManager *dm = [RigLeDiscoveryManager sharedInstance];
-        
-        firmwareUpdateService.shouldReconnectToPeripheral = NO;
-        CBUUID *dfuServiceUuid200 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString200];
-        CBUUID *dfuServiceUuid300 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString300];
-        NSArray *uuidList = @[dfuServiceUuid200, dfuServiceUuid300];
-        RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:uuidList timeout:DFU_SEARCH_TIMEOUT delegate:self allowDuplicates:NO];
-        [dm discoverDevices:dr];
-        [delegate updateStatus:@"Searching for Update Service..." errorCode:DfuError_None];
-    }
-    
-    return result;
+    return [self updateFirmware:request.updateDevice
+                          image:request.image
+                      imageSize:(uint32_t)request.image.length
+                   activateChar:request.activationCharacteristic
+                activateCommand:(uint8_t *)[request.activationCommand bytes]
+             activateCommandLen:request.activationCommand.length];
 
 }
 
