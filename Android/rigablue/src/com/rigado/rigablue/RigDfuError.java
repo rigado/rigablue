@@ -14,36 +14,57 @@ public class RigDfuError {
     private String errorMessage;
     private int errorCode;
 
-    public static final int OPERATION_INVALID_STATE = 2;
-    public static final int OPERATION_NOT_SUPPORTED = 3;
-    public static final int OPERATION_DATA_SIZE_EXCEEDS_LIMIT = 4;
-    public static final int OPERATION_OPERATION_FAILED = 6;
+    /**
+     * Direct port of RigDfuError.h from iOS version
+     */
+    // An invalid/null value was encountered where an Android BluetoothDevice was expected
+    public static final int BAD_PERIPHERAL = -1;
+    public static final int CONTROL_POINT_CHARACTERISTIC_MISSING = -2;
+    // An invalid/null value was encountered where a RigLeBaseDevice was expected
+    public static final int BAD_DEVICE = -3;
+    // Not currently used. See BAD_PERIPHERAL.
+    public static final int PERIPHERAL_NOT_SET = -4;
+    public static final int INVALID_PARAMETER = -5;
     public static final int IMAGE_VALIDATION_FAILURE = -6;
     public static final int IMAGE_ACTIVATION_FAILURE = -7;
+    // The image on the device before patching does not match the image the patch was started from.
     public static final int PATCH_CURRENT_IMAGE_CRC_FAILURE = -8;
     public static final int POST_PATCH_IMAGE_CRC_FAILURE = -9;
+    public static final int COULD_NOT_CONNECT = -10;
+    public static final int UNKNOWN_ERROR = -11;
+
+    /**
+     * Additional errors based on iOS error messages that did not have an associated RigDfuError object
+     */
     public static final int CONNECTION_FAILED = -30;
-    public static final int CONNECTION_TIMEOUT = -32;
-    public static final int DISCOVERY_TIMEOUT = -30;
+    public static final int CONNECTION_TIMEOUT = -31;
+    public static final int DISCOVERY_TIMEOUT = -32;
+    public static final int PATCH_INIT_WRITE_FAILURE = -33;
+    public static final int FIRMWARE_VALIDATION_INIT_FAILURE = -34;
 
     private static final Map<Integer, String> errorReasons;
 
     static {
         errorReasons = new HashMap<>();
-        //TODO : These "Operation" errors should probably make more sense
-        errorReasons.put(OPERATION_INVALID_STATE, "Operation invalid state reached.");
-        errorReasons.put(OPERATION_NOT_SUPPORTED, "Operation is not supported.");
-        errorReasons.put(OPERATION_DATA_SIZE_EXCEEDS_LIMIT, "Operation data size exceeds limit.");
-        errorReasons.put(OPERATION_OPERATION_FAILED, "Operation failed.");
-
+        errorReasons.put(BAD_PERIPHERAL, "Could not find RigDfu device! - Bad Peripheral.");
+        errorReasons.put(CONTROL_POINT_CHARACTERISTIC_MISSING, "Could not initialize firmware update service! Missing control point characteristic.");
+        errorReasons.put(BAD_DEVICE, "Could not find RigDfu device! - Bad Device.");
+        errorReasons.put(PERIPHERAL_NOT_SET, "Could not find RigDfu device! Peripheral not set.");
+        //TODO : Probably reword this
+        errorReasons.put(INVALID_PARAMETER, "Firmware update error : Invalid parameter!");
         errorReasons.put(IMAGE_VALIDATION_FAILURE, "Failed to validate firmware image!");
         errorReasons.put(IMAGE_ACTIVATION_FAILURE, "Failed to activate firmware image!");
-        //The image on the device before patching does not match the image the patch was started from.
         errorReasons.put(PATCH_CURRENT_IMAGE_CRC_FAILURE, "CRC for the current firmware image does not match required CRC! Do you have the correct patch version?");
         errorReasons.put(POST_PATCH_IMAGE_CRC_FAILURE, "CRC for the updated firmware image does not match the required CRC! Do you have the correct patch version?");
+        errorReasons.put(COULD_NOT_CONNECT, "Could not connect to RigDfu device!");
+        errorReasons.put(UNKNOWN_ERROR, "An unknown error occured.");
+
         errorReasons.put(CONNECTION_FAILED, "RigDfu connection failure!");
         errorReasons.put(CONNECTION_TIMEOUT, "RigDfu connection time out!");
         errorReasons.put(DISCOVERY_TIMEOUT, "Discovery timeout. Could not find RigDfu device!");
+
+        errorReasons.put(PATCH_INIT_WRITE_FAILURE, "Failed to write patch initialization start to control point.");
+        errorReasons.put(FIRMWARE_VALIDATION_INIT_FAILURE, "Could not initialize firmware validation!");
     }
 
     /**
