@@ -56,6 +56,8 @@
 /* Device Packet size */
 #define BYTES_IN_ONE_PACKET                     20
 
+NSUInteger kFirmwareKeyLength = 16;
+
 typedef enum FirmwareManagerState_enum
 {
     /* Initial state of update manager */
@@ -135,34 +137,37 @@ typedef enum FirmwareManagerState_enum
 }
 
 - (BOOL)firmwareImageIsPatch:(NSData*)firmwareImage {
+    if (firmwareImage.length < kFirmwareKeyLength) {
+        return NO;
+    }
+    
     // create data object with first 16 bytes of firmware image
-    NSData *key = [firmwareImage subdataWithRange:NSMakeRange(0, 16)];
-    NSUInteger count = key.length/sizeof(UInt8);
+    NSData *key = [firmwareImage subdataWithRange:NSMakeRange(0, kFirmwareKeyLength)];
     
     //convert patchKey to NSData and compare
     uint8_t patch_key[] = {
         0xac, 0xb3, 0x37, 0xe8, 0xd0, 0xeb, 0x40, 0x90,
         0xa4, 0xf3, 0xbb, 0x85, 0x7a, 0x5b, 0x2a, 0xf6
     };
-    NSData *keyPatchData = [NSData dataWithBytes:patch_key length:count];
+    NSData *keyPatchData = [NSData dataWithBytes:patch_key length:kFirmwareKeyLength];
     
     return [keyPatchData isEqualToData:key];
 }
 
-- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device image:(NSData*)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic*)characteristic
+- (RigDfuError_t)updateFirmware:(RigLeBaseDevice*)device image:(NSData*)firmwareImage activateChar:(CBCharacteristic*)characteristic
                 activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen
 {
     RigDfuError_t result = DfuError_None;
     NSLog(@"__updateFirmware__");
 
     isPatchUpdate = NO;
-    imageSize = firmwareImageSize;
+    imageSize = (UInt32)firmwareImage.length;
     image = firmwareImage;
     
     if ([self firmwareImageIsPatch:firmwareImage]) {
         isPatchUpdate = YES;
-        imageSize = firmwareImageSize - 16;
-        image = [firmwareImage subdataWithRange:NSMakeRange(16, imageSize)];
+        imageSize = imageSize - (UInt32)kFirmwareKeyLength;
+        image = [firmwareImage subdataWithRange:NSMakeRange(kFirmwareKeyLength, imageSize)];
     }
     
     // Create the firmware update service object and assigned this object as the delegate
@@ -231,7 +236,6 @@ typedef enum FirmwareManagerState_enum
 {
     return [self updateFirmware:request.updateDevice
                           image:request.image
-                      imageSize:(uint32_t)request.image.length
                    activateChar:request.activationCharacteristic
                 activateCommand:(uint8_t *)[request.activationCommand bytes]
              activateCommandLen:request.activationCommand.length];
