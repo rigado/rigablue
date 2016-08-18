@@ -2,15 +2,11 @@ package com.rigado.rigablue;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
-import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
-import android.os.Handler;
-import android.os.Looper;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
-import java.util.UUID;
 
 /**
  *  RigFirmwareUpdateManager.java
@@ -41,7 +37,9 @@ enum DfuOpCodeEnum {
     DfuOpCode_Reserved_7,
     DfuOpCode_Reserved_8,
     DfuOpCode_EraseAndReset,
-    DfuOpCode_EraseSizeRequest
+//    DfuOpCode_EraseSizeRequest, //removed because it is 10, and we need InitializePatch to be 10
+    DfuOpCode_InitializePatch,
+    DfuOpCode_ReceivePatchImage
 }
 
 /**
@@ -70,30 +68,60 @@ enum FirmwareManagerStateEnum {
  */
 public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver, IRigLeConnectionManagerObserver,
                                                 IRigFirmwareUpdateServiceObserver {
+
+    private static final int Response = 16; //unused in iOS
     private static final int PacketReceivedNotificationRequest = 8;
     private static final int NumberOfPackets = 1;
+
     private static final int PacketReceivedNotification = 17;
     private static final int ReceivedOpcode = 16;
-    private static final int OperationSuccess = 1;
+
+    private static final int OPERATION_SUCCESS = 1;
+    private static final int OPERATION_INVALID_STATE = 2; //Unused in iOS
+    private static final int OPERATION_NOT_SUPPORTED = 3; //Unused in iOS
+    private static final int OPERATION_DATA_SIZE_EXCEEDS_LIMIT = 4; //Unused in iOS
+    private static final int OPERATION_CRC_ERROR = 5;
+    private static final int OPERATION_OPERATION_FAILED = 6; //Unused in iOS
+    private static final int OPERATION_PATCH_NEED_MORE_DATA = 7;
+    private static final int OPERATION_PATCH_INPUT_IS_FULL = 8; //Unused in iOS
 
     private static final int BytesInOnePacket = 20;
     
-    private static final int ImageStartIndex = 0;
+    private static final int ImageStartPacketIndex = 0; //unused in iOS
     private static final int ImageStartPacketSize = 12;
     private static final int ImageInitPacketIndex = ImageStartPacketSize;
     private static final int ImageInitPacketSize = 32;
+
+    private static final int PatchInitPacketIndex = ImageStartPacketSize + ImageInitPacketSize;
+    private static final int PatchInitPacketSize = 12;
+
     private static final int ImageSecureDataStart = ImageInitPacketIndex + ImageInitPacketSize;
+
 
     private RigFirmwareUpdateService mFirmwareUpdateService;
     private FirmwareManagerStateEnum mState;
 
-    public static final int DiscoveryTimeoutError = -30;
-    public static final int ConnectionFailedError = -31;
-    public static final int ConnectionTimeoutError = -32;
+    //Removed from DfuOpOrdinal because we need InitializePatch to be 10
+    private final static int ERASE_SIZE_REQUEST = 10;
 
+    /**
+     * If the first 16 bytes matches this key, it is a patch update.
+     */
+    private final static byte[] patchKey = {(byte)0xac, (byte)0xb3, 0x37, (byte) 0xe8, (byte) 0xd0, (byte) 0xeb,
+            0x40, (byte)0x90, (byte)0xa4, (byte)0xf3, (byte)0xbb, (byte)0x85, 0x7a, 0x5b, 0x2a, (byte)0xf6 };
+
+    /**
+     * Size of patch key
+     */
+    private final static int PATCH_KEY_SIZE = 16;
 
     /**
      * Array to hold the firmware image being sent to the bootloader
+     */
+    byte [] mStartImage;
+
+    /**
+     * Array to hold the final firmware image after the patch check
      */
     byte [] mImage;
 
@@ -136,6 +164,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
 
     boolean mShouldStopSendingPackets;
+
     /**
      * This state is no longer used and will eventually be removed.
      */
@@ -150,6 +179,16 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * This state is no longer used and will eventually be removed.
      */
     boolean mDidForceEraseAfterStmUpdateImageRan;
+
+    /**
+     * State variable which is set in the method firmwareUpdate
+     */
+    boolean isPatchUpdate;
+
+    /**
+     * State variable which is set to true once the patch init packet has been sent to the bootloader.
+     */
+    boolean mIsPatchInitPacketSent;
 
     /**
      * The total number of firmware packets to be sent.
@@ -223,17 +262,32 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      *                        activateCharacteristic
      * @return Returns true if the firmware update started successfully, false otherwise
      */
-    public boolean updateFirmware(RigLeBaseDevice device, InputStream firmwareImage,
+    public boolean updateFirmware(RigLeBaseDevice device,
+                                  InputStream firmwareImage,
                                   BluetoothGattCharacteristic activateCharacteristic,
                                   byte[] activateCommand) {
         RigLog.i("__RigFirmwareUpdateManager.updateFirmware__");
+
+
         mUpdateDevice = device;
         try {
             mImageSize = firmwareImage.available();
-            mImage = new byte[mImageSize];
-            firmwareImage.read(mImage);
+            mStartImage = new byte[mImageSize];
+            firmwareImage.read(mStartImage);
         } catch(IOException e) {
             RigLog.e("IOException occurred while reading binary image data!");
+        }
+
+        isPatchUpdate = isPatchUpdate(mStartImage);
+
+        if(isPatchUpdate) {
+            //chop off the patch key -- first 16 bytes
+            mImageSize -= PATCH_KEY_SIZE;
+            mImage = new byte[mImageSize];
+            System.arraycopy(mStartImage, PATCH_KEY_SIZE, mImage, 0, mImageSize);
+        } else {
+            //nothing to do here!
+            mImage = mStartImage;
         }
 
         mFirmwareUpdateService = new RigFirmwareUpdateService();
@@ -283,6 +337,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * Initializes the state of the firmware update manager object.
      */
     private void initStateVariables() {
+        RigLog.i("__initStateVariables__");
     	mIsFileSizeWritten = false;
     	mIsInitPacketSent = false;
     	mIsPacketNotificationEnabled = false;
@@ -303,6 +358,24 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      */
     public void setObserver(IRigFirmwareUpdateManagerObserver observer) {
         mObserver = observer;
+    }
+
+    /**
+     * Detects whether the supplied firmware image is a patch
+     *
+     * @param firmwareImage the firmware image passed to the bootloader
+     * @return true if patch update
+     */
+    private boolean isPatchUpdate(byte[] firmwareImage) {
+        boolean isPatch = false;
+        final byte[] maybePatchKey = new byte[PATCH_KEY_SIZE];
+        System.arraycopy(firmwareImage, 0, maybePatchKey, 0, PATCH_KEY_SIZE);
+
+        if(Arrays.equals(patchKey, maybePatchKey)) {
+            isPatch = true;
+        }
+        RigLog.i("__RigFirmwareUpdateManager.isPatchUpdate__ :" + isPatch);
+        return isPatch;
     }
 
     /**
@@ -336,6 +409,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         RigLeConnectionManager.getInstance().setObserver(this);
 
         RigLog.d("Send enter bootloader command");
+
         mUpdateDevice.writeCharacteristic(characteristic, command);
     }
 
@@ -344,6 +418,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * firmware update.
      */
     private void cleanUp() {
+        RigLog.d("__RigFirmwareUpdateManager.cleanUp__");
     	RigLeConnectionManager.getInstance().setObserver(mOldConnectionObserver);
     	
     	if(mUpdateDevice != null) {
@@ -363,18 +438,34 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * @return The size of the update in bytes
      */
     private int getImageSize() {
+        RigLog.i("__RigFirmwareUpdateManager.getImageSize__");
     	int size = mImageSize;
     	if(mFirmwareUpdateService.isSecureDfu()) {
     		size -= (ImageStartPacketSize + ImageInitPacketSize);
+            if(isPatchUpdate) {
+                size -= PatchInitPacketSize;
+            }
     	}
     	return size;
+    }
+
+    private int getImageStart() {
+        RigLog.i("__RigFirmwareUpdateManager.getImageStart__");
+        final int imageStart;
+        if(isPatchUpdate) {
+            imageStart = ImageSecureDataStart + PatchInitPacketSize;
+        } else {
+            imageStart = ImageSecureDataStart;
+        }
+
+        return imageStart;
     }
 
     /**
      * Resets all state flags
      */
     private void resetFlags() {
-        RigLog.d("__RigFirmwareUpdateManager.resetFlags()__");
+        RigLog.d("__RigFirmwareUpdateManager.resetFlags__");
         mIsFileSizeWritten = false;
         mIsPacketNotificationEnabled = false;
         mIsReceivingFirmwareImage = false;
@@ -398,6 +489,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         RigLog.d("__RigFirmwareUpdateManager.writeFileSize__");
 
         if(mFirmwareUpdateService.isSecureDfu()) {
+            //same size as packet
         	byte [] data = new byte[ImageStartPacketSize];
         	System.arraycopy(mImage, 0, data, 0, ImageStartPacketSize);
         	
@@ -410,8 +502,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 	        data[1] = (byte)((mImageSize >> 8) & 0xFF);
 	        data[2] = (byte)((mImageSize >> 16) & 0xFF);
 	        data[3] = (byte)((mImageSize >> 24) & 0xFF);
-	
-	        RigLog.d("File size array: " + Arrays.toString(data));
 
         	mFirmwareUpdateService.writeDataToPacketCharacteristic(data);
         	mObserver.updateStatus("Writing device update size", 0);
@@ -422,7 +512,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * Helper function to enable packet notifications
      */
     private void enablePacketNotification() {
-        RigLog.d("__enablePacketNotification__");
+        RigLog.d("__RigFirmwareUpdateManager.enablePacketNotification__");
         byte [] data = { PacketReceivedNotificationRequest, NumberOfPackets, 0 };
 
         mFirmwareUpdateService.writeDataToControlPoint(data);
@@ -431,11 +521,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
     /**
      * Sends the init packet to the secure bootloader.  The init packet contains information
-     * regarding the encryption of the firmware image and which application binaires are being
+     * regarding the encryption of the firmware image and which application binaries are being
      * sent.  Typically, only the application binary is sent.
      */
     private void sendInitPacket() {
-    	RigLog.d("__sendInitPacket__");
+    	RigLog.d("__RigFirmwareUpdateManager.sendInitPacket__");
     	byte [] initPacketOne = new byte[ImageInitPacketSize/2];
     	byte [] initPacketTwo = new byte[ImageInitPacketSize/2];
     	
@@ -447,16 +537,26 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	try {
     		Thread.sleep(100);
     	} catch (Exception e) {
-    		
+            e.printStackTrace();
     	}
+
     	mFirmwareUpdateService.writeDataToPacketCharacteristic(initPacketTwo);
+    }
+
+    private void sendPatchInitPacket() {
+        RigLog.i("__RigFirmwareUpdateManager.sendPatchInitPacket__");
+        byte[] patchInitPacket = new byte[PatchInitPacketSize];
+
+        System.arraycopy(mImage, PatchInitPacketIndex, patchInitPacket, 0, PatchInitPacketSize);
+
+        mFirmwareUpdateService.writeDataToPacketCharacteristic(patchInitPacket);
     }
 
     /**
      * Commands the bootloader to prepare for receiving the firmware image.
      */
     private void receiveFirmwareImage() {
-        RigLog.d("__receiveFirmwareImage__");
+        RigLog.d("__RigFirmwareUpdateManager.receiveFirmwareImage__");
         byte [] data = { (byte)DfuOpCodeEnum.DfuOpCode_ReceiveFirmwareImage.ordinal() };
 
         mFirmwareUpdateService.writeDataToControlPoint(data);
@@ -466,7 +566,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * Starts the transfer of the firmware image data.
      */
     private void startUploadingFile() {
-        RigLog.d("__startUploadingFile__");
+        RigLog.d("__RigFirmwareUpdateManager.startUploadingFile__");
         int size = getImageSize();
         mTotalPackets = (size / BytesInOnePacket);
         if((size % BytesInOnePacket) != 0) {
@@ -489,11 +589,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	} else {
     		mLastPacketSize = (imageSizeLocal - ((mTotalPackets - 1) * BytesInOnePacket));
     	}
-    	RigLog.d("Last packet size: " + mLastPacketSize);
     }
 
     /**
-     * Sends the next firmware image packet.
+     * Sends one packet of data to the Dfu. If the packet being sent is the last packet, then the
+     * size is based on the size calculated in the call to determineLastPacketSize.
      */
     private void sendPacket() {
         RigLog.d("__RigFirmwareUpdateManager.sendPacket__");
@@ -513,8 +613,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         
         packet = new byte[packetSize];
         int index;
+        final int imageStart = getImageStart();
         if(mFirmwareUpdateService.isSecureDfu()) {
-        	index = ImageSecureDataStart + (mPacketNumber - 1) * BytesInOnePacket;
+        	index = imageStart + (mPacketNumber - 1) * BytesInOnePacket;
         } else {
         	index = (mPacketNumber - 1) * BytesInOnePacket;
         }
@@ -556,7 +657,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mObserver.updateStatus("Activating device software", 0);
     }
 
-    private void handleUpdateError(int error) {
+    private void handleUpdateError(RigDfuError error) {
 
         //Set to null when cleanUpAfterFailure is called, store a reference here
         IRigFirmwareUpdateManagerObserver o = mObserver;
@@ -593,7 +694,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         	mIsInitPacketSent = false;
         	mIsPacketNotificationEnabled = false;
         	mIsReceivingFirmwareImage = false;
-        	mObserver.updateProgress(0);
+        	updateProgress(0);
         	mPacketNumber = 0;
         }
         
@@ -622,29 +723,37 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     public void didWriteValueForControlPoint() {
         RigLog.d("__RigFirmwareUpdateManager.didWriteValueForControlPoint__");
 
-        if(mState == FirmwareManagerStateEnum.State_Cancelled && mDidSendCancel) {
+        //This check ensures none of the above is performed until after we successfully erase the flash
+        //Legacy code for old bootloader versions.
+        if (mShouldWaitForErasedSize) {
+            return;
+        }
+
+        if (mState == FirmwareManagerStateEnum.State_Cancelled && mDidSendCancel) {
             cleanUp();
             return;
         }
 
-        if(mShouldWaitForErasedSize) {
-            return;
-        }
-
-        if(mState == FirmwareManagerStateEnum.State_FinishedRadioImageTransfer) {
-        	try {
-        		Thread.sleep(2000);
-        	} catch(Exception e) {
-        		
-        	}
+        if (mState == FirmwareManagerStateEnum.State_FinishedRadioImageTransfer) {
+            try {
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             mObserver.didFinishUpdate();
         }
 
-        if(!mIsFileSizeWritten) {
+        /*
+         * This functionality behaves in tandem with the commands being written
+         * to the control point from didUpdateValueForControlPoint
+         */
+        if (!mIsFileSizeWritten) {
             writeFileSize();
-        } else if(!mIsInitPacketSent && mFirmwareUpdateService.isSecureDfu()) {
-        	sendInitPacket();
-        } else if(!mIsPacketNotificationEnabled) {
+        } else if (!mIsInitPacketSent && mFirmwareUpdateService.isSecureDfu()) {
+            sendInitPacket();
+        } else if (!mIsPatchInitPacketSent && isPatchUpdate){
+            sendPatchInitPacket();
+        } else if(!mIsPacketNotificationEnabled && !isPatchUpdate) {
             mIsPacketNotificationEnabled = true;
             receiveFirmwareImage();
         } else if(!mIsReceivingFirmwareImage) {
@@ -675,11 +784,16 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         byte request = value[1];
 
         if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_Start.ordinal()) {
-            if(value[2] == OperationSuccess) {
-                RigLog.i("Received notification for DFU_START");
+            if(value[2] == OPERATION_SUCCESS) {
+                /**
+                 * This is received after sending the size of the firmware image to the packet characteristic
+                 * the device has been properly erased by the Dfu. Here, we mark the fact that the firmware
+                 * image size has been sent and enable notifications for packets. This will cause a
+                 * didWriteValueToCharacteristic call to be generated by CoreBluetooth which will then cause
+                 * the firmware image transfer to begin.
+                 */
                 mIsFileSizeWritten = true;
                 if(mFirmwareUpdateService.isSecureDfu()) {
-                	RigLog.d("Start Init packet sequence");
                 	byte [] cmd = { (byte)DfuOpCodeEnum.DfuOpCode_Init.ordinal() };
                 	mFirmwareUpdateService.writeDataToControlPoint(cmd);
                 } else {
@@ -687,61 +801,122 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                 }
             }
         } else if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_Init.ordinal()) {
-        	if(value[2] == OperationSuccess) {
+        	if(value[2] == OPERATION_SUCCESS) {
+                //This is received after sending the patch initialization data. If the update is not
+                //a patch, then this step is skipped.
         		mIsInitPacketSent = true;
-        		enablePacketNotification();
-        	} else {
-                this.handleUpdateError(value[2]);
+                if(isPatchUpdate) {
+                    final byte[] cmd = {(byte) DfuOpCodeEnum.DfuOpCode_InitializePatch.ordinal()};
+                    mFirmwareUpdateService.writeDataToControlPoint(cmd);
+                } else {
+                    enablePacketNotification();
+                }
             }
+        } else if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_InitializePatch.ordinal()) {
+            if(value[2] == OPERATION_SUCCESS) {
+                mIsPatchInitPacketSent = true;
+                //At this point, the patching process and the normal update process diverge. In the normal
+                //case, the packet notifications would be enabled. Instead, the page image transfer starts.
+                final byte[] cmd = {(byte) DfuOpCodeEnum.DfuOpCode_ReceivePatchImage.ordinal()};
+                mFirmwareUpdateService.writeDataToControlPoint(cmd);
+            } else if(value[2] == OPERATION_CRC_ERROR) {
+                RigLog.e("CRC on patch initialization!");
+                this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.PATCH_CURRENT_IMAGE_CRC_FAILURE));
+            } else {
+                RigLog.e("Unexpected error during patch initialization!");
+                this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.UNKNOWN_ERROR));
+            }
+
         } else if(opCode == PacketReceivedNotification) {
+            //This is sent every time a packet is successfully received by the Dfu. This provides the app
+            //a way of knowing that each packet has been received and the total size that has been
+            //transferred thus far.
             mTotalBytesSent = ((value[1] & 0xFF) + ((value[2] & 0xFF) << 8) + ((value[3] & 0xFF) << 16) + ((value[4] & 0xFF) << 24));
 
-            float progress = (float)mTotalBytesSent / (float)mImageSize;
-            int progressPercentage = (int)(progress * 100);
-            mObserver.updateProgress(progressPercentage);
-            RigLog.i("Transferred " + mTotalBytesSent + "/" + mImageSize);
+            float progress = (float)mTotalBytesSent / (float)getImageSize();
+            updateProgress(progress);
 
+            //If we haven't sent the last packet yet, then keep sending packets. Once sent, we will notify
+            //the app that the firmware image has been fully transferred.
             if(!mIsLastPacket && !mShouldStopSendingPackets) {
+                // TODO: error handling in sendPacket()
                 if((mTotalBytesSent / 20) != mPacketNumber) {
                     RigLog.e("Data consistency error!!!!");
                 }
                 sendPacket();
             } else {
-                RigLog.i("Last packet notification received");
-                mObserver.updateProgress(100);
+                updateProgress(1.0f);
             }
         } else if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_ReceiveFirmwareImage.ordinal()) {
-            if(value[2] == OperationSuccess) {
+            if(value[2] == OPERATION_SUCCESS) {
                 RigLog.i("Firmware transfer successful");
                 mObserver.updateStatus("Firmware transfer successful.  Validating...", 0);
+                // TODO: handleError FIRMWARE_VALIDATION_INIT_FAILURE if validation fails
                 validateFirmware();
             } else {
                 RigLog.e("Error during firmware image transfer " + value[2]);
-                mObserver.updateStatus("Error during firmware transfer", value[2]);
-                this.handleUpdateError(value[2]);
+                this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.IMAGE_VALIDATION_FAILURE));
+            }
+        } else if (opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_ReceivePatchImage.ordinal()) {
+            if(value[2] == OPERATION_PATCH_NEED_MORE_DATA) {
+                final float progress =  (mPacketNumber * 20) / getImageSize();
+                updateProgress(progress);
+                if(!mShouldStopSendingPackets) {
+                    //Note in iOS : "update delegate (??)"
+                    sendPacket();
+                }
+            } else if(value[2] == OPERATION_SUCCESS) {
+                updateProgress(1.0f);
+                mObserver.updateStatus("Successfully Transferred Software. Validating...", 0);
+                // TODO: handleError FIRMWARE_VALIDATION_INIT_FAILURE if validation fails
+                validateFirmware();
+            } else {
+                //this else bracket is empty in iOS
             }
         } else if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_ValidateFirmwareImage.ordinal()) {
-            if(value[2] == OperationSuccess) {
+            if(value[2] == OPERATION_SUCCESS) {
                 RigLog.i("Successful transfer and validation of firmware image!");
+
+                //Once the firmware is validated, the firmware transfer is considered successful and the activation
+                //command is sent to the DFU.
                 if(mState == FirmwareManagerStateEnum.State_TransferringRadioImage) {
                     mObserver.updateStatus("Device software validated successfully!", 0);
                     mState = FirmwareManagerStateEnum.State_FinishedRadioImageTransfer;
+                    activateFirmware();
                 }
-                activateFirmware();
+
+            } else if(value[2] == OPERATION_CRC_ERROR) {
+                RigLog.e("CRC Failure on Validation!");
+                this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.POST_PATCH_IMAGE_CRC_FAILURE));
             } else {
-                //TODO: Figure out how to recover from this situation
-                RigLog.e("An error occurred during firmware image validation " + value[2]);
-                mObserver.updateStatus("Error during validation!", value[2]);
+                    //TODO: Figure out how to recover from this situation
+                this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.IMAGE_VALIDATION_FAILURE));
+
             }
-        } else if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_EraseSizeRequest.ordinal()) {
-            if(value[2] == OperationSuccess) {
-            	/* Note: This is not longer used for the dual bank bootloader.  The entire bank does not need to be
+        }  else if(opCode == ReceivedOpcode && request == (byte)ERASE_SIZE_REQUEST) {
+            if(value[2] == OPERATION_SUCCESS) {
+                /** NOTE: (iOS note)
+                    This is not used for the dual bank bootloader.  Also, as of S110 7.0, it is not necessary to disable the
+                    radio to read/write to/from the internal flash of the part.
+                    This message is sent by the DFU after an erase size request.  Initially, if not erased, the erase
+                    size request will return 0.  This will trigger the firmware update manager to send an erase and
+                    reset command to the device which will then cause the device to disconnect and perform the
+                    erase.  Once that is complete, the update manager will reconnect, perform discovery, and then send
+                    another erase size request.  At that point, the erase size should be greater than the size of the
+                    image to be sent.  If this is the case, then the firmware update is started by sending the DFU Start
+                    command.  Once this command is written successfully, the didWriteValueToCharacteristic callback will
+                    cause the firmware image size to be written to the device.  Once received, this will trigger the DFU
+                    to send the DFU Start response operation code and firmware transfer will begin.  See the first if
+                    condition in this function.
+                 */
+
+            	/* NOTE: (Android note)
+            	 * This is no longer used for the dual bank bootloader.  The entire bank does not need to be
             	 * erased to perform a firmware update.  In additional, as of S110 7.0, it is no longer necessary to
             	 * disable the radio when reading/write to the internal flash of the nRF.  This code is left for reference
             	 * and backwards compatibility with old bootloaders.
             	 */
                 mTotalBytesErased = (value[3] + (value[4] << 8) + (value[5] << 16) + (value[6] << 24)) & 0xFFFFFFFF;
-                RigLog.i("TotalBytesErased: " + mTotalBytesErased);
                 if(mTotalBytesErased < mImageSize) {
                     byte [] cmd = { (byte)DfuOpCodeEnum.DfuOpCode_EraseAndReset.ordinal() };
                     if(mState == FirmwareManagerStateEnum.State_CheckEraseAfterUnplug) {
@@ -752,6 +927,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                     mFirmwareUpdateService.setShouldReconnectState(true);
                     mFirmwareUpdateService.writeDataToControlPoint(cmd);
                 } else {
+                    //Device already erased, continue with the firmware update
                     byte [] cmd = { (byte)DfuOpCodeEnum.DfuOpCode_Start.ordinal() };
                     mShouldWaitForErasedSize = false;
                     if(mState == FirmwareManagerStateEnum.State_CheckEraseAfterUnplug) {
@@ -763,6 +939,13 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
     }
 
+    private void updateProgress(float progress) {
+        int progressPercentage = (int)(progress * 100);
+        if(mObserver!=null) {
+            mObserver.updateProgress(progressPercentage);
+        }
+    }
+
     /* IRigLeDiscoveryManagerObserver methods */
 
     /**
@@ -770,6 +953,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      *
      * @param device The available device information for the discovered device
      */
+
     @Override
     public void didDiscoverDevice(RigAvailableDeviceData device) {
         RigLog.d("__RigFirmwareUpdateManager.didDiscoverDevice__");
@@ -786,7 +970,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     public void discoveryDidTimeout() {
         RigLog.d("__RigFirmwareUpdateManager.discoveryDidTimetout__");
         RigLog.e("Did not find DFU device!!");
-        handleUpdateError(DiscoveryTimeoutError);
+        this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.DISCOVERY_TIMEOUT));
     }
 
     /**
@@ -816,7 +1000,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void didConnectDevice(RigLeBaseDevice device) {
         RigLog.d("__RigFirmwareUpdateManager.didConnectDevice__");
-        RigLog.d("Connected!");
         mUpdateDevice = device;
 
         RigLeConnectionManager.getInstance().setObserver(mOldConnectionObserver);
@@ -832,6 +1015,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      */
     @Override
     public void didDisconnectDevice(BluetoothDevice btDevice) {
+        RigLog.i("__RigFirmwareUpdateManager.didDisconnectDevice__");
         if(btDevice.getAddress().equals(mInitialDeviceAddress)) {
             //Give this to the original observer
             mFirmwareUpdateService.didDisconnectInitialNonBootloaderDevice();
@@ -845,8 +1029,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      */
     @Override
     public void deviceConnectionDidFail(RigAvailableDeviceData device) {
-        RigLog.e("RigFirmwareUpdateManager.deviceConnectionDidFail:Connection failed!");
-        handleUpdateError(ConnectionFailedError);
+        RigLog.e("__RigFirmwareUpdateManager.deviceConnectionDidFail__");
+        this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.CONNECTION_FAILED));
     }
 
     /**
@@ -857,10 +1041,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      */
     @Override
     public void deviceConnectionDidTimeout(RigAvailableDeviceData device) {
-        RigLog.e("RigFirmwareUpdateManager.deviceConnectionDidTimeout:Connection failed!");
+        RigLog.e("__RigFirmwareUpdateManager.deviceConnectionDidTimeout__");
         //Try again??
         //RigLeConnectionManager.getInstance().connectDevice(device, 10000);
         //EPS - This change was made to support a client project.  It may not be the correct way to handle this event.
-        handleUpdateError(ConnectionTimeoutError);
+        this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.CONNECTION_TIMEOUT));
     }
 }

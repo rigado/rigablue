@@ -41,10 +41,9 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
 	private boolean refreshDeviceCache(BluetoothGatt gatt){
         RigLog.d("refreshDeviceCache");
         try {
-            Method localMethod = gatt.getClass().getMethod("refresh", new Class[0]);
+            Method localMethod = gatt.getClass().getMethod("refresh");
             if (localMethod != null) {
-                boolean bool = ((Boolean) localMethod.invoke(gatt, new Object[0])).booleanValue();
-                return bool;
+                return (boolean) localMethod.invoke(gatt);
             }
         }
         catch (Exception localException) {
