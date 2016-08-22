@@ -127,6 +127,42 @@ up to 10 tries.  This property allows for indiviual reconnection control.</Abstr
 		</Token>
 		
 		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/setUpdateDFUServiceUuidString:</TokenIdentifier>
+			<Abstract type="html">This is the Firmware Update Service UUID for the connected device.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (strong, nonatomic) NSString *updateDFUServiceUuidString</Declaration>
+			
+			
+			<Anchor>//api/name/updateDFUServiceUuidString</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/updateDFUServiceUuidString</TokenIdentifier>
+			<Abstract type="html">This is the Firmware Update Service UUID for the connected device.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (strong, nonatomic) NSString *updateDFUServiceUuidString</Declaration>
+			
+			
+			<Anchor>//api/name/updateDFUServiceUuidString</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateService/updateDFUServiceUuidString</TokenIdentifier>
+			<Abstract type="html">This is the Firmware Update Service UUID for the connected device.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
+			
+			<Declaration>@property (strong, nonatomic) NSString *updateDFUServiceUuidString</Declaration>
+			
+			
+			<Anchor>//api/name/updateDFUServiceUuidString</Anchor>
+            <NodeRef refid="6"/>
+		</Token>
+		
+		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/init</TokenIdentifier>
 			<Abstract type="html">Initializes the update service object.</Abstract>
 			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
@@ -383,18 +419,6 @@ if NO, write data with CBCharacteristicWriteWithoutResponse</Abstract>
 			
 			
 			<Anchor>//api/name/updateDisChacteristics:</Anchor>
-            <NodeRef refid="6"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateService/getCharacteristicUuids</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigFirmwareUpdateService.m</DeclaredIn>
-			
-			<Declaration>- (NSArray *)getCharacteristicUuids</Declaration>
-			
-			
-			<Anchor>//api/name/getCharacteristicUuids</Anchor>
             <NodeRef refid="6"/>
 		</Token>
 		

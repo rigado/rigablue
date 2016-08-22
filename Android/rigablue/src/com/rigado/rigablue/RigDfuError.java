@@ -14,26 +14,26 @@ public class RigDfuError {
     private String errorMessage;
     private int errorCode;
 
-    /**
+    /*
      * Direct port of RigDfuError.h from iOS version
      */
-    // An invalid/null value was encountered where an Android BluetoothDevice was expected
+    /** An invalid/null value was encountered where an Android BluetoothDevice was expected */
     public static final int BAD_PERIPHERAL = -1;
     public static final int CONTROL_POINT_CHARACTERISTIC_MISSING = -2;
-    // An invalid/null value was encountered where a RigLeBaseDevice was expected
+    /** An invalid/null value was encountered where a RigLeBaseDevice was expected */
     public static final int BAD_DEVICE = -3;
-    // Not currently used. See BAD_PERIPHERAL.
+    /** Not currently used. See BAD_PERIPHERAL. */
     public static final int PERIPHERAL_NOT_SET = -4;
     public static final int INVALID_PARAMETER = -5;
     public static final int IMAGE_VALIDATION_FAILURE = -6;
     public static final int IMAGE_ACTIVATION_FAILURE = -7;
-    // The image on the device before patching does not match the image the patch was started from.
+    /** The image on the device before patching does not match the image the patch was started from. */
     public static final int PATCH_CURRENT_IMAGE_CRC_FAILURE = -8;
     public static final int POST_PATCH_IMAGE_CRC_FAILURE = -9;
     public static final int COULD_NOT_CONNECT = -10;
     public static final int UNKNOWN_ERROR = -11;
 
-    /**
+    /*
      * Additional errors based on iOS error messages that did not have an associated RigDfuError object
      */
     public static final int CONNECTION_FAILED = -30;

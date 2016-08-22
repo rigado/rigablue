@@ -17,7 +17,7 @@
 			<Abstract type="html">@method deviceRequestWithUuidList:timeout:delegate:allowDuplicates:</Abstract>
 			<DeclaredIn>RigDeviceRequest.h</DeclaredIn>
 			
-			<Declaration>+ (id)deviceRequestWithUuidList:(NSArray *)uuidList timeout:(float)timeout delegate:(id&lt;RigLeDiscoveryManagerDelegate&gt;)delegate allowDuplicates:(BOOL)allowDuplicates</Declaration>
+			<Declaration>+ (instancetype)deviceRequestWithUuidList:(NSArray *)uuidList timeout:(float)timeout delegate:(id&lt;RigLeDiscoveryManagerDelegate&gt;)delegate allowDuplicates:(BOOL)allowDuplicates</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>uuidList</Name>

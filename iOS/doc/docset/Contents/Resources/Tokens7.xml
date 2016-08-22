@@ -42,25 +42,13 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getSerivceList</TokenIdentifier>
-			<Abstract type="html">@method getServiceList</Abstract>
-			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
-			
-			<Declaration>- (NSArray *)getSerivceList</Declaration>
-			
-			<ReturnValue><Abstract type="html">List of discovered services.</Abstract></ReturnValue>
-			<Anchor>//api/name/getSerivceList</Anchor>
-            <NodeRef refid="7"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getServiceWithUuid:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
+			<Abstract type="html">@method getServiceList</Abstract>
 			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
 			
 			<Declaration>- (CBService *)getServiceWithUuid:(CBUUID *)uuid</Declaration>
 			
-			
+			<ReturnValue><Abstract type="html">List of discovered services.</Abstract></ReturnValue>
 			<Anchor>//api/name/getServiceWithUuid:</Anchor>
             <NodeRef refid="7"/>
 		</Token>
@@ -74,6 +62,18 @@
 			
 			
 			<Anchor>//api/name/getCharacteristicWithUuid:forService:</Anchor>
+            <NodeRef refid="7"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigLeBaseDevice/getServiceList</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (NSArray *)getServiceList</Declaration>
+			
+			
+			<Anchor>//api/name/getServiceList</Anchor>
             <NodeRef refid="7"/>
 		</Token>
 		

@@ -25,18 +25,6 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/clm/RigFirmwareUpdateRequest/patchRequestWithDevice:image:activationChar:activationCommand:maxRssi:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
-			
-			<Declaration>+ (RigFirmwareUpdateRequest *)patchRequestWithDevice:(RigLeBaseDevice *)device image:(NSData *)image activationChar:(CBCharacteristic *)activateChar activationCommand:(NSData *)activateCommand maxRssi:(int)rssi</Declaration>
-			
-			
-			<Anchor>//api/name/patchRequestWithDevice:image:activationChar:activationCommand:maxRssi:</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/setUpdateDevice:</TokenIdentifier>
 			<Abstract type="html"></Abstract>
 			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
@@ -177,42 +165,6 @@
 			
 			
 			<Anchor>//api/name/activationCommand</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/setIsPatch:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
-			
-			<Declaration>@property BOOL isPatch</Declaration>
-			
-			
-			<Anchor>//api/name/isPatch</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateRequest/isPatch</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
-			
-			<Declaration>@property BOOL isPatch</Declaration>
-			
-			
-			<Anchor>//api/name/isPatch</Anchor>
-            <NodeRef refid="5"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instp/RigFirmwareUpdateRequest/isPatch</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigFirmwareUpdateRequest.h</DeclaredIn>
-			
-			<Declaration>@property BOOL isPatch</Declaration>
-			
-			
-			<Anchor>//api/name/isPatch</Anchor>
             <NodeRef refid="5"/>
 		</Token>
 		

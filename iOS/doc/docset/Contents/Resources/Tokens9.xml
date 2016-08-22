@@ -55,7 +55,7 @@
 			<Abstract type="html">@method sharedInstance</Abstract>
 			<DeclaredIn>RigLeDiscoveryManager.h</DeclaredIn>
 			
-			<Declaration>+ (id)sharedInstance</Declaration>
+			<Declaration>+ (instancetype)sharedInstance</Declaration>
 			
 			<ReturnValue><Abstract type="html">RigLeDiscoveryManager instance</Abstract></ReturnValue>
 			<Anchor>//api/name/sharedInstance</Anchor>
@@ -166,7 +166,7 @@
 			<Abstract type="html"></Abstract>
 			<DeclaredIn>RigLeDiscoveryManager.m</DeclaredIn>
 			
-			<Declaration>- (id)init</Declaration>
+			<Declaration>- (instancetype)init</Declaration>
 			
 			
 			<Anchor>//api/name/init</Anchor>

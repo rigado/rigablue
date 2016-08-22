@@ -61,27 +61,21 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/updateFirmware:image:activateChar:activateCommand:activateCommandLen:</TokenIdentifier>
 			<Abstract type="html">Begins a firmware update for the given device.  If a device is not currently running the bootloader, a command to enter
 the bootloader must be provided.  If it is already in the bootloader, then the command may be nil and the command len 0.
 Additionally, the calling code must provide a characteristic on the device to which the command will be sent.  Again, if
 already in the bootloader, this characteristic parameter may be nil.</Abstract>
 			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
 			
-			<Declaration>- (RigDfuError_t)updateFirmware:(RigLeBaseDevice *)device isPatch:(BOOL)isPatch image:(NSData *)firmwareImage imageSize:(uint32_t)firmwareImageSize activateChar:(CBCharacteristic *)characteristic activateCommand:(uint8_t *)command activateCommandLen:(uint8_t)commandLen</Declaration>
+			<Declaration>- (RigDfuError_t)updateFirmware:(RigLeBaseDevice *)device image:(NSData *)firmwareImage activateChar:(CBCharacteristic *)characteristic activateCommand:(uint8_t *)command activateCommandLen:(uint8_t)commandLen</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>device</Name>
 					<Abstract type="html">The device for which to perform the firmware update</Abstract>
 				</Parameter><Parameter>
-					<Name>isPatch</Name>
-					<Abstract type="html">Set to true if the image is a patch image, otherwise set false</Abstract>
-				</Parameter><Parameter>
 					<Name>firmwareImage</Name>
 					<Abstract type="html">The firmware image to send to the device</Abstract>
-				</Parameter><Parameter>
-					<Name>firmwareImageSize</Name>
-					<Abstract type="html">The size of the firmware image</Abstract>
 				</Parameter><Parameter>
 					<Name>characteristic</Name>
 					<Abstract type="html">The command characteristic</Abstract>
@@ -94,7 +88,7 @@ already in the bootloader, this characteristic parameter may be nil.</Abstract>
 				</Parameter>
 			</Parameters>
 			<ReturnValue><Abstract type="html">YES if successful, NO otherwise</Abstract></ReturnValue>
-			<Anchor>//api/name/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:</Anchor>
+			<Anchor>//api/name/updateFirmware:image:activateChar:activateCommand:activateCommandLen:</Anchor>
             <NodeRef refid="4"/>
 		</Token>
 		
@@ -119,6 +113,18 @@ already in the bootloader, this characteristic parameter may be nil.</Abstract>
 			
 			
 			<Anchor>//api/name/initStateVariables</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/firmwareImageIsPatch:</TokenIdentifier>
+			<Abstract type="html"></Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
+			
+			<Declaration>- (BOOL)firmwareImageIsPatch:(NSData *)firmwareImage</Declaration>
+			
+			
+			<Anchor>//api/name/firmwareImageIsPatch:</Anchor>
             <NodeRef refid="4"/>
 		</Token>
 		
@@ -306,14 +312,14 @@ is based on the size calculated in the call to determineLastPacketSize.</Abstrac
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didDiscoverCharacteristicsForDFUSerivce</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/didDiscoverCharacteristicsForDFUService</TokenIdentifier>
 			<Abstract type="html">This method is sent from the delegate protocol once device service and characteristic discovery is complete.</Abstract>
 			<DeclaredIn>RigFirmwareUpdateManager.m</DeclaredIn>
 			
-			<Declaration>- (void)didDiscoverCharacteristicsForDFUSerivce</Declaration>
+			<Declaration>- (void)didDiscoverCharacteristicsForDFUService</Declaration>
 			
 			
-			<Anchor>//api/name/didDiscoverCharacteristicsForDFUSerivce</Anchor>
+			<Anchor>//api/name/didDiscoverCharacteristicsForDFUService</Anchor>
             <NodeRef refid="4"/>
 		</Token>
 		

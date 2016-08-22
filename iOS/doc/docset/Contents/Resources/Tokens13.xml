@@ -70,14 +70,14 @@ type of WriteWithResponse.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didDiscoverCharacteristicsForDFUSerivce</TokenIdentifier>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didDiscoverCharacteristicsForDFUService</TokenIdentifier>
 			<Abstract type="html">This method is called after discovery has been performed on the DFU service.</Abstract>
 			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
 			
-			<Declaration>- (void)didDiscoverCharacteristicsForDFUSerivce</Declaration>
+			<Declaration>- (void)didDiscoverCharacteristicsForDFUService</Declaration>
 			
 			
-			<Anchor>//api/name/didDiscoverCharacteristicsForDFUSerivce</Anchor>
+			<Anchor>//api/name/didDiscoverCharacteristicsForDFUService</Anchor>
             <NodeRef refid="13"/>
 		</Token>
 		

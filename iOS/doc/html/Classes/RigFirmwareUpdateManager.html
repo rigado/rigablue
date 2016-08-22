@@ -7,7 +7,7 @@
 
 	<link rel="stylesheet" href="../css/style.css">
 	<meta name="viewport" content="initial-scale=1, maximum-scale=1.4">
-	<meta name="generator" content="appledoc 2.2.1 (build 1333)">
+	<meta name="generator" content="appledoc 2.2.1 (build 1334)">
 </head>
 <body class="appledoc">
 	<header>
@@ -82,7 +82,7 @@
 		
 		<option value="//api/name/didDisconnectPeripheral:">- didDisconnectPeripheral:</option>
 		
-		<option value="//api/name/didDiscoverCharacteristicsForDFUSerivce">- didDiscoverCharacteristicsForDFUSerivce</option>
+		<option value="//api/name/didDiscoverCharacteristicsForDFUService">- didDiscoverCharacteristicsForDFUService</option>
 		
 		<option value="//api/name/didDiscoverDevice:">- didDiscoverDevice:</option>
 		
@@ -106,6 +106,8 @@
 		
 		<option value="//api/name/enablePacketNotifications">- enablePacketNotifications</option>
 		
+		<option value="//api/name/firmwareImageIsPatch:">- firmwareImageIsPatch:</option>
+		
 		<option value="//api/name/getImageSize">- getImageSize</option>
 		
 		<option value="//api/name/getImageStart">- getImageStart</option>
@@ -128,7 +130,7 @@
 		
 		<option value="//api/name/updateDeviceAndTriggerDiscovery">- updateDeviceAndTriggerDiscovery</option>
 		
-		<option value="//api/name/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:">- updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:</option>
+		<option value="//api/name/updateFirmware:image:activateChar:activateCommand:activateCommandLen:">- updateFirmware:image:activateChar:activateCommand:activateCommandLen:</option>
 		
 		<option value="//api/name/validateFirmware">- validateFirmware</option>
 		
@@ -263,8 +265,8 @@
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:" title="updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:">&ndash;&nbsp;updateFirmware:isPatch:image:imageSize:activateChar:activateCommand:activateCommandLen:</a></code>
+	<a name="//api/name/updateFirmware:image:activateChar:activateCommand:activateCommandLen:" title="updateFirmware:image:activateChar:activateCommand:activateCommandLen:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/updateFirmware:image:activateChar:activateCommand:activateCommandLen:">&ndash;&nbsp;updateFirmware:image:activateChar:activateCommand:activateCommandLen:</a></code>
 </h3>
 
 	<div class="method-info">
@@ -282,7 +284,7 @@ already in the bootloader, this characteristic parameter may be nil.</p>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)updateFirmware:(RigLeBaseDevice *)<em>device</em> isPatch:(BOOL)<em>isPatch</em> image:(NSData *)<em>firmwareImage</em> imageSize:(uint32_t)<em>firmwareImageSize</em> activateChar:(CBCharacteristic *)<em>characteristic</em> activateCommand:(uint8_t *)<em>command</em> activateCommandLen:(uint8_t)<em>commandLen</em></code></div>
+			<div class="method-subsection method-declaration"><code>- (RigDfuError_t)updateFirmware:(RigLeBaseDevice *)<em>device</em> image:(NSData *)<em>firmwareImage</em> activateChar:(CBCharacteristic *)<em>characteristic</em> activateCommand:(uint8_t *)<em>command</em> activateCommandLen:(uint8_t)<em>commandLen</em></code></div>
 
 		    
 			
@@ -296,18 +298,8 @@ already in the bootloader, this characteristic parameter may be nil.</p>
 					</tr>
 				
 					<tr>
-						<th scope="row" class="argument-name"><code>isPatch</code></th>
-						<td><p>Set to true if the image is a patch image, otherwise set false</p></td>
-					</tr>
-				
-					<tr>
 						<th scope="row" class="argument-name"><code>firmwareImage</code></th>
 						<td><p>The firmware image to send to the device</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>firmwareImageSize</code></th>
-						<td><p>The size of the firmware image</p></td>
 					</tr>
 				
 					<tr>
@@ -389,6 +381,22 @@ already in the bootloader, this characteristic parameter may be nil.</p>
 			
 
 			<div class="method-subsection method-declaration"><code>- (void)initStateVariables</code></div>
+
+		    
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/firmwareImageIsPatch:" title="firmwareImageIsPatch:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/firmwareImageIsPatch:">&ndash;&nbsp;firmwareImageIsPatch:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+
+			<div class="method-subsection method-declaration"><code>- (BOOL)firmwareImageIsPatch:(NSData *)<em>firmwareImage</em></code></div>
 
 		    
 		</div>
@@ -862,8 +870,8 @@ is based on the size calculated in the call to determineLastPacketSize.</p>
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/didDiscoverCharacteristicsForDFUSerivce" title="didDiscoverCharacteristicsForDFUSerivce"></a>
-	<h3 class="method-title"><code><a href="#//api/name/didDiscoverCharacteristicsForDFUSerivce">&ndash;&nbsp;didDiscoverCharacteristicsForDFUSerivce</a></code>
+	<a name="//api/name/didDiscoverCharacteristicsForDFUService" title="didDiscoverCharacteristicsForDFUService"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didDiscoverCharacteristicsForDFUService">&ndash;&nbsp;didDiscoverCharacteristicsForDFUService</a></code>
 </h3>
 
 	<div class="method-info">
@@ -878,7 +886,7 @@ is based on the size calculated in the call to determineLastPacketSize.</p>
 			
 		    
 
-			<div class="method-subsection method-declaration"><code>- (void)didDiscoverCharacteristicsForDFUSerivce</code></div>
+			<div class="method-subsection method-declaration"><code>- (void)didDiscoverCharacteristicsForDFUService</code></div>
 
 		    
 			
@@ -1244,10 +1252,10 @@ is based on the size calculated in the call to determineLastPacketSize.</p>
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2016 Rigado, LLC. All rights reserved. Updated: 2016-07-07</p>
+						<p class="copyright">Copyright &copy; 2016 Rigado, LLC. All rights reserved. Updated: 2016-08-22</p>
 						
 						
-						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1333)</a>.</p>
+						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
 						
 					</div>
 				</footer>
