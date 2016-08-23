@@ -126,7 +126,7 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
         RigLog.d("onCharacteristicChanged");
         if (mRigCoreListener != null) {
-            mRigCoreListener.onActionGattDataAvailable(characteristic, gatt.getDevice());
+            mRigCoreListener.onActionGattDataNotification(characteristic, gatt.getDevice());
         }
     }
 
