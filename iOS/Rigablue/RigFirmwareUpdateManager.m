@@ -864,7 +864,7 @@ typedef enum FirmwareManagerState_enum
 - (void)discoveryDidTimeout
 {
     NSLog(@"Did not find DFU Device!!");
-    
+    [self didFailToConnectToBootloader];
 }
 
 #pragma mark -
@@ -883,12 +883,12 @@ typedef enum FirmwareManagerState_enum
 
 - (void)deviceConnectionDidFail:(RigAvailableDeviceData *)device
 {
-    
+    [self didFailToConnectToBootloader];
 }
 
 - (void)deviceConnectionDidTimeout:(RigAvailableDeviceData *)device
 {
-    
+    [self didFailToConnectToBootloader];
 }
 
 #pragma mark -
