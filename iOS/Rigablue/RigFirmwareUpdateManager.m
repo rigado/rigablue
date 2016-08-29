@@ -558,6 +558,7 @@ typedef enum FirmwareManagerState_enum
         isPacketNotificationEnabled = NO;
         isReceivingFirmwareImage = NO;
         isInitPacketSent = NO;
+        isPatchInitPacketSent = NO;
         [delegate updateProgress:0.0f];
         packetNumber = 0;
     }
