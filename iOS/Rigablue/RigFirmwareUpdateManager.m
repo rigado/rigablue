@@ -254,6 +254,8 @@ typedef enum FirmwareManagerState_enum
     }
     
     [self initStateVariables];
+    firmwareUpdateService.alwaysReconnectOnDisconnect = NO;
+    firmwareUpdateService.shouldReconnectToPeripheral = NO;
 }
 
 - (uint32_t)getImageSize
