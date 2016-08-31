@@ -181,12 +181,10 @@ typedef enum FirmwareManagerState_enum
     //Set to automatically reconnect.  This will force iOS to connect again immediately after receving an advertisement packet from the peripheral after
     //activating the bootloader.
     firmwareUpdateService.shouldReconnectToPeripheral = YES;
-    state = State_Init;
+    state = State_DiscoverFirmwareServiceCharacteristics;
     
     //If already connected to a DFU, then start the update, otherwise send Bootloader activation command
-    state = State_DiscoverFirmwareServiceCharacteristics;
 
-    //iOS does strange things with the advertised name, better to check on discovered services to see if they match the DFU
     CBService *dfuService;
     if (firmwareUpdateService.updateDFUServiceUuidString) {
         dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:firmwareUpdateService.updateDFUServiceUuidString]];
