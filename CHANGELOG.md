@@ -24,3 +24,9 @@
 ## 1.0.0
 
 Initial Version
+
+# Contributors
+
+- @siarheimilkevich
+- @pgerlach
+- @halmueller
