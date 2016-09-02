@@ -97,8 +97,8 @@ typedef enum FirmwareManagerState_enum
     BOOL shouldWaitForErasedSize;
     BOOL didDisconnectToErase;
     BOOL didForceEraseAfterStmUpdateImageRan;
-    bool isPatchUpdate;
-    bool isPatchInitPacketSent;
+    BOOL isPatchUpdate;
+    BOOL isPatchInitPacketSent;
     
     uint32_t totalPackets;
     uint32_t packetNumber;
@@ -124,11 +124,17 @@ typedef enum FirmwareManagerState_enum
 - (void)initStateVariables
 {
     isFileSizeWritten = NO;
+    isInitPacketSent = NO;
+    
     isPacketNotificationEnabled = NO;
     isReceivingFirmwareImage = NO;
     isLastPacket = NO;
     shouldStopSendingPackets = NO;
     didForceEraseAfterStmUpdateImageRan = NO;
+    shouldWaitForErasedSize = NO;
+    didDisconnectToErase = NO;
+    isPatchUpdate = NO;
+    isPatchInitPacketSent = NO;    
     
     delegate = nil;
     state = State_Init;
@@ -254,6 +260,8 @@ typedef enum FirmwareManagerState_enum
     }
     
     [self initStateVariables];
+    firmwareUpdateService.alwaysReconnectOnDisconnect = NO;
+    firmwareUpdateService.shouldReconnectToPeripheral = NO;
 }
 
 - (uint32_t)getImageSize
@@ -558,6 +566,7 @@ typedef enum FirmwareManagerState_enum
         isPacketNotificationEnabled = NO;
         isReceivingFirmwareImage = NO;
         isInitPacketSent = NO;
+        isPatchInitPacketSent = NO;
         [delegate updateProgress:0.0f];
         packetNumber = 0;
     }
