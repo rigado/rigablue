@@ -222,7 +222,7 @@ typedef enum FirmwareManagerState_enum
         CBUUID *dfuServiceUuid200 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString200];
         CBUUID *dfuServiceUuid300 = [CBUUID UUIDWithString:kupdateDFUServiceUuidString300];
         NSArray *uuidList = @[dfuServiceUuid200, dfuServiceUuid300];
-        RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:uuidList timeout:DFU_SEARCH_TIMEOUT delegate:self allowDuplicates:NO];
+        RigDeviceRequest *dr = [RigDeviceRequest deviceRequestWithUuidList:uuidList timeout:DFU_SEARCH_TIMEOUT delegate:self allowDuplicates:YES];
         [dm discoverDevices:dr];
         [delegate updateStatus:@"Searching for Update Service..." errorCode:DfuError_None];
     }
