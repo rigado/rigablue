@@ -844,7 +844,7 @@ typedef enum FirmwareManagerState_enum
 #pragma mark - RigLeDiscoveryManagerDelegate methods
 - (void)didDiscoverDevice:(RigAvailableDeviceData *)device
 {
-    if ([device.peripheral.name isEqual:@"RigDfu"] && device.rssi.integerValue > -65) {
+    if ([device.peripheral.name isEqual:@"RigDfu"] && device.rssi.integerValue > -65 && device.rssi.integerValue < 0) {
         
         [[RigLeDiscoveryManager sharedInstance] stopDiscoveringDevices];
         oldDelegate = [RigLeConnectionManager sharedInstance].delegate;
