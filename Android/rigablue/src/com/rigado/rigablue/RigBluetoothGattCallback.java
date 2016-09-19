@@ -8,6 +8,7 @@ import android.bluetooth.BluetoothProfile;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.Locale;
 
 /**
  *  RigBluetoothGattCallback.java
@@ -62,7 +63,9 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
 
     @Override
     public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
-        RigLog.d("onConnectionStateChange - " + newState);
+        RigLog.d(String.format(Locale.US, "onConnectionStateChange : status  %d newState %d address %s",
+                status, newState, gatt.getDevice().getAddress()));
+
         if (newState == BluetoothProfile.STATE_CONNECTED) {
             if (!mBluetoothGattHashMap.containsKey(gatt.getDevice().getAddress())) {
                 mBluetoothGattHashMap.put(gatt.getDevice().getAddress(), gatt);
@@ -81,6 +84,7 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
             return;
 
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
+            gatt.disconnect();
             gatt.close();
             if (mBluetoothGattHashMap.containsKey(gatt.getDevice().getAddress())) {
                 mBluetoothGattHashMap.remove(gatt.getDevice().getAddress());
