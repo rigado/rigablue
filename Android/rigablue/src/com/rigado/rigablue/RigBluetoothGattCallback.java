@@ -84,7 +84,6 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
             return;
 
         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
-            gatt.disconnect();
             gatt.close();
             if (mBluetoothGattHashMap.containsKey(gatt.getDevice().getAddress())) {
                 mBluetoothGattHashMap.remove(gatt.getDevice().getAddress());

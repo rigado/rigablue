@@ -216,7 +216,6 @@ public class RigService {
             public void run() {
                 for (BluetoothGatt bluetoothGatt : mBluetoothGattHashMap.values()) {
                     if (bluetoothGatt != null) {
-                        bluetoothGatt.disconnect();
                         bluetoothGatt.close();
                     }
                 }

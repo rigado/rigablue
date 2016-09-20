@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,6 +48,7 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     private String mUpdateDfuServiceUuidString = null;
     private String mUpdateDfuControlPointUuidString = null;
     private String mUpdateDfuPacketCharUuidString = null;
+
 
     /**
      * The available device data for the bootloader device.
@@ -111,11 +111,6 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
      * The observer of this object.
      */
     IRigFirmwareUpdateServiceObserver mObserver;
-
-    /**
-     * The number of times a reconnection to the update device has been attempted.
-     */
-    int mReconnectAttempts;
 
     /**
      * If true, then the firmware update service will attempt to reconnection upon the next
@@ -430,6 +425,33 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
 
     /**
+     * The timeout in milliseconds for reconnection attempts
+     */
+    private final static int CONNECTION_TIMEOUT = 10000;
+
+    /**
+     * The number of times a reconnection to the update device has been attempted.
+     */
+    private int mReconnectAttempts;
+
+    /**
+     * The max number of times Rigablue will attempt to reconnect.
+     * This is currently set to zero as no tested devices have been able to reconnect.
+     */
+    private final static int MAX_RECONNECT_ATTEMPTS = 0;
+
+    private void maybeReconnect(BluetoothDevice device) {
+        if((mShouldReconnectToDevice || mAlwaysReconnectOnDisconnect) && mReconnectAttempts < MAX_RECONNECT_ATTEMPTS) {
+            RigLog.d(String.format("Reconnecting to %s...", device.getAddress()));
+            RigAvailableDeviceData deviceData = new RigAvailableDeviceData(device, 0, null, 0);
+            RigLeConnectionManager.getInstance().connectDevice(deviceData, CONNECTION_TIMEOUT);
+            mReconnectAttempts++;
+        } else {
+           mObserver.didDisconnectPeripheral();
+        }
+    }
+
+    /**
      * Called when a device disconnects.  Handles the logic for what should happen based on the
      * state of the reconnection variables.
      *
@@ -439,13 +461,10 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     public void didDisconnectDevice(BluetoothDevice btDevice) {
         RigLog.d("__RigFirmwareUpdateService.didDisconnectDevice__");
         if(btDevice.getAddress().equals(mUpdateDeviceAddress)) {
-            if(mShouldReconnectToDevice || mAlwaysReconnectOnDisconnect) {
-                RigLog.d("Reconnecting...");
-                RigLeConnectionManager.getInstance().connectDevice(mAvailDevice, 20000);
-            }
-            mObserver.didDisconnectPeripheral();
+            maybeReconnect(btDevice);
+
         } else {
-            /* This may be the orignal device disconnect.  Pass it on to the original connection
+            /* This may be the original device disconnect.  Pass it on to the original connection
              * manager delegate.
              */
             mOldConnectionObserver.didDisconnectDevice(btDevice);
@@ -460,10 +479,7 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     public void deviceConnectionDidFail(RigAvailableDeviceData device) {
         RigLog.d("__RigLeFirmwareUpdateService.deviceConnectionDidFail__");
         if(device.getBluetoothDevice().getAddress().equals(mUpdateDeviceAddress)) {
-            if(mShouldReconnectToDevice || mAlwaysReconnectOnDisconnect) {
-                RigLog.d("Reconnecting...");
-                RigLeConnectionManager.getInstance().connectDevice(mAvailDevice, 20000);
-            }
+            maybeReconnect(device.getBluetoothDevice());
         }
     }
 
@@ -475,10 +491,8 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     public void deviceConnectionDidTimeout(RigAvailableDeviceData device) {
         RigLog.d("__RigLeFirmwareUpdateService.deviceConnectionDidTimeout__");
         if(device.getBluetoothDevice().getAddress().equals(mUpdateDeviceAddress)) {
-            if(mShouldReconnectToDevice || mAlwaysReconnectOnDisconnect) {
-                RigLog.d("Reconnecting...");
-                RigLeConnectionManager.getInstance().connectDevice(mAvailDevice, 20000);
-            }
+                maybeReconnect(device.getBluetoothDevice());
+
         }
     }
     //endregion
