@@ -12,7 +12,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
-import android.util.Log;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.*;
@@ -100,10 +99,14 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
         Runnable task = new Runnable() {
             public void run() {
-                if(mConnectionFuture != null) {
+                if(mConnectionFuture != null
+                        && !mConnectionFuture.isCancelled()
+                        && getDeviceConnectionState(mConnectingDevice)!=BluetoothProfile.STATE_DISCONNECTED) {
                     RigLog.d("Connection timed out!");
                     disconnectPeripheral(mConnectingDevice);
-                    mConnectionObserver.connectionDidTimeout(mConnectingDevice);}
+                    mConnectionObserver.connectionDidTimeout(mConnectingDevice);
+                }
+
             }
         };
         mConnectionFuture = connectionWorker.schedule(task, timeout, TimeUnit.MILLISECONDS);
@@ -503,6 +506,14 @@ public class RigCoreBluetooth implements IRigCoreListener {
         return baseDevice;
     }
 
+    private void cleanUpConnectionFuture() {
+        // Check to see if it has already been cancelled
+        if(mConnectionFuture!=null && !mConnectionFuture.isCancelled()) {
+            mConnectionFuture.cancel(true);
+            mConnectionFuture = null;
+        }
+    }
+
     @Override
     public void onActionGattReadRemoteRssi(BluetoothDevice bluetoothDevice, int rssi) {
         RigLog.d("__RigCoreBluetooth.onActionGattReadRemoteRssi__ : " + bluetoothDevice.getAddress() + " rssi: " + rssi);
@@ -511,15 +522,13 @@ public class RigCoreBluetooth implements IRigCoreListener {
     @Override
     public void onActionGattConnected(BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattConnected__ : " + bluetoothDevice.getAddress());
-        if(!mConnectionFuture.isDone()) {
-            mConnectionFuture.cancel(true);
-            mConnectionFuture = null;
-        }
+        cleanUpConnectionFuture();
     }
 
     @Override
     public void onActionGattDisconnected(BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattDisconnected__ : " + bluetoothDevice.getAddress());
+        cleanUpConnectionFuture();
         clearQueue();
         mConnectionObserver.didDisconnectDevice(bluetoothDevice);
     }
@@ -528,6 +537,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
     public void onActionGattFail(BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattFail__");
         RigLog.e("Fail: " + bluetoothDevice.getAddress());
+        cleanUpConnectionFuture();
         disconnectPeripheral(bluetoothDevice);
         mConnectionObserver.didFailToConnectDevice(bluetoothDevice);
     }
