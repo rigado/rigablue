@@ -41,6 +41,7 @@ public class RigDfuError {
     public static final int DISCOVERY_TIMEOUT = -32;
     public static final int PATCH_INIT_WRITE_FAILURE = -33;
     public static final int FIRMWARE_VALIDATION_INIT_FAILURE = -34;
+    public static final int BOOTLOADER_DISCONNECT = -35;
 
     private static final Map<Integer, String> errorReasons;
 
@@ -65,6 +66,8 @@ public class RigDfuError {
 
         errorReasons.put(PATCH_INIT_WRITE_FAILURE, "Failed to write patch initialization start to control point.");
         errorReasons.put(FIRMWARE_VALIDATION_INIT_FAILURE, "Could not initialize firmware validation!");
+
+        errorReasons.put(BOOTLOADER_DISCONNECT, "RigDfu disconnected! Could not complete firmware update.");
     }
 
     /**

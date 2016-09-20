@@ -3,6 +3,7 @@ package com.rigado.rigablue;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothProfile;
+import android.content.Context;
 import android.util.Log;
 
 import java.io.IOException;
@@ -275,6 +276,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	initStateVariables();
     }
 
+
     /**
      * Performs a firmware update.
      *
@@ -292,7 +294,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                                   BluetoothGattCharacteristic activateCharacteristic,
                                   byte[] activateCommand) {
         RigLog.i("__RigFirmwareUpdateManager.updateFirmware__");
-
 
         mUpdateDevice = device;
         try {
@@ -816,6 +817,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void didDisconnectPeripheral() {
         RigLog.d("__RigFirmwareUpdateManager.didDisconnectDevice__");
+        this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
     }
 
     /**
