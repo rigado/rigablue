@@ -1070,6 +1070,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         if(btDevice.getAddress().equals(mInitialDeviceAddress)) {
             //Give this to the original observer
             mFirmwareUpdateService.didDisconnectInitialNonBootloaderDevice();
+
+        } else if(mState.ordinal() < FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed.ordinal()) {
+            //RigDfu disconnected before the firmware update completed!!!
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
         }
     }
 
