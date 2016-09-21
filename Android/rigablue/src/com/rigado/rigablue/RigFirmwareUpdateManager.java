@@ -405,6 +405,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     /**
+     * Max time in milliseconds to discover RigDfu
+     */
+    private final static int MAX_RIGDFU_DISCOVERY_TIMEOUT = 20000;
+
+    /**
      * Sends the command to put the device in to bootloader mode.
      *
      * @param characteristic The characteristic which accepts the bootloader activate command
@@ -423,7 +428,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
 
         String[] dfuServiceUuidStrings = mFirmwareUpdateService.getDfuServiceUuidStrings();
-        RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, 0);
+        RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, MAX_RIGDFU_DISCOVERY_TIMEOUT);
         dr.setObserver(this);
         dm.startDiscoverDevices(dr);
         if(mObserver != null) {
