@@ -134,7 +134,7 @@ typedef enum FirmwareManagerState_enum
     shouldWaitForErasedSize = NO;
     didDisconnectToErase = NO;
     isPatchUpdate = NO;
-    isPatchInitPacketSent = NO;    
+    isPatchInitPacketSent = NO;
     
     delegate = nil;
     state = State_Init;
@@ -292,13 +292,13 @@ typedef enum FirmwareManagerState_enum
     firmwareUpdateService.shouldReconnectToPeripheral = YES;
     result = [firmwareUpdateService setDevice:bootloaderDevice];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to set bootloader device." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to set bootloader device."];
         [self cleanUpAfterFailure];
     }
     
     result = [firmwareUpdateService triggerServiceDiscovery];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to discover services for bootloader device or discovered services were invalid." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to discover services for bootloader device or discovered services were invalid." ];
         [self cleanUpAfterFailure];
     }
 }
@@ -321,7 +321,7 @@ typedef enum FirmwareManagerState_enum
         
         result = [firmwareUpdateService writeDataToPacketCharacteristic:data withLen:sizeof(data) shouldGetResponse:NO];
         if (result != DfuError_None) {
-            [delegate updateFailed:@"Failed to write image size to packet characteristic." errorCode:result];
+            [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write image size to packet characteristic."];
             //TODO: Clean up after failure
             return result;
         }
@@ -341,7 +341,7 @@ typedef enum FirmwareManagerState_enum
         
         result = [firmwareUpdateService writeDataToPacketCharacteristic:data withLen:sizeof(data) shouldGetResponse:NO];
         if (result != DfuError_None) {
-            [delegate updateFailed:@"Failed to write image size to packet characteristic." errorCode:result];
+            [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write image size to packet characteristic."];
             //TODO: Clean up after failure
             return result;
         }
@@ -364,7 +364,7 @@ typedef enum FirmwareManagerState_enum
     
     result = [firmwareUpdateService writeDataToControlPoint:data withLen:sizeof(data) shouldGetResponse:YES];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to write enable notifications for packets." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write enable notifications for packets." ];
         //TODO: Clean up after failure
         return result;
     }
@@ -382,7 +382,7 @@ typedef enum FirmwareManagerState_enum
     
     result = [firmwareUpdateService writeDataToPacketCharacteristic:initPacket withLen:IMAGE_INIT_PACKET_SIZE/2 shouldGetResponse:NO];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to write init packet." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write init packet."];
         return result;
     }
     
@@ -392,7 +392,7 @@ typedef enum FirmwareManagerState_enum
     
     result = [firmwareUpdateService writeDataToPacketCharacteristic:&initPacket[IMAGE_INIT_PACKET_SIZE/2] withLen:IMAGE_INIT_PACKET_SIZE/2 shouldGetResponse:NO];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to write init packet." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write init packet."];
         return result;
     }
     return result;
@@ -407,7 +407,7 @@ typedef enum FirmwareManagerState_enum
 
     result = [firmwareUpdateService writeDataToPacketCharacteristic:patchInitPacket withLen:PATCH_INIT_PACKET_SIZE shouldGetResponse:NO];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to write patch init packet." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write patch init packet."];
         return result;
     }
 
@@ -423,7 +423,7 @@ typedef enum FirmwareManagerState_enum
     uint8_t data = RECEIVE_FIRMWARE_IMAGE;
     RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&data withLen:sizeof(data) shouldGetResponse:YES];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to initialize firmware image transfer." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to initialize firmware image transfer."];
         return result;
     }
     return DfuError_None;
@@ -446,7 +446,7 @@ typedef enum FirmwareManagerState_enum
     [delegate updateStatus:@"Transferring New Device Software" errorCode:0];
     RigDfuError_t result = [self sendPacket];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to start transfer of image data." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to start transfer of image data."];
         return result;
     }
     
@@ -511,7 +511,7 @@ typedef enum FirmwareManagerState_enum
     uint8_t cmd = VALIDATE_FIRMWARE_IMAGE;
     RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to start firmware validation." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to start firmware validation."];
         return result;
     }
     [delegate updateStatus:@"Validating Transferred Device Software" errorCode:DfuError_None];
@@ -533,7 +533,7 @@ typedef enum FirmwareManagerState_enum
     
     RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to write packet characteristic." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write packet characteristic."];
         return result;
     }
     
@@ -550,7 +550,7 @@ typedef enum FirmwareManagerState_enum
     //Sent as a delegate method but not needed for this implementation
     RigDfuError_t result = [firmwareUpdateService triggerServiceDiscovery];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to initiate discovery for update device." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to initiate discovery for update device."];
         [self cleanUpAfterFailure];
     }
 }
@@ -572,7 +572,7 @@ typedef enum FirmwareManagerState_enum
     }
     RigDfuError_t result = [firmwareUpdateService enableControlPointNotifications];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to set notifications on control point." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to set notifications on control point."];
         [self cleanUpAfterFailure];
     }
 }
@@ -588,16 +588,16 @@ typedef enum FirmwareManagerState_enum
     // If the result of this request is at least the size of the firmware image, then we are
     // certain flash has been erased and we can send over the new firmware image.  Otherwise, it
     // will trigger the flash erase.
-//    uint8_t data = ERASE_SIZE_REQUEST;
-//    
-//    shouldWaitForErasedSize = YES;
+    //    uint8_t data = ERASE_SIZE_REQUEST;
+    //
+    //    shouldWaitForErasedSize = YES;
     uint8_t cmd = DFU_START;
     NSLog(@"Sending DFU_START opcode");
     shouldWaitForErasedSize = NO;
     state = State_TransferringRadioImage;
     RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
     if (result != DfuError_None) {
-        [delegate updateFailed:@"Failed to write start DFU command to control point." errorCode:result];
+        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write start DFU command to control point."];
         //TODO: Clean up after failure
         //return result;
     }
@@ -671,7 +671,7 @@ typedef enum FirmwareManagerState_enum
                 uint8_t cmd = INITIALIZE_DFU;
                 RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
                 if (result != DfuError_None) {
-                    [delegate updateFailed:@"Failed to write dfu initialization to control point." errorCode:result];
+                    [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write dfu initialization to control point."];
                     //TODO: Clean up after failure
                     //return result;
                 }
@@ -692,7 +692,7 @@ typedef enum FirmwareManagerState_enum
                 uint8_t cmd = INITIALIZE_PATCH;
                 RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
                 if (result != DfuError_None) {
-                    [delegate updateFailed:@"Failed to write patch initialization start to control point." errorCode:result];
+                    [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write patch initialization start to control point."];
                     //TODO: Clean up after failure
                     //return result;
                 }
@@ -712,16 +712,16 @@ typedef enum FirmwareManagerState_enum
             uint8_t cmd = RECEIVE_PATCH_IMAGE;
             RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
             if (result != DfuError_None) {
-                [delegate updateFailed:@"Failed to write patch initialization start to control point." errorCode:result];
+                [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write patch initialization start to control point."];
                 [self cleanUpAfterFailure];
             }
         } else if(value[2] == OPERATION_CRC_ERROR) {
             NSLog(@"CRC on patch initialization!");
-            [delegate updateFailed:@"CRC of current image does not match required CRC!" errorCode:DfuError_PatchCurrentImageCrcFailure];
+            [self firmwareUpdateFailedFromError:DfuError_PatchCurrentImageCrcFailure withErrorMessage:@"CRC of current image does not match required CRC!"];
             [self cleanUpAfterFailure];
         } else {
             NSLog(@"Unexpected patch initialization error!");
-            [delegate updateFailed:@"Unexpected patch init error!" errorCode:DfuError_Unknown];
+            [self firmwareUpdateFailedFromError:DfuError_Unknown withErrorMessage:@"Unexpected patch init error!"];
             [self cleanUpAfterFailure];
         }
     } else if (opCode == PACKET_RECEIVED_NOTIFICATION) {
@@ -750,12 +750,12 @@ typedef enum FirmwareManagerState_enum
             [delegate updateStatus:@"Successfully Transferred Software.  Validating..." errorCode:DfuError_None];
             RigDfuError_t result = [self validateFirmware];
             if(result != DfuError_None) {
-                [delegate updateFailed:@"Could not initialize firmware validation!" errorCode:result];
+                [self firmwareUpdateFailedFromError:result withErrorMessage:@"Could not initialize firmware validation!"];
                 [self cleanUpAfterFailure];
             }
         } else {
             NSLog(@"Error on firmware transfer: %d", value[2]);
-            [delegate updateFailed:@"Firmwave Validation Failed!" errorCode:DfuError_ImageValidationFailure];
+            [self firmwareUpdateFailedFromError:DfuError_ImageValidationFailure withErrorMessage:@"Firmware Validation Failed!"];
             [self cleanUpAfterFailure];
         }
     } else if(opCode == RECEIVED_OPCODE && request == RECEIVE_PATCH_IMAGE) {
@@ -763,8 +763,8 @@ typedef enum FirmwareManagerState_enum
             [delegate updateProgress:((float)(packetNumber * 20) / (float)[self getImageSize])];
             //TODO: Report progress
             if(!shouldStopSendingPackets) {
-               //update delegate
-               [self sendPacket];
+                //update delegate
+                [self sendPacket];
             }
         } else if(value[2] == OPERATION_SUCCESS) {
             [delegate updateProgress:1.0];
@@ -772,13 +772,13 @@ typedef enum FirmwareManagerState_enum
             [delegate updateStatus:@"Successfully Transferred Software.  Validating..." errorCode:DfuError_None];
             RigDfuError_t result = [self validateFirmware];
             if(result != DfuError_None) {
-                [delegate updateFailed:@"Could not initialize firmware validation!" errorCode:result];
+                [self firmwareUpdateFailedFromError:result withErrorMessage:@"Could not initialize firmware validation!"];
                 [self cleanUpAfterFailure];
             }
         } else {
-
+            
         }
-    } 
+    }
     else if (opCode == RECEIVED_OPCODE && request == VALIDATE_FIRMWARE_IMAGE) {
         NSLog(@"Firmware validated");
         if (value[2] == OPERATION_SUCCESS) {
@@ -791,18 +791,18 @@ typedef enum FirmwareManagerState_enum
                 state = State_FinishedRadioImageTransfer;
                 RigDfuError_t result = [self activateFirmware];
                 if(result != DfuError_None) {
-                    [delegate updateFailed:@"Could not activate updated firmware!" errorCode:result];
+                    [self firmwareUpdateFailedFromError:result withErrorMessage:@"Could not activate updated firmware!"];
                     [self cleanUpAfterFailure];
                 }
             }
         } else {
             if (value[2] == OPERATION_CRC_ERROR) {
                 NSLog(@"CRC Failure on Validation!");
-                [delegate updateFailed:@"Either image post patch CRC failed or the encrypted data was incorrect!" errorCode:DfuError_ImageValidationFailure];
+                [self firmwareUpdateFailedFromError:DfuError_ImageValidationFailure withErrorMessage:@"Either image post patch CRC failed or the encrypted data was incorrect!"];
                 [self cleanUpAfterFailure];
             } else {
                 NSLog(@"Error occurred during firmware validation");
-                [delegate updateFailed:@"Firmwave Validation Failed!" errorCode:DfuError_ImageValidationFailure];
+                [self firmwareUpdateFailedFromError:DfuError_ImageValidationFailure withErrorMessage:@"Firmware Validation Failed!"];
                 [self cleanUpAfterFailure];
             }
         }
@@ -843,9 +843,15 @@ typedef enum FirmwareManagerState_enum
     }
 }
 
+- (void)firmwareUpdateFailedFromError:(RigDfuError_t)error withErrorMessage:(NSString *)errorMessage {
+    if ([delegate respondsToSelector:@selector(updateFailed:errorCode:)]) {
+        [delegate updateFailed:errorMessage errorCode:error];
+    }
+}
+
 - (void)didFailToConnectToBootloader
 {
-    [delegate updateFailed:@"Could not connect to Bootloader." errorCode:DfuError_CouldNotConnect];
+    [self firmwareUpdateFailedFromError:DfuError_CouldNotConnect withErrorMessage:@"Could not connect to Bootloader."];
     [self cleanUpAfterFailure];
 }
 
@@ -921,5 +927,3 @@ typedef enum FirmwareManagerState_enum
 }
 
 @end
-
-
