@@ -64,7 +64,7 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
     if (request == nil) {
         return;
     }
-    
+
     if (!btIsReady) {
         //
         NSLog(@"Central manager not yet ready, delaying request until it is ready");
@@ -72,7 +72,9 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
         return;
     }
     
-    [self startDiscovery:request];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self startDiscovery:request];
+    });
 }
 
 - (void)startDiscovery:(RigDeviceRequest*)request
@@ -189,7 +191,9 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 {
     btIsReady = YES;
     if (delayedRequest != nil) {
-        [self startDiscovery:delayedRequest];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self startDiscovery:delayedRequest];
+        });
         delayedRequest = nil;
     }
 }
