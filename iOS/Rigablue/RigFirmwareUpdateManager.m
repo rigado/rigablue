@@ -220,8 +220,16 @@ typedef enum FirmwareManagerState_enum
             NSLog(@"Invalid parameter provided!");
             return DfuError_InvalidParameter;
         }
-        [device.peripheral writeValue:[NSData dataWithBytes:command length:commandLen] forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
-        
+
+        if (characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse) {
+            [device.peripheral writeValue:[NSData dataWithBytes:command length:commandLen] forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
+        } else if (characteristic.properties & CBCharacteristicPropertyWrite) {
+            [device.peripheral writeValue:[NSData dataWithBytes:command length:commandLen] forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];
+        } else {
+            NSLog(@"Update characteristic is not writeable");
+            return DfuError_InvalidParameter;
+        }
+
         RigLeDiscoveryManager *dm = [RigLeDiscoveryManager sharedInstance];
         
         firmwareUpdateService.shouldReconnectToPeripheral = NO;
