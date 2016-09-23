@@ -1,7 +1,7 @@
 *.xcuserstate
 *.xcbkptlist
 *.xcexplist
-docset-installed.txts
+docset-installed.txt
 .DS_Store
 xcshareddata/
 xcuserdata/

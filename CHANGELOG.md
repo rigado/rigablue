@@ -1,5 +1,25 @@
 # Change Log
 
+## [1.1.1] - 2016-09-23
+
+### Android
+
+#### Changed
+- Use newer BLE interfaces when available (API 21+)
+- Fix DFU activation when write confirmation and validation happen out-of-order
+- Better handle DFU disconnect failures
+- Fail DFU gracefully when connection fails
+- Fix occasional issue with connection timeout firing unexpectedly
+
+### iOS
+
+#### Changed
+- Improve reliability of DFU device discovery
+- Correctly reset state before DFU reconnection
+- Fix discovery timeout callback when fired on background thread
+- Use appropriate write (response) type in DFU
+- Add respondsToSelector check for optional updateFailed callback
+
 ## [1.1.0] - 2016-08-19
 
 ### Android
