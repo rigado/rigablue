@@ -429,14 +429,19 @@ NSString *kDisModelNumberUuidString = @"2a24";
         return;
     }
     
+    // This method is fired when RigDFU is disconnected, and when the Device is disconnected
+    // When it's the Device, we do nothing because that's expected to happen
+    
     NSLog(@"Disconnected!");
-    isConnected = NO;
     if (peripheral == updateDevice.peripheral) {
+        isConnected = NO;
         [updateDFUCharArray removeAllObjects];
         if (shouldReconnectToPeripheral || alwaysReconnectOnDisconnect) {
             NSLog(@"Reconnecting...");
             reconnectAttempts++;
             if (reconnectAttempts == 5) {
+                // If after 5 tries to reconnect we can not, we stop trying.
+                // This allows the delegate call "didFailToConnectToBootloader" to be called.
                 shouldReconnectToPeripheral = NO;
             }
             [NSThread sleepForTimeInterval:.3];

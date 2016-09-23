@@ -64,7 +64,7 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
     if (request == nil) {
         return;
     }
-    
+
     if (!btIsReady) {
         //
         NSLog(@"Central manager not yet ready, delaying request until it is ready");
@@ -72,7 +72,9 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
         return;
     }
     
-    [self startDiscovery:request];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self startDiscovery:request];
+    });
 }
 
 - (void)startDiscovery:(RigDeviceRequest*)request
@@ -143,10 +145,6 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 - (void)didDiscoverDevice:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advData rssi:(NSNumber *)rssi
 {
     BOOL found = NO;
-    if (rssi.intValue >= 0) {
-        /* Sometimes an invalid RSSI is provided by the OS.  Connecting to devices reported in this state will generally result in an unknown connection error. */
-        return;
-    }
     
     RigAvailableDeviceData *availableDevice = nil;
     
@@ -193,7 +191,9 @@ static id<RigLeDiscoveryManagerDelegate> delegate;
 {
     btIsReady = YES;
     if (delayedRequest != nil) {
-        [self startDiscovery:delayedRequest];
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [self startDiscovery:delayedRequest];
+        });
         delayedRequest = nil;
     }
 }

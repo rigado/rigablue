@@ -1,11 +1,17 @@
 package com.rigado.rigablue;
 
+import android.annotation.TargetApi;
 import android.bluetooth.*;
+import android.bluetooth.le.BluetoothLeScanner;
+import android.bluetooth.le.ScanCallback;
+import android.bluetooth.le.ScanRecord;
+import android.bluetooth.le.ScanResult;
+import android.bluetooth.le.ScanSettings;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-//import android.os.Handler;
+import android.os.Build;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.*;
@@ -13,7 +19,6 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
-//import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -56,6 +61,13 @@ public class RigCoreBluetooth implements IRigCoreListener {
     private static ScheduledFuture<?> mConnectionFuture;
     private static ScheduledFuture<?> mDiscoveryFuture;
 
+    // Legacy BLE scanning
+    private BluetoothAdapter.LeScanCallback mLegacyScanCallback = null;
+
+    // BLE scanning for API 21+
+    private BluetoothLeScanner mBleScanner = null;
+    private ScanCallback mLollipopScanCallback = null;
+
     RigCoreBluetooth() {
         mContext = null;
         mIsDiscovering = false;
@@ -74,6 +86,10 @@ public class RigCoreBluetooth implements IRigCoreListener {
         return instance;
     }
 
+    /**
+     * Central initialization point for Rigablue. Call once Bluetooth has been enabled.
+     * @param context
+     */
     public static void initialize(Context context) {
         RigCoreBluetooth.getInstance().setContext(context);
         RigCoreBluetooth.getInstance().init();
@@ -87,10 +103,14 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
         Runnable task = new Runnable() {
             public void run() {
-                if(mConnectionFuture != null) {
+                if(mConnectionFuture != null
+                        && !mConnectionFuture.isCancelled()
+                        && getDeviceConnectionState(mConnectingDevice)!=BluetoothProfile.STATE_DISCONNECTED) {
                     RigLog.d("Connection timed out!");
                     disconnectPeripheral(mConnectingDevice);
-                    mConnectionObserver.connectionDidTimeout(mConnectingDevice);}
+                    mConnectionObserver.connectionDidTimeout(mConnectingDevice);
+                }
+
             }
         };
         mConnectionFuture = connectionWorker.schedule(task, timeout, TimeUnit.MILLISECONDS);
@@ -133,8 +153,47 @@ public class RigCoreBluetooth implements IRigCoreListener {
         mBluetoothLeService = new RigService(mContext, this);
         mBluetoothLeService.initialize();
         mContext.registerReceiver(mBluetoothStateReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
+
         final BluetoothManager bluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
+            mLollipopScanCallback = new ScanCallback() {
+                @Override
+                public void onScanFailed(int errorCode) {
+                    super.onScanFailed(errorCode);
+                    RigLog.e("BLE Scan failed with error code " + errorCode);
+                }
+
+                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+                @Override
+                public void onScanResult(int callbackType, ScanResult result) {
+                    super.onScanResult(callbackType, result);
+                    BluetoothDevice device = result.getDevice();
+                    int rssi = result.getRssi();
+                    ScanRecord scanRecord = result.getScanRecord();
+                    if (scanRecord == null) {
+                        return;
+                    }
+                    byte[] rawScanRecord = scanRecord.getBytes();
+                    if (isRelevantScanRecord(rawScanRecord)) {
+                        mDiscoveryObserver.didDiscoverDevice(device, rssi, rawScanRecord);
+                        RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());
+                    }
+                }
+            };
+        } else {
+            mLegacyScanCallback = new BluetoothAdapter.LeScanCallback() {
+                @Override
+                public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
+                    if (isRelevantScanRecord(scanRecord)) {
+                        mDiscoveryObserver.didDiscoverDevice(device, rssi, scanRecord);
+                        RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());
+                    }
+                }
+            };
+        }
     }
 
     public void finish() {
@@ -168,13 +227,41 @@ public class RigCoreBluetooth implements IRigCoreListener {
             scheduleDiscoveryTimeout(timeout);
         }
         mIsDiscovering = true;
+        mUUIDList = uuidList;
+
         new Thread(new Runnable() {
             @Override
             public void run() {
-                mUUIDList = uuidList;
-                mBluetoothAdapter.startLeScan(mLeScanCallback);
+                // Started on background thread; callbacks will fire on the main thread
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    startLollipopScan();
+                } else {
+                    startLegacyLeScan();
+                }
             }
         }).start();
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void startLollipopScan () {
+        // API 21+, except where noted 23+
+        ScanSettings.Builder builder = new ScanSettings.Builder();
+        // Scan using highest duty cycle (this is default for legacy).
+        builder.setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY);
+        builder.setReportDelay(0);
+
+        // Aggressive mode seems to improve discovery in the short (15s) window we have for DFU
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            builder.setMatchMode(ScanSettings.MATCH_MODE_AGGRESSIVE);
+        }
+
+        ScanSettings settings = builder.build();
+
+        mBleScanner.startScan(null, settings, mLollipopScanCallback);
+    }
+
+    private void startLegacyLeScan () {
+        mBluetoothAdapter.startLeScan(mLegacyScanCallback);
     }
 
     void stopDiscovery() {
@@ -190,8 +277,10 @@ public class RigCoreBluetooth implements IRigCoreListener {
             mDiscoveryFuture = null;
         }
 
-        if (mBluetoothAdapter != null) {
-            mBluetoothAdapter.stopLeScan(mLeScanCallback);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && mBleScanner != null) {
+            mBleScanner.stopScan(mLollipopScanCallback);
+        } else if (mBluetoothAdapter != null) {
+            mBluetoothAdapter.stopLeScan(mLegacyScanCallback);
         }
     }
 
@@ -275,37 +364,26 @@ public class RigCoreBluetooth implements IRigCoreListener {
         }
     }
 
-    // Device scan callback.
-    private final BluetoothAdapter.LeScanCallback mLeScanCallback = new BluetoothAdapter.LeScanCallback() {
-
-        @Override
-        public void onLeScan(final BluetoothDevice device, final int rssi, final byte[] scanRecord) {
-            boolean found = false;
-            List<UUID> uuidScanList = parseUUIDs(scanRecord);
-            if (mUUIDList != null) {
-                for (UUID mUUID : mUUIDList) {
-                    for (UUID scanUUID : uuidScanList) {
-                        if (scanUUID.equals(mUUID)) {
-                            RigLog.e("SCAN RESULT : " + scanUUID);
-                            found = true;  // all we need to find is one
-                            break;
-                        }
-                    }
-                    if (found) {
+    private boolean isRelevantScanRecord(byte[] rawScanRecord) {
+        boolean found = false;
+        List<UUID> uuidScanList = parseUUIDs(rawScanRecord);
+        if (mUUIDList != null) {
+            for (UUID mUUID : mUUIDList) {
+                for (UUID scanUUID : uuidScanList) {
+                    if (scanUUID.equals(mUUID)) {
+                        found = true;  // all we need to find is one
                         break;
                     }
                 }
-            } else {
-                found = true;  // if filter list is null, then take everything
+                if (found) {
+                    break;
+                }
             }
-
-            if (found) {
-                mDiscoveryObserver.didDiscoverDevice(device, rssi, scanRecord);
-                RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());
-
-            }
+        } else {
+            found = true;  // if filter list is null, then take everything
         }
-    };
+        return found;
+    }
 
     private List<UUID> parseUUIDs(final byte[] advertisedData) {
         List<UUID> uuids = new ArrayList<>();
@@ -432,6 +510,14 @@ public class RigCoreBluetooth implements IRigCoreListener {
         return baseDevice;
     }
 
+    private void cleanUpConnectionFuture() {
+        // Check to see if it has already been cancelled
+        if(mConnectionFuture!=null && !mConnectionFuture.isCancelled()) {
+            mConnectionFuture.cancel(true);
+            mConnectionFuture = null;
+        }
+    }
+
     @Override
     public void onActionGattReadRemoteRssi(BluetoothDevice bluetoothDevice, int rssi) {
         RigLog.d("__RigCoreBluetooth.onActionGattReadRemoteRssi__ : " + bluetoothDevice.getAddress() + " rssi: " + rssi);
@@ -440,15 +526,13 @@ public class RigCoreBluetooth implements IRigCoreListener {
     @Override
     public void onActionGattConnected(BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattConnected__ : " + bluetoothDevice.getAddress());
-        if(!mConnectionFuture.isDone()) {
-            mConnectionFuture.cancel(true);
-            mConnectionFuture = null;
-        }
+        cleanUpConnectionFuture();
     }
 
     @Override
     public void onActionGattDisconnected(BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattDisconnected__ : " + bluetoothDevice.getAddress());
+        cleanUpConnectionFuture();
         clearQueue();
         mConnectionObserver.didDisconnectDevice(bluetoothDevice);
     }
@@ -457,6 +541,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
     public void onActionGattFail(BluetoothDevice bluetoothDevice) {
         RigLog.d("__RigCoreBluetooth.onActionGattFail__");
         RigLog.e("Fail: " + bluetoothDevice.getAddress());
+        cleanUpConnectionFuture();
         disconnectPeripheral(bluetoothDevice);
         mConnectionObserver.didFailToConnectDevice(bluetoothDevice);
     }

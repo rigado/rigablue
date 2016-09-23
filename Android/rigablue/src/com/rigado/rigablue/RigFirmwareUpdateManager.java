@@ -3,6 +3,8 @@ package com.rigado.rigablue;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothProfile;
+import android.content.Context;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,19 +48,43 @@ enum DfuOpCodeEnum {
  * Enum for tracking the current state of the firmware update.
  */
 enum FirmwareManagerStateEnum {
+    /** Initial state, set in constructor and during cleanup */
     State_Init,
+    // unused
     State_UserUnpluggedDeviceAwaitingReconnect,
+    /** After updateFirmware is called, and before service discovery */
     State_DiscoverFirmwareServiceCharacteristics,
+    // deprecated (erase size request)
     State_CheckEraseAfterUnplug,
+    // unused
     State_TriggeredErase,
+    // deprecated (erase size request)
     State_ReconnectAfterInitialFlashErase,
+    // deprecated (erase size request)
     State_TransferringStmUpdateImage,
+    // unused
     State_ActivatingStmUpdaterImage,
+    // deprecated (erase size request)
     State_ReconnectAfterStmUpdate,
+    // unused
     State_WaitReconnectAfterStmUpdateAndInvalidate,
+    // deprecated (erase size request)
     State_ReconnectAfterStmUpdateFlashErase,
+    /** Entered when ctrl point notifications have been enabled, and we're ready to send `DfuOpCode_Start` */
     State_TransferringRadioImage,
+    /** Entered once transfer is done, but before validateFirmware() is called */
     State_FinishedRadioImageTransfer,
+
+    /** Entered when firmware validation passes (from onCharacteristicChanged notification) */
+    State_ImageValidationPassed,
+    /** Entered when didWriteValueForControlPoint is called and state is State_FinishedRadioImageTransfer */
+    State_ImageValidationWriteCompleted,
+    /** Validation has succeeded and validation write has completed. Ready to activate Firmware. */
+    // Note: This state is explicitly modeled to make it easy to trigger didFinishUpdate;
+    // must go through ImageValidationPassed and ImageValidationWriteCompleted, but order is indeterminate
+    State_ImageValidationWriteCompletedAndPassed,
+
+    /** Entered when cancelUpdate() called */
     State_Cancelled
 }
 
@@ -86,7 +112,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     private static final int OPERATION_PATCH_INPUT_IS_FULL = 8; //Unused in iOS
 
     private static final int BytesInOnePacket = 20;
-    
+
     private static final int ImageStartPacketIndex = 0; //unused in iOS
     private static final int ImageStartPacketSize = 12;
     private static final int ImageInitPacketIndex = ImageStartPacketSize;
@@ -250,6 +276,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	initStateVariables();
     }
 
+
     /**
      * Performs a firmware update.
      *
@@ -267,7 +294,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                                   BluetoothGattCharacteristic activateCharacteristic,
                                   byte[] activateCommand) {
         RigLog.i("__RigFirmwareUpdateManager.updateFirmware__");
-
 
         mUpdateDevice = device;
         try {
@@ -345,7 +371,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	mIsLastPacket = false;
     	mShouldStopSendingPackets = false;
     	mDidForceEraseAfterStmUpdateImageRan = false;
-    	
+
     	mObserver = null;
     	mState = FirmwareManagerStateEnum.State_Init;
     	mImageSize = 0;
@@ -379,6 +405,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     /**
+     * Max time in milliseconds to discover RigDfu
+     */
+    private final static int MAX_RIGDFU_DISCOVERY_TIMEOUT = 20000;
+
+    /**
      * Sends the command to put the device in to bootloader mode.
      *
      * @param characteristic The characteristic which accepts the bootloader activate command
@@ -389,6 +420,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
         RigLeDiscoveryManager dm = RigLeDiscoveryManager.getInstance();
         dm.stopDiscoveringDevices();
+
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
@@ -396,7 +428,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
 
         String[] dfuServiceUuidStrings = mFirmwareUpdateService.getDfuServiceUuidStrings();
-        RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, 0);
+        RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, MAX_RIGDFU_DISCOVERY_TIMEOUT);
         dr.setObserver(this);
         dm.startDiscoverDevices(dr);
         if(mObserver != null) {
@@ -420,14 +452,14 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     private void cleanUp() {
         RigLog.d("__RigFirmwareUpdateManager.cleanUp__");
     	RigLeConnectionManager.getInstance().setObserver(mOldConnectionObserver);
-    	
+
     	if(mUpdateDevice != null) {
     		if(RigCoreBluetooth.getInstance().getDeviceConnectionState(mUpdateDevice.getBluetoothDevice()) ==
                     BluetoothProfile.STATE_CONNECTED) {
     			RigLeConnectionManager.getInstance().disconnectDevice(mUpdateDevice);
     		}
     	}
-    	
+
     	initStateVariables();
     }
 
@@ -492,10 +524,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             //same size as packet
         	byte [] data = new byte[ImageStartPacketSize];
         	System.arraycopy(mImage, 0, data, 0, ImageStartPacketSize);
-        	
+
         	mFirmwareUpdateService.writeDataToPacketCharacteristic(data);
         	mObserver.updateStatus("Writing device update size", 0);
-        	
+
         } else {
 	        byte [] data = new byte[4];
 	        data[0] = (byte)(mImageSize & 0xFF);
@@ -528,12 +560,12 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	RigLog.d("__RigFirmwareUpdateManager.sendInitPacket__");
     	byte [] initPacketOne = new byte[ImageInitPacketSize/2];
     	byte [] initPacketTwo = new byte[ImageInitPacketSize/2];
-    	
+
     	System.arraycopy(mImage, ImageInitPacketIndex, initPacketOne, 0, ImageInitPacketSize/2);
     	System.arraycopy(mImage, ImageInitPacketIndex + (ImageInitPacketSize/2), initPacketTwo, 0, ImageInitPacketSize/2);
-    	
+
     	mFirmwareUpdateService.writeDataToPacketCharacteristic(initPacketOne);
-    	
+
     	try {
     		Thread.sleep(100);
     	} catch (Exception e) {
@@ -601,7 +633,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mPacketNumber++;
         byte [] packet;
         int packetSize = BytesInOnePacket;
-        
+
         if(mPacketNumber == mTotalPackets) {
             RigLog.i("Sending last packet: " + mPacketNumber);
             mIsLastPacket = true;
@@ -610,7 +642,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         } else {
             RigLog.i("Sending packet: " + mPacketNumber + "/" + mTotalPackets);
         }
-        
+
         packet = new byte[packetSize];
         int index;
         final int imageStart = getImageStart();
@@ -629,6 +661,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * after the last packet has been received by the bootloader.
      */
     private void validateFirmware() {
+        mState = FirmwareManagerStateEnum.State_FinishedRadioImageTransfer;
+
         RigLog.d("__RigFirmwareUpdateManager.validateFirmware__");
         byte [] cmd = { (byte)DfuOpCodeEnum.DfuOpCode_ValidateFirmwareImage.ordinal() };
 
@@ -637,11 +671,26 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     /**
+     * Once the firmware is validated AND write has completed, the firmware transfer is considered successful
+     * and the activation command is sent to the DFU.
+     *
+     * We model the "completed & passed" state explicitly rather than relying on the write queue to schedule
+     * our activation write in order to have an easy way to determine when the update has finished.
+     */
+    private void finishValidation () {
+        RigLog.d("__RigFirmwareUpdateManager.finishValidation__");
+        mObserver.updateStatus("Device software validated successfully!", 0);
+        mState = FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed;
+        activateFirmware();
+    }
+
+    /**
      * Instructs the bootloader to active the new firmware image (i.e. run it) and then completes
      * the update by reassigning the connection observer.
      */
     private void activateFirmware() {
         RigLog.d("__RigFirmwareUpdateManager.activateFirmware__");
+
         byte[] cmd = {(byte) DfuOpCodeEnum.DfuOpCode_ActivateFirmwareImage.ordinal()};
         if (mState == FirmwareManagerStateEnum.State_ActivatingStmUpdaterImage) {
             mDidActivateFirmware = true;
@@ -666,7 +715,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.setShouldReconnectState(false);
 
         this.cleanUp();
-        
+
         if(o != null) {
             o.updateFailed(error);
         }
@@ -697,7 +746,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         	updateProgress(0);
         	mPacketNumber = 0;
         }
-        
+
         mFirmwareUpdateService.enableControlPointNotifications();
     }
 
@@ -735,6 +784,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
 
         if (mState == FirmwareManagerStateEnum.State_FinishedRadioImageTransfer) {
+            mState = FirmwareManagerStateEnum.State_ImageValidationWriteCompleted;
+        } else if (mState == FirmwareManagerStateEnum.State_ImageValidationPassed) {
+            finishValidation();
+        } else if (mState == FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed) {
             try {
                 Thread.sleep(2000);
             } catch (Exception e) {
@@ -769,6 +822,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void didDisconnectPeripheral() {
         RigLog.d("__RigFirmwareUpdateManager.didDisconnectDevice__");
+        this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
     }
 
     /**
@@ -875,16 +929,13 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             }
         } else if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_ValidateFirmwareImage.ordinal()) {
             if(value[2] == OPERATION_SUCCESS) {
-                RigLog.i("Successful transfer and validation of firmware image!");
-
-                //Once the firmware is validated, the firmware transfer is considered successful and the activation
-                //command is sent to the DFU.
-                if(mState == FirmwareManagerStateEnum.State_TransferringRadioImage) {
-                    mObserver.updateStatus("Device software validated successfully!", 0);
-                    mState = FirmwareManagerStateEnum.State_FinishedRadioImageTransfer;
-                    activateFirmware();
+                // Validation result comes from a notification. However, we may not have yet received a callback indicating
+                // that the validation write has completed.
+                if (mState == FirmwareManagerStateEnum.State_ImageValidationWriteCompleted) {
+                    finishValidation();
+                } else {
+                    mState = FirmwareManagerStateEnum.State_ImageValidationPassed;
                 }
-
             } else if(value[2] == OPERATION_CRC_ERROR) {
                 RigLog.e("CRC Failure on Validation!");
                 this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.POST_PATCH_IMAGE_CRC_FAILURE));
@@ -1019,6 +1070,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         if(btDevice.getAddress().equals(mInitialDeviceAddress)) {
             //Give this to the original observer
             mFirmwareUpdateService.didDisconnectInitialNonBootloaderDevice();
+
+        } else if(mState.ordinal() < FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed.ordinal()) {
+            //RigDfu disconnected before the firmware update completed!!!
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
         }
     }
 

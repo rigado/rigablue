@@ -150,7 +150,7 @@ public class RigService {
                     BluetoothDevice btDevice = mBluetoothGattHashMap.get(address).getDevice();
                     if (mBluetoothManager.getConnectionState(btDevice,
                             BluetoothProfile.GATT_SERVER) == BluetoothProfile.STATE_CONNECTED) {
-                        RigLog.w("Device already connected.");
+                        RigLog.w(String.format("Device already connected: %s %s", btDevice.getAddress(), btDevice.getName()));
                         isAlreadyConnected = true;
                     }
                 }

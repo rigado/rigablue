@@ -28,7 +28,7 @@
  *
  *  @param uuidList        List of UUIDs to search for during discovery.
  *  @param timeout         The length of time for which discovery should run; use 0 to run discovery indefinitely.
- *  @param delegate        The delegate object to be notified by the dicovery manager.
+ *  @param delegate        The delegate object to be notified by the discovery manager.
  *  @param allowDuplicates See {@link allowDuplicates} for more information.
  *
  *  @return Returns a <code>RigDeviceRequest</code> object with all approprite fields filled in.

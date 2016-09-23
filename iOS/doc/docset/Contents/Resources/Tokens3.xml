@@ -27,7 +27,7 @@
 					<Abstract type="html">The length of time for which discovery should run; use 0 to run discovery indefinitely.</Abstract>
 				</Parameter><Parameter>
 					<Name>delegate</Name>
-					<Abstract type="html">The delegate object to be notified by the dicovery manager.</Abstract>
+					<Abstract type="html">The delegate object to be notified by the discovery manager.</Abstract>
 				</Parameter><Parameter>
 					<Name>allowDuplicates</Name>
 					<Abstract type="html">See {@link allowDuplicates} for more information.</Abstract>

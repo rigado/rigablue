@@ -126,66 +126,6 @@ the RigLeConnectionManagerDelegate protocol.</Abstract>
             <NodeRef refid="8"/>
 		</Token>
 		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/init</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
-			
-			<Declaration>- (id)init</Declaration>
-			
-			
-			<Anchor>//api/name/init</Anchor>
-            <NodeRef refid="8"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/didConnectDevice:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
-			
-			<Declaration>- (void)didConnectDevice:(CBPeripheral *)peripheral</Declaration>
-			
-			
-			<Anchor>//api/name/didConnectDevice:</Anchor>
-            <NodeRef refid="8"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/didDisconnectDevice:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
-			
-			<Declaration>- (void)didDisconnectDevice:(CBPeripheral *)peripheral</Declaration>
-			
-			
-			<Anchor>//api/name/didDisconnectDevice:</Anchor>
-            <NodeRef refid="8"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/connectionDidTimeout:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
-			
-			<Declaration>- (void)connectionDidTimeout:(CBPeripheral *)peripheral</Declaration>
-			
-			
-			<Anchor>//api/name/connectionDidTimeout:</Anchor>
-            <NodeRef refid="8"/>
-		</Token>
-		
-		<Token>
-			<TokenIdentifier>//apple_ref/occ/instm/RigLeConnectionManager/didFailToConnectDevice:</TokenIdentifier>
-			<Abstract type="html"></Abstract>
-			<DeclaredIn>RigLeConnectionManager.m</DeclaredIn>
-			
-			<Declaration>- (void)didFailToConnectDevice:(CBPeripheral *)peripheral</Declaration>
-			
-			
-			<Anchor>//api/name/didFailToConnectDevice:</Anchor>
-            <NodeRef refid="8"/>
-		</Token>
-		
         
         
 	</File>
