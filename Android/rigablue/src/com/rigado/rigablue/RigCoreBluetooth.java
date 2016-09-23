@@ -86,6 +86,10 @@ public class RigCoreBluetooth implements IRigCoreListener {
         return instance;
     }
 
+    /**
+     * Central initialization point for Rigablue. Call once Bluetooth has been enabled.
+     * @param context
+     */
     public static void initialize(Context context) {
         RigCoreBluetooth.getInstance().setContext(context);
         RigCoreBluetooth.getInstance().init();
