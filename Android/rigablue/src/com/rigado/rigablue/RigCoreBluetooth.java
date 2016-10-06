@@ -158,31 +158,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
-            mLollipopScanCallback = new ScanCallback() {
-                @Override
-                public void onScanFailed(int errorCode) {
-                    super.onScanFailed(errorCode);
-                    RigLog.e("BLE Scan failed with error code " + errorCode);
-                }
-
-                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public void onScanResult(int callbackType, ScanResult result) {
-                    super.onScanResult(callbackType, result);
-                    BluetoothDevice device = result.getDevice();
-                    int rssi = result.getRssi();
-                    ScanRecord scanRecord = result.getScanRecord();
-                    if (scanRecord == null) {
-                        return;
-                    }
-                    byte[] rawScanRecord = scanRecord.getBytes();
-                    if (isRelevantScanRecord(rawScanRecord)) {
-                        mDiscoveryObserver.didDiscoverDevice(device, rssi, rawScanRecord);
-                        RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());
-                    }
-                }
-            };
+            setUpLollipopScanCallback();
         } else {
             mLegacyScanCallback = new BluetoothAdapter.LeScanCallback() {
                 @Override
@@ -194,6 +170,34 @@ public class RigCoreBluetooth implements IRigCoreListener {
                 }
             };
         }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setUpLollipopScanCallback() {
+        mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
+        mLollipopScanCallback = new ScanCallback() {
+            @Override
+            public void onScanFailed(int errorCode) {
+                super.onScanFailed(errorCode);
+                RigLog.e("BLE Scan failed with error code " + errorCode);
+            }
+
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+                BluetoothDevice device = result.getDevice();
+                int rssi = result.getRssi();
+                ScanRecord scanRecord = result.getScanRecord();
+                if (scanRecord == null) {
+                    return;
+                }
+                byte[] rawScanRecord = scanRecord.getBytes();
+                if (isRelevantScanRecord(rawScanRecord)) {
+                    mDiscoveryObserver.didDiscoverDevice(device, rssi, rawScanRecord);
+                    RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());
+                }
+            }
+        };
     }
 
     public void finish() {
