@@ -349,6 +349,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     public void cancelUpdate() {
+        RigLog.e("__cancelUpdate__");
+        mObserver.updateStatus("Cancelling...", 0);
+
         mState = FirmwareManagerStateEnum.State_Cancelled;
 
         mFirmwareUpdateService.setShouldAlwaysReconnectState(false);
@@ -358,6 +361,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.writeDataToControlPoint(data);
         mDidSendCancel = true;
     }
+
 
     /**
      * Initializes the state of the firmware update manager object.
@@ -408,6 +412,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * Max time in milliseconds to discover RigDfu
      */
     private final static int MAX_RIGDFU_DISCOVERY_TIMEOUT = 20000;
+    private RigLeDiscoveryManager mDiscoveryManager;
 
     /**
      * Sends the command to put the device in to bootloader mode.
@@ -418,8 +423,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     private void sendEnterBootloaderCommand(BluetoothGattCharacteristic characteristic, byte [] command) {
         RigLog.d("__RigFirmwareUpdateManager.sendEnterBootloaderCommand__");
 
-        RigLeDiscoveryManager dm = RigLeDiscoveryManager.getInstance();
-        dm.stopDiscoveringDevices();
+        mDiscoveryManager = RigLeDiscoveryManager.getInstance();
+        mDiscoveryManager.stopDiscoveringDevices();
 
         try {
             Thread.sleep(500);
@@ -430,7 +435,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         String[] dfuServiceUuidStrings = mFirmwareUpdateService.getDfuServiceUuidStrings();
         RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, MAX_RIGDFU_DISCOVERY_TIMEOUT);
         dr.setObserver(this);
-        dm.startDiscoverDevices(dr);
+        mDiscoveryManager.startDiscoverDevices(dr);
         if(mObserver != null) {
             mObserver.updateStatus("Searching for updater service...", 0);
         }
@@ -707,7 +712,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     private void handleUpdateError(RigDfuError error) {
-
         //Set to null when cleanUpAfterFailure is called, store a reference here
         IRigFirmwareUpdateManagerObserver o = mObserver;
 
@@ -779,7 +783,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
 
         if (mState == FirmwareManagerStateEnum.State_Cancelled && mDidSendCancel) {
-            cleanUp();
             return;
         }
 
@@ -822,7 +825,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void didDisconnectPeripheral() {
         RigLog.d("__RigFirmwareUpdateManager.didDisconnectDevice__");
-        this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
+        if(mState == FirmwareManagerStateEnum.State_Cancelled) {
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.FIRMWARE_UPDATE_CANCELLED));
+        } else {
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
+        }
     }
 
     /**
@@ -1053,6 +1060,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         RigLog.d("__RigFirmwareUpdateManager.didConnectDevice__");
         mUpdateDevice = device;
 
+        if(mState == FirmwareManagerStateEnum.State_Cancelled) {
+            cancelUpdate();
+            return;
+        }
+
         RigLeConnectionManager.getInstance().setObserver(mOldConnectionObserver);
         mFirmwareUpdateService.setShouldReconnectState(true);
         mFirmwareUpdateService.setDevice(device);
@@ -1067,12 +1079,20 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void didDisconnectDevice(BluetoothDevice btDevice) {
         RigLog.i("__RigFirmwareUpdateManager.didDisconnectDevice__");
+
+        if(mState == FirmwareManagerStateEnum.State_Cancelled) {
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.FIRMWARE_UPDATE_CANCELLED));
+            return;
+        }
+
         if(btDevice.getAddress().equals(mInitialDeviceAddress)) {
             //Give this to the original observer
             mFirmwareUpdateService.didDisconnectInitialNonBootloaderDevice();
+            return;
+        }
 
-        } else if(mState.ordinal() < FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed.ordinal()) {
-            //RigDfu disconnected before the firmware update completed!!!
+        //RigDfu disconnected before the firmware update completed
+        if(mState.ordinal() < FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed.ordinal()) {
             this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
         }
     }

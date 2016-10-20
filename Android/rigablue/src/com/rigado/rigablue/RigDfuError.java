@@ -42,6 +42,7 @@ public class RigDfuError {
     public static final int PATCH_INIT_WRITE_FAILURE = -33;
     public static final int FIRMWARE_VALIDATION_INIT_FAILURE = -34;
     public static final int BOOTLOADER_DISCONNECT = -35;
+    public static final int FIRMWARE_UPDATE_CANCELLED = -36;
 
     private static final Map<Integer, String> errorReasons;
 
@@ -68,6 +69,8 @@ public class RigDfuError {
         errorReasons.put(FIRMWARE_VALIDATION_INIT_FAILURE, "Could not initialize firmware validation!");
 
         errorReasons.put(BOOTLOADER_DISCONNECT, "RigDfu disconnected! Could not complete firmware update.");
+
+        errorReasons.put(FIRMWARE_UPDATE_CANCELLED, "Firmware update cancelled!");
     }
 
     /**
