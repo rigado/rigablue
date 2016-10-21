@@ -554,6 +554,13 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
     //endregion
 
+    /**
+     * Detects the Dfu version (200 or 300) and sets the firmware
+     * update UUIDs accordingly. Clears the list of UUIDs if
+     * a matching service is not found.
+     *
+     * @param device An instance of #RigLeBaseDevice
+     */
     private void setDfuUUIDsFromDevice (RigLeBaseDevice device) {
         List<BluetoothGattService> fwServices = device.getServiceList();
         for (BluetoothGattService service: fwServices) {
@@ -574,6 +581,9 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
         clearDfuUUIDs();
     }
 
+    /**
+     * Resets the Dfu firmware update UUIDs
+     */
     private void clearDfuUUIDs() {
         mUpdateDfuServiceUuidString = null;
         mUpdateDfuControlPointUuidString = null;
