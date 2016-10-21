@@ -2,7 +2,10 @@ package com.rigado.rigablue;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.support.v4.app.NavUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -185,6 +188,17 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
         mObserver = observer;
     }
 
+    public boolean readDescriptor(BluetoothGattDescriptor descriptor) {
+        RigLog.d("RigLeBaseDevice.readDescriptor");
+        if(descriptor == null) {
+            RigLog.w("Descriptor was null! Ignoring read request.");
+            return false;
+        }
+
+        RigCoreBluetooth.getInstance().readDescriptor(mBluetoothDevice, descriptor);
+        return true;
+    }
+
     /**
      * Reads the value of the characteristic
      *
@@ -313,6 +327,13 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
     public void didWriteValue(BluetoothDevice btDevice, BluetoothGattCharacteristic characteristic) {
         if(mObserver != null) {
             mObserver.didWriteValue(this, characteristic);
+        }
+    }
+
+    @Override
+    public void didReadDescriptor(BluetoothDevice btDevice, BluetoothGattDescriptor descriptor) {
+        if(mObserver != null) {
+            mObserver.didReadDescriptor(this, descriptor);
         }
     }
 }

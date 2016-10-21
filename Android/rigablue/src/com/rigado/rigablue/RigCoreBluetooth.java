@@ -334,6 +334,13 @@ public class RigCoreBluetooth implements IRigCoreListener {
         write(request);
     }
 
+    public void readDescriptor(BluetoothDevice device, BluetoothGattDescriptor descriptor) {
+        RigLog.d("__RigCoreBluetooth.readDescriptor__");
+
+        IRigDataRequest request = new RigDescriptorRequest(device, descriptor);
+        read(request);
+    }
+
     private synchronized void read(IRigDataRequest request) {
         if(mOpsQueue.isEmpty() && !mIsDataOpInProgress) {
             mIsDataOpInProgress = true;
@@ -585,6 +592,17 @@ public class RigCoreBluetooth implements IRigCoreListener {
         RigLeBaseDevice baseDevice = getRigLeBaseDeviceForBluetoothDevice(bluetoothDevice);
         if(baseDevice != null) {
             baseDevice.didWriteValue(bluetoothDevice, characteristic);
+        }
+        nextOp();
+    }
+
+    @Override
+    public void onActionGattDescriptorRead(BluetoothDevice bluetoothDevice, BluetoothGattDescriptor descriptor) {
+        RigLog.d("__RigCoreBluetooth.onActionGattDescriptorRead__");
+        mIsDataOpInProgress = false;
+        RigLeBaseDevice baseDevice = getRigLeBaseDeviceForBluetoothDevice(bluetoothDevice);
+        if(baseDevice != null) {
+            baseDevice.didReadDescriptor(bluetoothDevice, descriptor);
         }
         nextOp();
     }

@@ -1,6 +1,7 @@
 package com.rigado.rigablue;
 
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 
 /**
  *  IRigLeBaseDeviceObserver.java
@@ -55,4 +56,6 @@ public interface IRigLeBaseDeviceObserver {
      * @see RigLeBaseDevice#runDiscovery()
      */
     void discoveryDidComplete(RigLeBaseDevice device);
+
+    void didReadDescriptor(RigLeBaseDevice device, BluetoothGattDescriptor descriptor);
 }
