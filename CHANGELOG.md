@@ -50,3 +50,4 @@ Initial Version
 - @siarheimilkevich
 - @pgerlach
 - @halmueller
+- @talarari
