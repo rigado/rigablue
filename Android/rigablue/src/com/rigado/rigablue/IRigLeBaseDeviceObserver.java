@@ -57,5 +57,4 @@ public interface IRigLeBaseDeviceObserver {
      */
     void discoveryDidComplete(RigLeBaseDevice device);
 
-    void didReadDescriptor(RigLeBaseDevice device, BluetoothGattDescriptor descriptor);
 }
