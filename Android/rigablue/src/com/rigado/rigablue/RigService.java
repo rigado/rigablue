@@ -299,32 +299,6 @@ public class RigService {
         }
     }
 
-    /**
-     * Request a write on a the {@code BluetoothGattDescriptor}. The write result is reported
-     * asynchronously through the {@code BluetoothGattCallback#onDescriptorWrite(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattDescriptor, int)}
-     * callback.
-     *
-     * @param address The address of the destination device.
-     * @param descriptor The descriptor to write
-     */
-    public synchronized void writeDescriptor(final String address, final BluetoothGattDescriptor descriptor) {
-        if(mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
-            RigLog.w("BluetoothAdapter not initialized or device already disconnected");
-            return;
-        }
-
-        if (descriptor == null) {
-            RigLog.e("Invalid descriptor, Descriptor is null!");
-            return;
-        }
-
-        RigLog.i("writeDescriptor for " + address + " with value - " + Arrays.toString(descriptor.getValue()));
-
-        if(!mBluetoothGattHashMap.get(address).writeDescriptor(descriptor)) {
-            RigLog.e("writeDescriptor failed!");
-        }
-    }
-
     private static final UUID CLIENT_CHARACTERISTIC_CONFIGURATION =
             UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 

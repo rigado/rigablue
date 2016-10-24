@@ -334,14 +334,6 @@ public class RigCoreBluetooth implements IRigCoreListener {
         write(request);
     }
 
-    public void writeDescriptor(BluetoothDevice device, BluetoothGattDescriptor descriptor,
-                                byte [] value) {
-        RigLog.d("__RigCoreBluetooth.writeDescriptor__");
-
-        IRigDataRequest request = new RigDescriptorWriteRequest(device, descriptor, value);
-        write(request);
-    }
-
     public void readDescriptor(BluetoothDevice device, BluetoothGattDescriptor descriptor) {
         RigLog.d("__RigCoreBluetooth.readDescriptor__");
 

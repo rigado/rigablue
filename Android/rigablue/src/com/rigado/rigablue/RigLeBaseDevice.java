@@ -191,15 +191,6 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
         didUpdateValue(null, null);
     }
 
-    public void discoverDescriptors() {
-        RigLog.d("__discoverDescriptors__");
-        mServiceIndex = 0;
-        mCharacteristicIndex = 0;
-        mDescriptorIndex = 0;
-
-        didReadDescriptor(null, null);
-    }
-
     /**
      * Sets the observer for this device.
      *
@@ -209,10 +200,21 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
         mObserver = observer;
     }
 
+    /**
+     * Sets the descriptor observer for this device.
+     *
+     * @param observer The observer object
+     */
     public void setDescriptorObserver(IRigLeDescriptorObserver observer) {
         mDescriptorObserver = observer;
     }
 
+    /**
+     * Reads the value of the characteristic
+     *
+     * @param descriptor The descriptor to read
+     * @return Return false if the descriptor is invalid
+     */
     public boolean readDescriptor(BluetoothGattDescriptor descriptor) {
         RigLog.d("RigLeBaseDevice.readDescriptor");
         if(descriptor == null) {
@@ -221,17 +223,6 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
         }
 
         RigCoreBluetooth.getInstance().readDescriptor(mBluetoothDevice, descriptor);
-        return true;
-    }
-
-    public boolean writeDescriptor(BluetoothGattDescriptor descriptor, byte[] value) {
-        RigLog.d("RigLeBaseDevice.writeDescriptor " + Arrays.toString(value));
-        if(descriptor == null || value == null) {
-            RigLog.w("Descriptor or value was null! Ignoring write request.");
-            return false;
-        }
-
-        RigCoreBluetooth.getInstance().writeDescriptor(mBluetoothDevice, descriptor, value);
         return true;
     }
 
