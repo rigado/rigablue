@@ -3,8 +3,6 @@ package com.rigado.rigablue;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothProfile;
-import android.content.Context;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -348,7 +346,18 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         return true;
     }
 
+    /**
+     * Cancels an in progress firmware update. Sets #FirmwareManagerStateEnum to `State_Cancelled`,
+     * prevents reconnection attempts, and sends a reset command to the bootloader. The reset
+     * will trigger the `didDisconnectDevice` or `didDisconnectPeripheral` callbacks depending
+     * on connection state at the time of the cancel. Either callback will pass
+     * the correct #RigDfuError code to `handleUpdateError`.
+     *
+     */
     public void cancelUpdate() {
+        RigLog.e("__cancelUpdate__");
+        mObserver.updateStatus("Cancelling...", 0);
+
         mState = FirmwareManagerStateEnum.State_Cancelled;
 
         mFirmwareUpdateService.setShouldAlwaysReconnectState(false);
@@ -358,6 +367,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.writeDataToControlPoint(data);
         mDidSendCancel = true;
     }
+
 
     /**
      * Initializes the state of the firmware update manager object.
@@ -408,6 +418,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      * Max time in milliseconds to discover RigDfu
      */
     private final static int MAX_RIGDFU_DISCOVERY_TIMEOUT = 20000;
+    private RigLeDiscoveryManager mDiscoveryManager;
 
     /**
      * Sends the command to put the device in to bootloader mode.
@@ -418,8 +429,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     private void sendEnterBootloaderCommand(BluetoothGattCharacteristic characteristic, byte [] command) {
         RigLog.d("__RigFirmwareUpdateManager.sendEnterBootloaderCommand__");
 
-        RigLeDiscoveryManager dm = RigLeDiscoveryManager.getInstance();
-        dm.stopDiscoveringDevices();
+        mDiscoveryManager = RigLeDiscoveryManager.getInstance();
+        mDiscoveryManager.stopDiscoveringDevices();
 
         try {
             Thread.sleep(500);
@@ -430,7 +441,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         String[] dfuServiceUuidStrings = mFirmwareUpdateService.getDfuServiceUuidStrings();
         RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, MAX_RIGDFU_DISCOVERY_TIMEOUT);
         dr.setObserver(this);
-        dm.startDiscoverDevices(dr);
+        mDiscoveryManager.startDiscoverDevices(dr);
         if(mObserver != null) {
             mObserver.updateStatus("Searching for updater service...", 0);
         }
@@ -481,6 +492,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     	return size;
     }
 
+    /**
+     * Determines the starting index of the firmware update image.
+     *
+     * @return The image start index
+     */
     private int getImageStart() {
         RigLog.i("__RigFirmwareUpdateManager.getImageStart__");
         final int imageStart;
@@ -574,7 +590,12 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
     	mFirmwareUpdateService.writeDataToPacketCharacteristic(initPacketTwo);
     }
-
+    /**
+     * Sends the patch init packet to the secure bootloader.  The init packet contains information
+     * regarding the encryption of the firmware image and which application binaries are being
+     * sent.  Typically, only the application binary is sent. The patch init packet also
+     * contains a 128-bit key to identify it as a patch.
+     */
     private void sendPatchInitPacket() {
         RigLog.i("__RigFirmwareUpdateManager.sendPatchInitPacket__");
         byte[] patchInitPacket = new byte[PatchInitPacketSize];
@@ -706,8 +727,14 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mObserver.updateStatus("Activating device software", 0);
     }
 
+    /**
+     * Called when a firmware update fails or is cancelled. Prevents reconnection
+     * attempts, ensures disconnection from the device, resets state variables,
+     * and sends an error message to the original observer.
+     *
+     * @param error An instance of #RigDfuError
+     */
     private void handleUpdateError(RigDfuError error) {
-
         //Set to null when cleanUpAfterFailure is called, store a reference here
         IRigFirmwareUpdateManagerObserver o = mObserver;
 
@@ -720,7 +747,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             o.updateFailed(error);
         }
     }
-
 
     /**
      * Called when the bootloader peripheral is connected.
@@ -778,8 +804,9 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             return;
         }
 
+        //If the firmware update was cancelled, exit the write operation. We are
+        //waiting for a reset and disconnect callback.
         if (mState == FirmwareManagerStateEnum.State_Cancelled && mDidSendCancel) {
-            cleanUp();
             return;
         }
 
@@ -818,11 +845,18 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     /**
      * Called when the bootloader peripheral disconnects.  If the firmware update was successful,
      * then the connection observer will be reassigned and this method will not be invoked.
+     *
+     * We check state here, because disconnection could be caused by cancelling an in progress update.
+     * However, if it is not `State_Cancelled`, then we know the bootloader connection failed.
      */
     @Override
     public void didDisconnectPeripheral() {
         RigLog.d("__RigFirmwareUpdateManager.didDisconnectDevice__");
-        this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
+        if(mState == FirmwareManagerStateEnum.State_Cancelled) {
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.FIRMWARE_UPDATE_CANCELLED));
+        } else {
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
+        }
     }
 
     /**
@@ -990,6 +1024,12 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         }
     }
 
+    /**
+     * Sends the current progress of the firmware update to the
+     * #IRigFirmwareUpdateManagerObserver if assigned.
+     *
+     * @param progress The current progress
+     */
     private void updateProgress(float progress) {
         int progressPercentage = (int)(progress * 100);
         if(mObserver!=null) {
@@ -1046,12 +1086,23 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     /**
      * Called after a successful connection has been made to the bootloader device.
      *
+     * We check for `State_Cancelled` here and trigger a reset if the update has been
+     * cancelled. Currently, there is no way to tell how the bootloader was
+     * entered. The firmware decides whether or not the bootloader advertises for 2 seconds
+     * or 3 minutes. We call #cancelUpdate only after a successful connection attempt so
+     * that we can potentially reset any long-running bootloader advertising process.
+     *
      * @param device The newly connected device
      */
     @Override
     public void didConnectDevice(RigLeBaseDevice device) {
         RigLog.d("__RigFirmwareUpdateManager.didConnectDevice__");
         mUpdateDevice = device;
+
+        if(mState == FirmwareManagerStateEnum.State_Cancelled) {
+            cancelUpdate();
+            return;
+        }
 
         RigLeConnectionManager.getInstance().setObserver(mOldConnectionObserver);
         mFirmwareUpdateService.setShouldReconnectState(true);
@@ -1060,19 +1111,30 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     /**
-     * Called if the bootloader device disconnects
+     * Called if a device disconnects. This can be the original device
+     * or Dfu.
      *
      * @param btDevice The disconnected Bluetooth Device object
      */
     @Override
     public void didDisconnectDevice(BluetoothDevice btDevice) {
         RigLog.i("__RigFirmwareUpdateManager.didDisconnectDevice__");
+
+        //The firmware update was cancelled and the bootloader reset
+        if(mState == FirmwareManagerStateEnum.State_Cancelled) {
+            this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.FIRMWARE_UPDATE_CANCELLED));
+            return;
+        }
+
+        //The device disconnected and entered the bootloader. Continue the update process.
         if(btDevice.getAddress().equals(mInitialDeviceAddress)) {
             //Give this to the original observer
             mFirmwareUpdateService.didDisconnectInitialNonBootloaderDevice();
+            return;
+        }
 
-        } else if(mState.ordinal() < FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed.ordinal()) {
-            //RigDfu disconnected before the firmware update completed!!!
+        //RigDfu disconnected before the firmware update completed
+        if(mState.ordinal() < FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed.ordinal()) {
             this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT));
         }
     }
@@ -1097,9 +1159,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     @Override
     public void deviceConnectionDidTimeout(RigAvailableDeviceData device) {
         RigLog.e("__RigFirmwareUpdateManager.deviceConnectionDidTimeout__");
-        //Try again??
-        //RigLeConnectionManager.getInstance().connectDevice(device, 10000);
-        //EPS - This change was made to support a client project.  It may not be the correct way to handle this event.
         this.handleUpdateError(RigDfuError.errorFromCode(RigDfuError.CONNECTION_TIMEOUT));
     }
 }
