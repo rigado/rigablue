@@ -2,6 +2,7 @@ package com.rigado.rigablue;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 /**
  *  IRigCoreBluetoothDeviceObserver.java
  *
@@ -45,4 +46,6 @@ public interface IRigCoreBluetoothDeviceObserver {
      * @param characteristic The characteristic which had its value written
      */
     void didWriteValue(BluetoothDevice btDevice, BluetoothGattCharacteristic characteristic);
+
+    void didReadDescriptor(BluetoothDevice btDevice, BluetoothGattDescriptor descriptor);
 }

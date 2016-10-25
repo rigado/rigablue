@@ -162,4 +162,15 @@ public class RigBluetoothGattCallback extends BluetoothGattCallback {
             }
         }
     }
+
+    @Override
+    public void onDescriptorRead(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status) {
+        RigLog.d("onDescriptorRead");
+        if(status == BluetoothGatt.GATT_SUCCESS) {
+            if(mRigCoreListener != null) {
+                mRigCoreListener.onActionGattDescriptorRead(gatt.getDevice(), descriptor);
+            }
+        }
+
+    }
 }
