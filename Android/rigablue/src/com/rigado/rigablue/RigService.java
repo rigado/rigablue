@@ -325,7 +325,8 @@ public class RigService {
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIGURATION);
         if (descriptor != null) {
             RigLog.d("descriptor = " + descriptor.getUuid());
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            descriptor.setValue(enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                    : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
             mBluetoothGattHashMap.get(address).writeDescriptor(descriptor);
         } else {
             RigLog.w("descriptor = null");
