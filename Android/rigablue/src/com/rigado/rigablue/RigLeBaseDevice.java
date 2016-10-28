@@ -340,6 +340,8 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
             if(mObserver != null) {
                 RigLog.d("Discovery did complete");
                 mObserver.discoveryDidComplete(this);
+            } else {
+                RigLog.e("Discovery did complete but the observer was null!");
             }
         }
     }
