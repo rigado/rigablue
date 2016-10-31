@@ -1,6 +1,6 @@
 //
 //  @file RigLeBaseDevice.h
-//  @library Rigablue 
+//  @library Rigablue
 //
 //  Created by Eric Stutzenberger on 4/28/14.
 //  @copyright (c) 2014 Rigado, LLC. All rights reserved.
@@ -67,6 +67,31 @@
  *  @param device           The device to which this characteristic belongs.
  */
 - (void)didWriteValueForCharacteristic:(CBCharacteristic*)characteristic forDevice:(RigLeBaseDevice*)device;
+
+@optional
+/**
+ *  @method didDiscoverDescriptorsForCharacteristic:
+ *
+ *  This method is called when the device discovers a descriptor on a characteristic.
+ *
+ *  @param charactristic    The characteristic for which discovery has occured.
+ *  @param device           The device to which this characteristic belongs.
+ *
+ *  @discussion This method is called when the device discovers a descriptor on a characteristic.
+ */
+- (void)didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic onDevice:(RigLeBaseDevice*)device;
+
+/**
+ *  @method didUpdateValueForDescriptor:
+ *
+ *  This is called when a read request is performed or when
+ *  a descriptor changes its value due to a notification from the peripheral.
+ *
+ *  @param descriptor       The descriptor for which the value was read.
+ *  @param device           The device to which this characteristic belongs.
+ */
+- (void)didUpdateValueForDescriptor:(CBDescriptor*)descriptor forDevice:(RigLeBaseDevice*)device;
+
 @end
 
 /**
