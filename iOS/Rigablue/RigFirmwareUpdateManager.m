@@ -31,7 +31,7 @@
 #define RECEIVE_FIRMWARE_IMAGE                  3
 #define VALIDATE_FIRMWARE_IMAGE                 4
 #define ACTIVATE_FIRMWARE_AND_RESET             5
-//#define SYSTEM_RESET                            6  /* Available but not used */
+#define SYSTEM_RESET                            6  /* Available but not used */
 #define ERASE_AND_RESET                         9
 #define ERASE_SIZE_REQUEST                      10
 #define INITIALIZE_PATCH                        10
@@ -71,7 +71,9 @@ typedef enum FirmwareManagerState_enum
     /* This state is used during image transfer */
     State_TransferringRadioImage,
     /* This is the final state once the transfer is complete */
-    State_FinishedRadioImageTransfer
+    State_FinishedRadioImageTransfer,
+    /* This is the state if the Firmware Update is being canceled */
+    State_FirmwareUpdateCanceled
 } eFirmwareManagerState;
 
 @interface RigFirmwareUpdateManager() <RigFirmwareUpdateServiceDelegate, RigLeDiscoveryManagerDelegate, RigLeBaseDeviceDelegate, RigLeConnectionManagerDelegate>
@@ -165,7 +167,7 @@ typedef enum FirmwareManagerState_enum
 {
     RigDfuError_t result = DfuError_None;
     NSLog(@"__updateFirmware__");
-
+    
     isPatchUpdate = NO;
     imageSize = (UInt32)firmwareImage.length;
     image = firmwareImage;
@@ -190,7 +192,7 @@ typedef enum FirmwareManagerState_enum
     state = State_DiscoverFirmwareServiceCharacteristics;
     
     //If already connected to a DFU, then start the update, otherwise send Bootloader activation command
-
+    
     CBService *dfuService;
     if (firmwareUpdateService.updateDFUServiceUuidString) {
         dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:firmwareUpdateService.updateDFUServiceUuidString]];
@@ -220,7 +222,7 @@ typedef enum FirmwareManagerState_enum
             NSLog(@"Invalid parameter provided!");
             return DfuError_InvalidParameter;
         }
-
+        
         if (characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse) {
             [device.peripheral writeValue:[NSData dataWithBytes:command length:commandLen] forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
         } else if (characteristic.properties & CBCharacteristicPropertyWrite) {
@@ -229,7 +231,7 @@ typedef enum FirmwareManagerState_enum
             NSLog(@"Update characteristic is not writeable");
             return DfuError_InvalidParameter;
         }
-
+        
         RigLeDiscoveryManager *dm = [RigLeDiscoveryManager sharedInstance];
         
         firmwareUpdateService.shouldReconnectToPeripheral = NO;
@@ -251,7 +253,21 @@ typedef enum FirmwareManagerState_enum
                    activateChar:request.activationCharacteristic
                 activateCommand:(uint8_t *)[request.activationCommand bytes]
              activateCommandLen:request.activationCommand.length];
+    
+}
 
+- (RigDfuError_t)cancelFirmwareUpdate {
+    RigDfuError_t result = DfuError_None;
+    uint8_t resetCommand[] = { SYSTEM_RESET };
+    state = State_FirmwareUpdateCanceled;
+    result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
+    if (result == DfuError_None) {
+        [delegate updateCanceled];
+        [self cleanUpAfterFailure];
+    } else {
+        NSLog(@"Error occured with Firmware Update Cancel");
+    }
+    return result;
 }
 
 - (void)cleanUpAfterFailure
@@ -412,13 +428,13 @@ typedef enum FirmwareManagerState_enum
     RigDfuError_t result = DfuError_None;
     uint8_t patchInitPacket[PATCH_INIT_PACKET_SIZE];
     memcpy(patchInitPacket, &image.bytes[PATCH_INIT_PACKET_IDX], PATCH_INIT_PACKET_SIZE);
-
+    
     result = [firmwareUpdateService writeDataToPacketCharacteristic:patchInitPacket withLen:PATCH_INIT_PACKET_SIZE shouldGetResponse:NO];
     if (result != DfuError_None) {
         [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write patch init packet."];
         return result;
     }
-
+    
     return result;
 }
 
