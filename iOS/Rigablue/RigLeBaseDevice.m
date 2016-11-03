@@ -136,6 +136,12 @@ static int discoveredServicesCount = 0;
     }
 }
 
+-(void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
+    if(_delegate && [_delegate respondsToSelector:@selector(didDiscoverDescriptorsForCharacteristic:onDevice:)]) {
+        [_delegate didDiscoverDescriptorsForCharacteristic:characteristic onDevice:self];
+    }
+}
+
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error
 {
     NSLog(@"Notification state updated");
@@ -149,6 +155,12 @@ static int discoveredServicesCount = 0;
     NSLog(@"Did Write Value for Characteristic");
     if (_delegate) {
         [_delegate didWriteValueForCharacteristic:characteristic forDevice:self];
+    }
+}
+
+- (void)peripheral:(CBPeripheral *)peripheral didWriteValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
+    if(_delegate && [_delegate respondsToSelector:@selector(didWriteValueForDescriptor:forDevice:)]) {
+        [_delegate didWriteValueForDescriptor:descriptor forDevice:self];
     }
 }
 
@@ -184,15 +196,8 @@ static int discoveredServicesCount = 0;
     }
 }
 
-
--(void)peripheral:(CBPeripheral *)peripheral didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error {
-    if(_delegate) {
-        [_delegate didDiscoverDescriptorsForCharacteristic:characteristic onDevice:self];
-    }
-}
-
 - (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForDescriptor:(CBDescriptor *)descriptor error:(NSError *)error {
-    if(_delegate) {
+    if(_delegate && [_delegate respondsToSelector:@selector(didUpdateValueForDescriptor:forDevice:)]) {
         [_delegate didUpdateValueForDescriptor:descriptor forDevice:self];
     }
 }
