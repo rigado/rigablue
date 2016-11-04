@@ -75,12 +75,12 @@
  *
  *  This method is called when the device discovers a descriptor on a characteristic.
  *
- *  @param charactristic    The characteristic for which discovery has occured.
+ *  @param characteristic   The characteristic for which discovery has occurred.
  *  @param device           The device to which this characteristic belongs.
  *
  *  @discussion This method is called when the device discovers a descriptor on a characteristic.
  */
-- (void)didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic onDevice:(RigLeBaseDevice*)device;
+- (void)didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice*)device;
 
 /**
  *  @method didUpdateValueForDescriptor:
