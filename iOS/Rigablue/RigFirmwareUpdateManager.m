@@ -31,7 +31,7 @@
 #define RECEIVE_FIRMWARE_IMAGE                  3
 #define VALIDATE_FIRMWARE_IMAGE                 4
 #define ACTIVATE_FIRMWARE_AND_RESET             5
-#define SYSTEM_RESET                            6  /* Available but not used */
+#define SYSTEM_RESET                            6
 #define ERASE_AND_RESET                         9
 #define ERASE_SIZE_REQUEST                      10
 #define INITIALIZE_PATCH                        10
@@ -72,7 +72,7 @@ typedef enum FirmwareManagerState_enum
     State_TransferringRadioImage,
     /* This is the final state once the transfer is complete */
     State_FinishedRadioImageTransfer,
-    /* This is the state if the Firmware Update is being canceled */
+    /* This is the state if the Firmware Update should cancel */
     State_FirmwareUpdateCanceled
 } eFirmwareManagerState;
 
@@ -144,7 +144,8 @@ typedef enum FirmwareManagerState_enum
     image = nil;
 }
 
-- (BOOL)firmwareImageIsPatch:(NSData*)firmwareImage {
+- (BOOL)firmwareImageIsPatch:(NSData*)firmwareImage
+{
     if (firmwareImage.length < kFirmwareKeyLength) {
         return NO;
     }
@@ -256,18 +257,25 @@ typedef enum FirmwareManagerState_enum
     
 }
 
-- (RigDfuError_t)cancelFirmwareUpdate {
-    RigDfuError_t result = DfuError_None;
-    uint8_t resetCommand[] = { SYSTEM_RESET };
+- (void)cancelFirmwareUpdate
+{
     state = State_FirmwareUpdateCanceled;
-    result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
+    uint8_t resetCommand[] = { SYSTEM_RESET };
+    
+    RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
+    
+    // If writeDataToControllPoint is successful, let the delegate know and clean up
     if (result == DfuError_None) {
-        [delegate updateCanceled];
+        if ([delegate respondsToSelector:@selector(updateCanceled)]) {
+            [delegate updateCanceled];
+        }
         [self cleanUpAfterFailure];
-    } else {
-        NSLog(@"Error occured with Firmware Update Cancel");
     }
-    return result;
+    
+    // If the error is not DFUError_None, it is likely that the control point is missing
+    // because the Bootloader is not yet connected.
+    // When the firmwareUpdateManager calls enableControlPointNotification
+    // it will see we are in a "canceled" state, and send the reset command.
 }
 
 - (void)cleanUpAfterFailure
@@ -606,6 +614,24 @@ typedef enum FirmwareManagerState_enum
  */
 - (void)didEnableControlPointNotifications
 {
+    
+    if (state == State_FirmwareUpdateCanceled) {
+        uint8_t resetCommand[] = { SYSTEM_RESET };
+        
+        RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
+        if (result != DfuError_None) {
+            if ([delegate respondsToSelector:@selector(cancelFailedWithErrorCode:)]) {
+                [delegate cancelFailedWithErrorCode:result];
+            }
+            NSLog(@"Error occured with Firmware Update Cancel");
+        } else {
+            if ([delegate respondsToSelector:@selector(updateCanceled)]) {
+                [delegate updateCanceled];
+            }
+            [self cleanUpAfterFailure];
+        }
+    }
+    
     NSLog(@"__didEnableControlPointNotifications__");
     // This is sent after enabling notifications on the control point
     // This is always done after discovery has completed.  Next we send an erase size request.
