@@ -263,6 +263,7 @@ typedef enum FirmwareManagerState_enum
     uint8_t resetCommand[] = { SYSTEM_RESET };
     
     RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
+    // We write with response, but take action immediately since the device will reset before responding
     
     // If writeDataToControllPoint is successful, let the delegate know and clean up
     if (result == DfuError_None) {
