@@ -27,6 +27,10 @@ public interface IRigFirmwareUpdateManagerObserver {
     void updateProgress(final int progress);
 
     /**
+     * Deprecated. See {@code updateStatus(final String status)}. Error messages are part of the
+     * {@link RigDfuError} objects sent to
+     * {@link IRigFirmwareUpdateManagerObserver#updateFailed(RigDfuError)}.
+     *
      * This method is called to provide a string based description of the current status.  In
      * addition, if the status is an error message, the error number is provided here.
      *
