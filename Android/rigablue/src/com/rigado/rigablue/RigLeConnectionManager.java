@@ -135,7 +135,12 @@ public class RigLeConnectionManager implements IRigCoreBluetoothConnectionObserv
     public void didConnectDevice(BluetoothDevice btDevice) {
         byte [] scanRecord;
         scanRecord = mAdvertisingDataList.get(btDevice);
-        RigLeBaseDevice baseDevice = new RigLeBaseDevice(btDevice, RigCoreBluetooth.getInstance().getServiceList(btDevice.getAddress()), scanRecord);
+        RigLeBaseDevice baseDevice =
+                new RigLeBaseDevice(
+                        mConnectingDevice.getUncachedName(),
+                        btDevice,
+                        RigCoreBluetooth.getInstance().getServiceList(btDevice.getAddress()),
+                        scanRecord);
         mAdvertisingDataList.remove(btDevice);
         RigAvailableDeviceData toRemove = null;
 

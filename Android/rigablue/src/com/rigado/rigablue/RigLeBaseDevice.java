@@ -93,9 +93,12 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
      * @param serviceList The list of services available for the Bluetooth device
      * @param scanRecord The advertising data for this device
      */
-    public RigLeBaseDevice(BluetoothDevice bluetoothDevice, List<BluetoothGattService> serviceList, byte[] scanRecord) {
+    public RigLeBaseDevice(String deviceName,
+                           BluetoothDevice bluetoothDevice,
+                           List<BluetoothGattService> serviceList,
+                           byte[] scanRecord) {
         mBluetoothDevice = bluetoothDevice;
-        mName = mBluetoothDevice.getName();
+        mName = deviceName;
         mBluetoothGattServices = new ArrayList<>();
         if (serviceList != null) {
             UUID mGapUuid = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb");
