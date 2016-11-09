@@ -260,24 +260,36 @@ typedef enum FirmwareManagerState_enum
 - (void)cancelFirmwareUpdate
 {
     state = State_FirmwareUpdateCanceled;
+    RigDfuError_t result = [self sendCancelCommand];
+    if (result != DfuError_ControlPointCharacteristicMissing && result != DfuError_None) {
+        if ([delegate respondsToSelector:@selector(cancelFailedWithErrorCode:)]) {
+            [delegate cancelFailedWithErrorCode:result];
+            
+        }
+        NSLog(@"Error occured with Firmware Update Cancel");
+    }
+    
+    // If cancelFirmwareUpdate is called before the bootloader has connected,
+    // We will get an error: DfuError_ControlPointCharacteristicMissing
+    
+    // When the firmwareUpdateManager calls enableControlPointNotification
+    // it will see we are in a "canceled" state, and send the reset command again.
+}
+
+- (RigDfuError_t)sendCancelCommand {
     uint8_t resetCommand[] = { SYSTEM_RESET };
-    
-    RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
     // We write with response, but take action immediately since the device will reset before responding
+    RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
     
-    // If writeDataToControllPoint is successful, let the delegate know and clean up
     if (result == DfuError_None) {
         if ([delegate respondsToSelector:@selector(updateCanceled)]) {
             [delegate updateCanceled];
         }
         [self cleanUpAfterFailure];
     }
-    
-    // If the error is not DFUError_None, it is likely that the control point is missing
-    // because the Bootloader is not yet connected.
-    // When the firmwareUpdateManager calls enableControlPointNotification
-    // it will see we are in a "canceled" state, and send the reset command.
+    return result;
 }
+
 
 - (void)cleanUpAfterFailure
 {
@@ -617,20 +629,14 @@ typedef enum FirmwareManagerState_enum
 {
     
     if (state == State_FirmwareUpdateCanceled) {
-        uint8_t resetCommand[] = { SYSTEM_RESET };
-        
-        RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
+        RigDfuError_t result = [self sendCancelCommand];
         if (result != DfuError_None) {
             if ([delegate respondsToSelector:@selector(cancelFailedWithErrorCode:)]) {
                 [delegate cancelFailedWithErrorCode:result];
             }
             NSLog(@"Error occured with Firmware Update Cancel");
-        } else {
-            if ([delegate respondsToSelector:@selector(updateCanceled)]) {
-                [delegate updateCanceled];
-            }
-            [self cleanUpAfterFailure];
         }
+        return;
     }
     
     NSLog(@"__didEnableControlPointNotifications__");
