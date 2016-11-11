@@ -31,7 +31,7 @@
 #define RECEIVE_FIRMWARE_IMAGE                  3
 #define VALIDATE_FIRMWARE_IMAGE                 4
 #define ACTIVATE_FIRMWARE_AND_RESET             5
-//#define SYSTEM_RESET                            6  /* Available but not used */
+#define SYSTEM_RESET                            6
 #define ERASE_AND_RESET                         9
 #define ERASE_SIZE_REQUEST                      10
 #define INITIALIZE_PATCH                        10
@@ -71,7 +71,9 @@ typedef enum FirmwareManagerState_enum
     /* This state is used during image transfer */
     State_TransferringRadioImage,
     /* This is the final state once the transfer is complete */
-    State_FinishedRadioImageTransfer
+    State_FinishedRadioImageTransfer,
+    /* This is the state if the Firmware Update should cancel */
+    State_FirmwareUpdateCanceled
 } eFirmwareManagerState;
 
 @interface RigFirmwareUpdateManager() <RigFirmwareUpdateServiceDelegate, RigLeDiscoveryManagerDelegate, RigLeBaseDeviceDelegate, RigLeConnectionManagerDelegate>
@@ -142,7 +144,8 @@ typedef enum FirmwareManagerState_enum
     image = nil;
 }
 
-- (BOOL)firmwareImageIsPatch:(NSData*)firmwareImage {
+- (BOOL)firmwareImageIsPatch:(NSData*)firmwareImage
+{
     if (firmwareImage.length < kFirmwareKeyLength) {
         return NO;
     }
@@ -165,7 +168,7 @@ typedef enum FirmwareManagerState_enum
 {
     RigDfuError_t result = DfuError_None;
     NSLog(@"__updateFirmware__");
-
+    
     isPatchUpdate = NO;
     imageSize = (UInt32)firmwareImage.length;
     image = firmwareImage;
@@ -190,7 +193,7 @@ typedef enum FirmwareManagerState_enum
     state = State_DiscoverFirmwareServiceCharacteristics;
     
     //If already connected to a DFU, then start the update, otherwise send Bootloader activation command
-
+    
     CBService *dfuService;
     if (firmwareUpdateService.updateDFUServiceUuidString) {
         dfuService = [device getServiceWithUuid:[CBUUID UUIDWithString:firmwareUpdateService.updateDFUServiceUuidString]];
@@ -220,7 +223,7 @@ typedef enum FirmwareManagerState_enum
             NSLog(@"Invalid parameter provided!");
             return DfuError_InvalidParameter;
         }
-
+        
         if (characteristic.properties & CBCharacteristicPropertyWriteWithoutResponse) {
             [device.peripheral writeValue:[NSData dataWithBytes:command length:commandLen] forCharacteristic:characteristic type:CBCharacteristicWriteWithoutResponse];
         } else if (characteristic.properties & CBCharacteristicPropertyWrite) {
@@ -229,7 +232,7 @@ typedef enum FirmwareManagerState_enum
             NSLog(@"Update characteristic is not writeable");
             return DfuError_InvalidParameter;
         }
-
+        
         RigLeDiscoveryManager *dm = [RigLeDiscoveryManager sharedInstance];
         
         firmwareUpdateService.shouldReconnectToPeripheral = NO;
@@ -251,8 +254,42 @@ typedef enum FirmwareManagerState_enum
                    activateChar:request.activationCharacteristic
                 activateCommand:(uint8_t *)[request.activationCommand bytes]
              activateCommandLen:request.activationCommand.length];
-
+    
 }
+
+- (void)cancelFirmwareUpdate
+{
+    state = State_FirmwareUpdateCanceled;
+    RigDfuError_t result = [self sendCancelCommand];
+    if (result != DfuError_ControlPointCharacteristicMissing && result != DfuError_None) {
+        if ([delegate respondsToSelector:@selector(cancelFailedWithErrorCode:)]) {
+            [delegate cancelFailedWithErrorCode:result];
+            
+        }
+        NSLog(@"Error occured with Firmware Update Cancel");
+    }
+    
+    // If cancelFirmwareUpdate is called before the bootloader has connected,
+    // We will get an error: DfuError_ControlPointCharacteristicMissing
+    
+    // When the firmwareUpdateManager calls enableControlPointNotification
+    // it will see we are in a "canceled" state, and send the reset command again.
+}
+
+- (RigDfuError_t)sendCancelCommand {
+    uint8_t resetCommand[] = { SYSTEM_RESET };
+    // We write with response, but take action immediately since the device will reset before responding
+    RigDfuError_t result = [firmwareUpdateService writeDataToControlPoint:resetCommand withLen:1 shouldGetResponse:YES];
+    
+    if (result == DfuError_None) {
+        if ([delegate respondsToSelector:@selector(updateCanceled)]) {
+            [delegate updateCanceled];
+        }
+        [self cleanUpAfterFailure];
+    }
+    return result;
+}
+
 
 - (void)cleanUpAfterFailure
 {
@@ -412,13 +449,13 @@ typedef enum FirmwareManagerState_enum
     RigDfuError_t result = DfuError_None;
     uint8_t patchInitPacket[PATCH_INIT_PACKET_SIZE];
     memcpy(patchInitPacket, &image.bytes[PATCH_INIT_PACKET_IDX], PATCH_INIT_PACKET_SIZE);
-
+    
     result = [firmwareUpdateService writeDataToPacketCharacteristic:patchInitPacket withLen:PATCH_INIT_PACKET_SIZE shouldGetResponse:NO];
     if (result != DfuError_None) {
         [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to write patch init packet."];
         return result;
     }
-
+    
     return result;
 }
 
@@ -590,6 +627,18 @@ typedef enum FirmwareManagerState_enum
  */
 - (void)didEnableControlPointNotifications
 {
+    
+    if (state == State_FirmwareUpdateCanceled) {
+        RigDfuError_t result = [self sendCancelCommand];
+        if (result != DfuError_None) {
+            if ([delegate respondsToSelector:@selector(cancelFailedWithErrorCode:)]) {
+                [delegate cancelFailedWithErrorCode:result];
+            }
+            NSLog(@"Error occured with Firmware Update Cancel");
+        }
+        return;
+    }
+    
     NSLog(@"__didEnableControlPointNotifications__");
     // This is sent after enabling notifications on the control point
     // This is always done after discovery has completed.  Next we send an erase size request.
