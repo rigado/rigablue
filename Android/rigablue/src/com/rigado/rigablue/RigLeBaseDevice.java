@@ -89,20 +89,27 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
     /**
      * Creates a new base device object.
      *
-     * @param bluetoothDevice The Bluetooth device for this base device
-     * @param serviceList The list of services available for the Bluetooth device
-     * @param scanRecord The advertising data for this device
+     *  @param deviceName The local name of the device parsed from the advertising
+     *                    data {@code scanRecord} or set using {@link BluetoothDevice#getName()}.
+     *                    See {@link RigAvailableDeviceData#parseNameFromScanRecord(byte[],
+     *                    BluetoothDevice)}
+     *  @param bluetoothDevice The Bluetooth device for this base device
+     *  @param serviceList The list of services available for the Bluetooth device
+     *  @param scanRecord The advertising data for this device
      */
-    public RigLeBaseDevice(BluetoothDevice bluetoothDevice, List<BluetoothGattService> serviceList, byte[] scanRecord) {
+    public RigLeBaseDevice(String deviceName,
+                           BluetoothDevice bluetoothDevice,
+                           List<BluetoothGattService> serviceList,
+                           byte[] scanRecord) {
         mBluetoothDevice = bluetoothDevice;
-        mName = mBluetoothDevice.getName();
+        mName = deviceName;
         mBluetoothGattServices = new ArrayList<>();
         if (serviceList != null) {
             UUID mGapUuid = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb");
             UUID mGattUuid = UUID.fromString("00001801-0000-1000-8000-00805f9b34fb");
             for(BluetoothGattService service : serviceList) {
                 if(service.getUuid().equals(mGapUuid) ||
-                   service.getUuid().equals(mGattUuid)) {
+                        service.getUuid().equals(mGattUuid)) {
                     //Ignore GAP and GATT services for now
                     continue;
                 }
@@ -111,6 +118,19 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
         }
         mScanRecord = scanRecord;
         mIsDiscoveryComplete = false;
+    }
+
+    /**
+     * Creates a new base device object using {@link BluetoothDevice#getName()}
+     *
+     * @param bluetoothDevice The Bluetooth device for this base device
+     * @param serviceList The list of services available for the Bluetooth device
+     * @param scanRecord The advertising data for this device
+     */
+    public RigLeBaseDevice(BluetoothDevice bluetoothDevice,
+                           List<BluetoothGattService> serviceList,
+                           byte[] scanRecord) {
+        this(bluetoothDevice.getName(), bluetoothDevice, serviceList, scanRecord);
     }
 
     /**

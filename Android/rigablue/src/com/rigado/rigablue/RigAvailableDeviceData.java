@@ -1,6 +1,7 @@
 package com.rigado.rigablue;
 
 import android.bluetooth.BluetoothDevice;
+import android.util.Log;
 
 /**
  *  RigAvailableDeviceData.java
@@ -21,9 +22,21 @@ import android.bluetooth.BluetoothDevice;
 public class RigAvailableDeviceData {
 
     /**
+     * The following data type values are assigned by Bluetooth SIG.
+     * For more details refer to Bluetooth 4.1 specification, Volume 3, Part C, Section 18.
+     */
+    private static final int DATA_TYPE_LOCAL_NAME_SHORT = 0x08;
+    private static final int DATA_TYPE_LOCAL_NAME_COMPLETE = 0x09;
+
+    /**
      * The available bluetooth device.
      */
     private BluetoothDevice mBluetoothDevice;
+
+    /**
+     * The device name
+     */
+    private String mName;
 
     /**
      * The RSSI when discovered.
@@ -53,6 +66,61 @@ public class RigAvailableDeviceData {
         this.mBluetoothDevice = bluetoothDevice;
         this.mRssi = rssi;
         this.mScanRecord = scanRecord;
+        this.mName = parseNameFromScanRecord(scanRecord, bluetoothDevice);
+    }
+
+    /**
+     * Import from Google's {@link android.bluetooth.le.ScanRecord}
+     *
+     * Parses the local name of the {@link BluetoothDevice} from the {@code scanRecord}.
+     * Since {@link BluetoothDevice#getName()} is cached by the bluetooth stack, it is unreliable
+     * because it might return the wrong name.
+     *
+     * @param scanRecord The raw bytes of the {@link android.bluetooth.le.ScanRecord} returned from
+     *                   a Bluetooth LE scan.
+     * @return The local name of the device or null
+     */
+    private String parseNameFromScanRecord(byte [] scanRecord, BluetoothDevice device) {
+        if (scanRecord == null) {
+            return null;
+        }
+
+        int currentPos = 0;
+
+        try {
+            while (currentPos < scanRecord.length) {
+                // length is unsigned int.
+                int length = scanRecord[currentPos++] & 0xFF;
+                if (length == 0) {
+                    break;
+                }
+
+                // Not the length includes the length of the field type itself
+                final int dataLength = length - 1;
+                // fieldType is unsigned int.
+                final int fieldType = scanRecord[currentPos++] & 0xFF;
+                switch (fieldType) {
+                    case DATA_TYPE_LOCAL_NAME_SHORT:
+                    case DATA_TYPE_LOCAL_NAME_COMPLETE:
+                        return new String(extractBytes(scanRecord, currentPos, dataLength));
+                    default:
+                        // ignore other data types
+                        break;
+                }
+                currentPos += dataLength;
+            }
+        } catch (Exception e) {
+            RigLog.e("Unable to parse device name!");
+        }
+
+        return null;
+    }
+
+    /**
+     * @return The device name parsed from the raw {@code scanRecord} bytes
+     */
+    public String getUncachedName() {
+        return this.mName;
     }
 
     /**
@@ -108,5 +176,20 @@ public class RigAvailableDeviceData {
             return "";
         }
         return mBluetoothDevice.getAddress();
+    }
+
+    /**
+     * Import from Google's {@link android.bluetooth.le.ScanRecord} class.
+     * Helper method to extract bytes from byte array.
+     *
+     * @param scanRecord The raw bytes received from a Bluetooth LE scan
+     * @param start Start index of the data to extract
+     * @param length Length of the data to extract
+     * @return A new {@code byte []} containing the desired section of the {@code scanRecord}
+     */
+    private static byte[] extractBytes(byte[] scanRecord, int start, int length) {
+        byte[] bytes = new byte[length];
+        System.arraycopy(scanRecord, start, bytes, 0, length);
+        return bytes;
     }
 }
