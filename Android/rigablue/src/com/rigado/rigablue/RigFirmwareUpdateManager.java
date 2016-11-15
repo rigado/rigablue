@@ -651,6 +651,21 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     private void sendPacket() {
         RigLog.d("__RigFirmwareUpdateManager.sendPacket__");
 
+        /**
+         * If we fail to read a characteristic, we assume the device is in an invalid state and
+         * call {@link IRigCoreListener#onActionGattFail(BluetoothDevice)}, which forces a
+         * disconnect event. The disconnect event calls {@code cleanUp},
+         * {@code handleUpdateError), and {@code initStateVariables}. All variables are reset.
+         * However, it can take several seconds for the device to actually disconnect.
+         * Meanwhile, we might still be receiving {@link IRigCoreListener} callbacks. This
+         * check prevents NPEs caused by trying to get the {@code mImage} size in response to a
+         * notification received after a forced disconnect event.
+         */
+        if (mState.ordinal() < FirmwareManagerStateEnum.State_TransferringRadioImage.ordinal()) {
+            RigLog.e("Exiting send packet operation! State is < State_TransferringRadioImage.");
+            return;
+        }
+
         mPacketNumber++;
         byte [] packet;
         int packetSize = BytesInOnePacket;
