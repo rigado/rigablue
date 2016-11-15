@@ -293,6 +293,8 @@ public class RigCoreBluetooth implements IRigCoreListener {
         if (!checkBluetoothState()) {
             return;
         }
+        // Clear the queue before initiating a new connection
+        clearQueue();
         mConnectingDevice = device;
         mBluetoothLeService.connect(device.getAddress());
         scheduleConnectionTimeout(timeout);
@@ -507,6 +509,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
     private void clearQueue () {
         if (mOpsQueue != null) {
+            mIsDataOpInProgress = false;
             mOpsQueue.clear();
         }
     }
