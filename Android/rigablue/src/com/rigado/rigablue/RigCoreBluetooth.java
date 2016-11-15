@@ -507,7 +507,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
         mDiscoveryObserver = observer;
     }
 
-    private void clearQueue () {
+    private synchronized void clearQueue () {
         if (mOpsQueue != null) {
             mIsDataOpInProgress = false;
             mOpsQueue.clear();
