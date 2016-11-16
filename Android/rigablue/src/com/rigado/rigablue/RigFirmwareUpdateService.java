@@ -338,8 +338,7 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
 
     /**
-     * Deprecated as of v1.2.0. Use {@code writeToControlPoint(byte[] data)}
-     * for better error handling.
+     * Deprecated as of v1.2.0.
      *
      * Writes data to the update device's control point characteristic.
      * @param data The data to write
@@ -386,8 +385,7 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
 
     /**
-     * Deprecated as of v1.2.0. Use {@code writeToPacketCharacteristic(byte[] data)}
-     * for better error handling.
+     * Deprecated as of v1.2.0.
      *
      * Writes data to the update device's packet characteristic.
      * @param data The data to write.

@@ -58,6 +58,10 @@ public class RigDfuError {
     public static final int CONNECTION_FAILED = -30;
     public static final int CONNECTION_TIMEOUT = -31;
     public static final int DISCOVERY_TIMEOUT = -32;
+    /** Unused */
+    public static final int PATCH_INIT_WRITE_FAILURE = -33;
+    /** Unused */
+    public static final int FIRMWARE_VALIDATION_INIT_FAILURE = -34;
     public static final int BOOTLOADER_DISCONNECT = -35;
     public static final int FIRMWARE_UPDATE_CANCELLED = -36;
 

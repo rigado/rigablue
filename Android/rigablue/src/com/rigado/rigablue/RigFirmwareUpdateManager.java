@@ -369,7 +369,11 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         mFirmwareUpdateService.setShouldReconnectState(false);
 
         byte [] data = { (byte)DfuOpCodeEnum.DfuOpCode_SystemReset.ordinal() };
-        mFirmwareUpdateService.writeDataToControlPoint(data);
+        final RigDfuError error = mFirmwareUpdateService.writeToControlPoint(data);
+        if (error != null) {
+            RigLog.w("Unable to cancel firmware update!");
+            handleUpdateError(error);
+        }
         mDidSendCancel = true;
     }
 
