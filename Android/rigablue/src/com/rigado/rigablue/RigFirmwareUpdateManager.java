@@ -704,7 +704,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
          */
         if (mState.ordinal() < FirmwareManagerStateEnum.State_TransferringRadioImage.ordinal()) {
             RigLog.e("Exiting send packet operation! State is < State_TransferringRadioImage.");
-            return;
+            return RigDfuError.errorFromCode(RigDfuError.BOOTLOADER_DISCONNECT);
         }
 
         mPacketNumber++;
