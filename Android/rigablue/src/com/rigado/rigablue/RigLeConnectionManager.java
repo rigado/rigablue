@@ -109,13 +109,23 @@ public class RigLeConnectionManager implements IRigCoreBluetoothConnectionObserv
     }
 
     /**
-     * Cleans up the {@link android.bluetooth.BluetoothGatt} object created during
-     * a connection attempt and disconnects the {@link BluetoothDevice} if the
-     * connection attempt was successful.
+     * To clean up {@link android.bluetooth.BluetoothGatt} objects in a timely manner, you should
+     * cancel the connection if you have tried to connect to an available device, but have not yet
+     * received the actual base device in a connection callback.
      *
      * @param deviceToRemove The {@link RigAvailableDeviceData} used in
      *                       {@code connectDevice}
      *
+     * Example:
+     * <pre>
+     * {@code
+     * if (rigLeBaseDevice != null) {
+     *     connectionManager.disconnectDevice(rigLeBaseDevice);
+     * } else if (rigAvailableDeviceData != null) {
+     *     connectionManager.cancelConnection(rigAvailableDeviceData);
+     * }
+     * }
+     * </pre>
      */
     public void cancelConnection(RigAvailableDeviceData deviceToRemove) {
         RigCoreBluetooth.getInstance()
