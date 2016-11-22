@@ -143,7 +143,7 @@ public class RigService {
 
         new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 boolean isAlreadyConnected = false;
 
                 if (mBluetoothGattHashMap.containsKey(address)) {
@@ -195,7 +195,7 @@ public class RigService {
         
         new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 BluetoothGatt gatt = mBluetoothGattHashMap.get(address);
                 if(gatt != null) {
                     mBluetoothGattHashMap.get(address).disconnect();
@@ -213,7 +213,7 @@ public class RigService {
         RigLog.d("close");
         new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 for (BluetoothGatt bluetoothGatt : mBluetoothGattHashMap.values()) {
                     if (bluetoothGatt != null) {
                         bluetoothGatt.close();
