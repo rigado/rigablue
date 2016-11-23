@@ -38,7 +38,6 @@ NSString *kDisModelNumberUuidString = @"2a24";
 
 @implementation RigFirmwareUpdateService
 {
-    CBCentralManager    *centralManager;
     RigLeBaseDevice     *updateDevice;
     RigAvailableDeviceData *availDevice;
     CBPeripheral        *updatePeripheral;
@@ -383,6 +382,8 @@ NSString *kDisModelNumberUuidString = @"2a24";
     }
 }
 
+// This method should be renamed in a future release
+// setConnectionManagerDelegateToOldDelegate would accurately describe its behaviour
 - (void)completeUpdate
 {
     [RigLeConnectionManager sharedInstance].delegate = oldDelegate;

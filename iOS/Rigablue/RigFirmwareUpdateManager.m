@@ -108,7 +108,6 @@ typedef enum FirmwareManagerState_enum
     uint32_t totalBytesErased;
     uint8_t lastPacketSize;
     
-    id<RigLeConnectionManagerDelegate> oldDelegate;
     RigLeBaseDevice *bootloaderDevice;
 }
 
@@ -294,7 +293,7 @@ typedef enum FirmwareManagerState_enum
 - (void)cleanUpAfterFailure
 {
     /* Reassign connection delegate */
-    [RigLeConnectionManager sharedInstance].delegate = oldDelegate;
+    [firmwareUpdateService completeUpdate];
     
     /* For device disconnection if connected */
     if (bootloaderDevice != nil) {
@@ -919,7 +918,6 @@ typedef enum FirmwareManagerState_enum
     if ([device.peripheral.name isEqual:@"RigDfu"] && device.rssi.integerValue > -65 && device.rssi.integerValue < 0) {
         
         [[RigLeDiscoveryManager sharedInstance] stopDiscoveringDevices];
-        oldDelegate = [RigLeConnectionManager sharedInstance].delegate;
         [RigLeConnectionManager sharedInstance].delegate = self;
         [[RigLeConnectionManager sharedInstance] connectDevice:device connectionTimeout:10.0f];
         
@@ -942,7 +940,7 @@ typedef enum FirmwareManagerState_enum
 -(void)didConnectDevice:(RigLeBaseDevice *)device
 {
     bootloaderDevice = device;
-    [RigLeConnectionManager sharedInstance].delegate = oldDelegate;
+    [RigLeConnectionManager sharedInstance].delegate = firmwareUpdateService;
     [self performSelectorOnMainThread:@selector(updateDeviceAndTriggerDiscovery) withObject:nil waitUntilDone:NO];
 }
 
