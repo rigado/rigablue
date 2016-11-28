@@ -519,7 +519,9 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
             /* This may be the original device disconnect.  Pass it on to the original connection
              * manager delegate.
              */
-            mOldConnectionObserver.didDisconnectDevice(btDevice);
+            if (mOldConnectionObserver != null) {
+                mOldConnectionObserver.didDisconnectDevice(btDevice);
+            }
         }
     }
 
