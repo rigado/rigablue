@@ -3,6 +3,7 @@ package com.rigado.rigablue;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothProfile;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -305,6 +306,12 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             firmwareImage.read(mStartImage);
         } catch(IOException e) {
             RigLog.e("IOException occurred while reading binary image data!");
+        }
+
+        if (mStartImage.length < PATCH_KEY_SIZE) {
+            RigLog.d("Received invalid binary!");
+            handleUpdateError(RigDfuError.errorFromCode(RigDfuError.INVALID_PARAMETER));
+            return false;
         }
 
         isPatchUpdate = isPatchUpdate(mStartImage);
