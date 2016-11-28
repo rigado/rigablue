@@ -855,7 +855,7 @@ typedef enum FirmwareManagerState_enum
         } else {
             if (value[2] == OPERATION_CRC_ERROR) {
                 NSLog(@"CRC Failure on Validation!");
-                [self firmwareUpdateFailedFromError:DfuError_ImageValidationFailure withErrorMessage:@"Either image post patch CRC failed or the encrypted data was incorrect!"];
+                [self firmwareUpdateFailedFromError:DfuError_PostPatchImageCrcFailure withErrorMessage:@"Either image post patch CRC failed or the encrypted data was incorrect!"];
                 [self cleanUpAfterFailure];
             } else {
                 NSLog(@"Error occurred during firmware validation");
