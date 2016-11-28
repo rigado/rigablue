@@ -294,12 +294,16 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                                   byte[] activateCommand) {
         RigLog.i("__RigFirmwareUpdateManager.updateFirmware__");
 
+        mFirmwareUpdateService = new RigFirmwareUpdateService();
+        mFirmwareUpdateService.setObserver(this);
+
         if (device == null || firmwareImage == null || activateCharacteristic == null || activateCommand == null) {
             handleUpdateError(RigDfuError.errorFromCode(RigDfuError.INVALID_PARAMETER));
             return false;
         }
 
         mUpdateDevice = device;
+
         try {
             mImageSize = firmwareImage.available();
             mStartImage = new byte[mImageSize];
@@ -325,9 +329,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             //nothing to do here!
             mImage = mStartImage;
         }
-
-        mFirmwareUpdateService = new RigFirmwareUpdateService();
-        mFirmwareUpdateService.setObserver(this);
 
         mFirmwareUpdateService.setShouldReconnectState(true);
         mState = FirmwareManagerStateEnum.State_DiscoverFirmwareServiceCharacteristics;
