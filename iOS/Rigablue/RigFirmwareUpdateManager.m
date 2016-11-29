@@ -109,6 +109,8 @@ typedef enum FirmwareManagerState_enum
     uint8_t lastPacketSize;
     
     RigLeBaseDevice *bootloaderDevice;
+    RigLeBaseDevice *baseDevice;
+    id<RigLeBaseDeviceDelegate> oldBaseDeviceDelegate;
 }
 
 @synthesize delegate;
@@ -138,6 +140,8 @@ typedef enum FirmwareManagerState_enum
     isPatchInitPacketSent = NO;
     
     delegate = nil;
+    baseDevice = nil;
+    oldBaseDeviceDelegate = nil;
     state = State_Init;
     imageSize = 0;
     image = nil;
@@ -177,6 +181,11 @@ typedef enum FirmwareManagerState_enum
         imageSize = imageSize - (UInt32)kFirmwareKeyLength;
         image = [firmwareImage subdataWithRange:NSMakeRange(kFirmwareKeyLength, imageSize)];
     }
+    
+    // We hold on to an instance of the device and its delegate because the delegate will be overridden by firmwareUpdateService
+    // and we will reset it in cleanUpAfterFailure
+    oldBaseDeviceDelegate = device.delegate;
+    baseDevice = device;
     
     // Create the firmware update service object and assigned this object as the delegate
     firmwareUpdateService = [[RigFirmwareUpdateService alloc] init];
@@ -292,8 +301,9 @@ typedef enum FirmwareManagerState_enum
 
 - (void)cleanUpAfterFailure
 {
-    /* Reassign connection delegate */
+    /* Reassign connection and baseDevice delegate */
     [firmwareUpdateService completeUpdate];
+    baseDevice.delegate = oldBaseDeviceDelegate;
     
     /* For device disconnection if connected */
     if (bootloaderDevice != nil) {
