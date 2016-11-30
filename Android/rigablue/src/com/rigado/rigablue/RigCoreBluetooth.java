@@ -147,9 +147,14 @@ public class RigCoreBluetooth implements IRigCoreListener {
         this.mContext = context;
     }
 
+    /**
+     * The discovery flag is reset here to handle cases where a bluetooth state change is
+     * received while discovery is running. 
+     */
     public void init() {
         RigLog.d("__RigCoreBluetooth.init__");
 
+        mIsDiscovering = false;
         mBluetoothLeService = new RigService(mContext, this);
         mBluetoothLeService.initialize();
         mContext.registerReceiver(mBluetoothStateReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
