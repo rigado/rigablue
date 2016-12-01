@@ -3,6 +3,7 @@ package com.rigado.rigablue;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothProfile;
+import android.util.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -293,18 +294,28 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                                   byte[] activateCommand) {
         RigLog.i("__RigFirmwareUpdateManager.updateFirmware__");
 
+        mFirmwareUpdateService = new RigFirmwareUpdateService();
+        mFirmwareUpdateService.setObserver(this);
+
         if (device == null || firmwareImage == null || activateCharacteristic == null || activateCommand == null) {
             handleUpdateError(RigDfuError.errorFromCode(RigDfuError.INVALID_PARAMETER));
             return false;
         }
 
         mUpdateDevice = device;
+
         try {
             mImageSize = firmwareImage.available();
             mStartImage = new byte[mImageSize];
             firmwareImage.read(mStartImage);
         } catch(IOException e) {
             RigLog.e("IOException occurred while reading binary image data!");
+        }
+
+        if (mStartImage.length < PATCH_KEY_SIZE) {
+            RigLog.d("Received invalid binary!");
+            handleUpdateError(RigDfuError.errorFromCode(RigDfuError.INVALID_PARAMETER));
+            return false;
         }
 
         isPatchUpdate = isPatchUpdate(mStartImage);
@@ -318,9 +329,6 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             //nothing to do here!
             mImage = mStartImage;
         }
-
-        mFirmwareUpdateService = new RigFirmwareUpdateService();
-        mFirmwareUpdateService.setObserver(this);
 
         mFirmwareUpdateService.setShouldReconnectState(true);
         mState = FirmwareManagerStateEnum.State_DiscoverFirmwareServiceCharacteristics;
