@@ -108,8 +108,9 @@ typedef enum FirmwareManagerState_enum
     uint32_t totalBytesErased;
     uint8_t lastPacketSize;
     
-    id<RigLeConnectionManagerDelegate> oldDelegate;
     RigLeBaseDevice *bootloaderDevice;
+    RigLeBaseDevice *baseDevice;
+    id<RigLeBaseDeviceDelegate> oldBaseDeviceDelegate;
 }
 
 @synthesize delegate;
@@ -139,6 +140,8 @@ typedef enum FirmwareManagerState_enum
     isPatchInitPacketSent = NO;
     
     delegate = nil;
+    baseDevice = nil;
+    oldBaseDeviceDelegate = nil;
     state = State_Init;
     imageSize = 0;
     image = nil;
@@ -178,6 +181,11 @@ typedef enum FirmwareManagerState_enum
         imageSize = imageSize - (UInt32)kFirmwareKeyLength;
         image = [firmwareImage subdataWithRange:NSMakeRange(kFirmwareKeyLength, imageSize)];
     }
+    
+    // We hold on to an instance of the device and its delegate because the delegate will be overridden by firmwareUpdateService
+    // and we will reset it in cleanUpAfterFailure
+    oldBaseDeviceDelegate = device.delegate;
+    baseDevice = device;
     
     // Create the firmware update service object and assigned this object as the delegate
     firmwareUpdateService = [[RigFirmwareUpdateService alloc] init];
@@ -293,8 +301,9 @@ typedef enum FirmwareManagerState_enum
 
 - (void)cleanUpAfterFailure
 {
-    /* Reassign connection delegate */
-    [RigLeConnectionManager sharedInstance].delegate = oldDelegate;
+    /* Reassign connection and baseDevice delegate */
+    [firmwareUpdateService completeUpdate];
+    baseDevice.delegate = oldBaseDeviceDelegate;
     
     /* For device disconnection if connected */
     if (bootloaderDevice != nil) {
@@ -919,7 +928,6 @@ typedef enum FirmwareManagerState_enum
     if ([device.peripheral.name isEqual:@"RigDfu"] && device.rssi.integerValue > -65 && device.rssi.integerValue < 0) {
         
         [[RigLeDiscoveryManager sharedInstance] stopDiscoveringDevices];
-        oldDelegate = [RigLeConnectionManager sharedInstance].delegate;
         [RigLeConnectionManager sharedInstance].delegate = self;
         [[RigLeConnectionManager sharedInstance] connectDevice:device connectionTimeout:10.0f];
         
@@ -942,7 +950,7 @@ typedef enum FirmwareManagerState_enum
 -(void)didConnectDevice:(RigLeBaseDevice *)device
 {
     bootloaderDevice = device;
-    [RigLeConnectionManager sharedInstance].delegate = oldDelegate;
+    [RigLeConnectionManager sharedInstance].delegate = firmwareUpdateService;
     [self performSelectorOnMainThread:@selector(updateDeviceAndTriggerDiscovery) withObject:nil waitUntilDone:NO];
 }
 

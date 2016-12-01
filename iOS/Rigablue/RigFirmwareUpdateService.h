@@ -11,6 +11,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "RigLeConnectionManager.h"
 #import "RigLeBaseDevice.h"
 #import "RigDfuError.h"
 
@@ -56,7 +57,7 @@ extern NSString *kupdateDFUServiceUuidString300;
 - (void)didFailToConnectToBootloader;
 @end
 
-@interface RigFirmwareUpdateService : NSObject
+@interface RigFirmwareUpdateService : NSObject <RigLeConnectionManagerDelegate>
 
 /**
  *  The delegate for the FirmwareUpdateService should be set prior to starting firmware updates.  See
