@@ -121,7 +121,7 @@ public class RigService {
     public int getConnectionStateForDevice(BluetoothDevice device) {
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        return bluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
+        return bluetoothManager.getConnectionState(device, BluetoothGatt.GATT_SERVER);
     }
 
     /**

@@ -216,8 +216,9 @@ public class RigCoreBluetooth implements IRigCoreListener {
     }
 
     public int getDeviceConnectionState(BluetoothDevice device) {
-        final BluetoothManager bluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        return bluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        return bluetoothManager.getConnectionState(device, BluetoothGatt.GATT_SERVER);
     }
 
     void startDiscovery(final UUID[] uuidList, long timeout) {
