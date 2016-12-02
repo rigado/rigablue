@@ -110,13 +110,18 @@ public class RigService {
     }
 
     /**
+     * {@Deprecated} See {@link RigCoreBluetooth#getDeviceConnectionState(BluetoothDevice)}
+     *
      * Returns the current connection state for the device
+     *
      * @param device The device for which to retrieve the connection state
      * @return The connection state
      */
+    @Deprecated
     public int getConnectionStateForDevice(BluetoothDevice device) {
-        BluetoothGatt gatt = mBluetoothGattHashMap.get(device.getAddress());
-        return gatt.getConnectionState(device);
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        return bluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
     }
 
     /**
