@@ -373,6 +373,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
         mState = FirmwareManagerStateEnum.State_Cancelled;
 
+        if (mDiscoveryManager.isDiscoveryRunning()) {
+            mDiscoveryManager.stopDiscoveringDevices();
+        }
+
         mFirmwareUpdateService.setShouldAlwaysReconnectState(false);
         mFirmwareUpdateService.setShouldReconnectState(false);
 
