@@ -360,6 +360,17 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     /**
+     * Utility method to check the observer state before sending a status update
+     *
+     * @param status The current status of the firmware update
+     */
+    private void updateStatus(final String status) {
+        if (mObserver != null) {
+            mObserver.updateStatus(status, 0);
+        }
+    }
+
+    /**
      * Cancels an in progress firmware update. Sets #FirmwareManagerStateEnum to `State_Cancelled`,
      * prevents reconnection attempts, and sends a reset command to the bootloader. The reset
      * will trigger the `didDisconnectDevice` or `didDisconnectPeripheral` callbacks depending
@@ -369,9 +380,14 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      */
     public void cancelUpdate() {
         RigLog.e("__cancelUpdate__");
-        mObserver.updateStatus("Cancelling...", 0);
+
+        updateStatus("Cancelling...");
 
         mState = FirmwareManagerStateEnum.State_Cancelled;
+
+        if (mDiscoveryManager.isDiscoveryRunning()) {
+            mDiscoveryManager.stopDiscoveringDevices();
+        }
 
         mFirmwareUpdateService.setShouldAlwaysReconnectState(false);
         mFirmwareUpdateService.setShouldReconnectState(false);
@@ -459,9 +475,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         RigDeviceRequest dr = new RigDeviceRequest(dfuServiceUuidStrings, MAX_RIGDFU_DISCOVERY_TIMEOUT);
         dr.setObserver(this);
         mDiscoveryManager.startDiscoverDevices(dr);
-        if(mObserver != null) {
-            mObserver.updateStatus("Searching for updater service...", 0);
-        }
+
+        updateStatus("Searching for updater service...");
 
         mFirmwareUpdateService.setInitialNonBootloaderDevice(mUpdateDevice);
         mInitialDeviceAddress = mUpdateDevice.getBluetoothDevice().getAddress();
@@ -573,7 +588,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             return;
         }
 
-        mObserver.updateStatus("Writing device update size", 0);
+        updateStatus("Writing device update size");
+
     }
 
     /**
@@ -590,7 +606,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             return;
         }
 
-        mObserver.updateStatus("Enabling packet notifications", 0);
+        updateStatus("Enabling packet notifications");
+
     }
 
     /**
@@ -673,7 +690,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
         determineLastPacketSize();
 
-        mObserver.updateStatus("Transferring New Device Software", 0);
+        updateStatus("Transferring New Device Software");
+
         final RigDfuError error = sendPacket();
         if (error != null) {
             RigLog.w("Failed to start transfer of image data!");
@@ -761,7 +779,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             return;
         }
 
-        mObserver.updateStatus("Validating updated device software", 0);
+        updateStatus("Validating updated device software");
     }
 
     /**
@@ -773,7 +791,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
      */
     private void finishValidation () {
         RigLog.d("__RigFirmwareUpdateManager.finishValidation__");
-        mObserver.updateStatus("Device software validated successfully!", 0);
+        updateStatus("Device software validated successfully!");
         mState = FirmwareManagerStateEnum.State_ImageValidationWriteCompletedAndPassed;
         activateFirmware();
     }
@@ -803,7 +821,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             return;
         }
 
-        mObserver.updateStatus("Activating device software", 0);
+        updateStatus("Activating device software");
     }
 
     /**
@@ -873,7 +891,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             return;
         }
 
-        mObserver.updateStatus("Initializing Device Firmware Update", 0);
+        updateStatus("Initializing Device Firmware Update");
     }
 
     /**
@@ -905,7 +923,10 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            mObserver.didFinishUpdate();
+
+            if (mObserver != null) {
+                mObserver.didFinishUpdate();
+            }
         }
 
         /*
@@ -1040,7 +1061,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
         } else if(opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_ReceiveFirmwareImage.ordinal()) {
             if(value[2] == OPERATION_SUCCESS) {
                 RigLog.i("Firmware transfer successful");
-                mObserver.updateStatus("Firmware transfer successful.  Validating...", 0);
+                updateStatus("Firmware transfer successful.  Validating...");
                 validateFirmware();
             } else {
                 RigLog.e("Error during firmware image transfer " + value[2]);
@@ -1060,7 +1081,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
                 }
             } else if(value[2] == OPERATION_SUCCESS) {
                 updateProgress(1.0f);
-                mObserver.updateStatus("Successfully Transferred Software. Validating...", 0);
+                updateStatus("Successfully Transferred Software. Validating...");
                 validateFirmware();
             }
 
