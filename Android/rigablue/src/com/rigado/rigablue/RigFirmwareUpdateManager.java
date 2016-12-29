@@ -1069,7 +1069,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
             }
         } else if (opCode == ReceivedOpcode && request == (byte)DfuOpCodeEnum.DfuOpCode_ReceivePatchImage.ordinal()) {
             if(value[2] == OPERATION_PATCH_NEED_MORE_DATA) {
-                final float progress =  (mPacketNumber * 20) / getImageSize();
+                final float progress =  ((float) (mPacketNumber * 20) / (float) getImageSize());
                 updateProgress(progress);
                 if(!mShouldStopSendingPackets) {
 
