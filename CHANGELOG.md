@@ -1,5 +1,47 @@
 # Change Log
 
+## [1.2] - 2016-12-30
+
+### iOS
+
+#### Fixed
+
+- Correct the error code for CRC validation
+- Reset Device Delegate correctly under some DFU failure cases
+
+#### Changed
+
+- Support cancellation of firmware updates
+- Add optional Descriptor delegate methods to protocol
+
+### Android
+
+#### Fixed
+
+- Fix progress value for patched updates
+- Prevent NPEs caused by forced disconnects
+- Prevent NPE caused by invalid binary; pass back error code INVALID_PARAMETER
+- Add null check for observers in some circumstances
+- Synchronize methods that modify the gatt hashmap & clear queue operation
+- Update targeted API handling to prevent linter error
+- Fix and deprecate RigService method to retreive connection state (use RigCoreBluetooth instead)
+- Set firmware service at start of DFU to prevent NPEs on update failures
+- Write the correct notification toggle value to the descriptor
+
+#### Changed
+
+- Support cancellation of firmware updates
+- Add ability to cancel connection requests
+- Add ability to read ble descriptors
+- Mark `opInProgress` as false whe queue is cleared; prevents unresponsive operations after a reconnection.
+- Stop device discovery on cancel
+- Reset discovery flag on initialization
+- Parse name from raw scan record bytes
+- Return RigDfu disconnect failure during forced disconnects
+- Handle missing device and characteristic errors.
+- Log error when discovery observer is null
+
+
 ## [1.1.1] - 2016-09-23
 
 ### Android
