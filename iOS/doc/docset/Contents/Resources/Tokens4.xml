@@ -104,6 +104,18 @@ already in the bootloader, this characteristic parameter may be nil.</Abstract>
             <NodeRef refid="4"/>
 		</Token>
 		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/instm/RigFirmwareUpdateManager/cancelFirmwareUpdate</TokenIdentifier>
+			<Abstract type="html">This method cancels a firmware update.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (void)cancelFirmwareUpdate</Declaration>
+			
+			
+			<Anchor>//api/name/cancelFirmwareUpdate</Anchor>
+            <NodeRef refid="4"/>
+		</Token>
+		
         
         
 	</File>

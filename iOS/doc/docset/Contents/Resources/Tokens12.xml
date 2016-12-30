@@ -74,6 +74,30 @@ along with an error code if applicable.  Assuming all is well, error should be D
             <NodeRef refid="12"/>
 		</Token>
 		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateManagerDelegate/updateCanceled</TokenIdentifier>
+			<Abstract type="html">This method is called when the firmware update is canceled.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (void)updateCanceled</Declaration>
+			
+			
+			<Anchor>//api/name/updateCanceled</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateManagerDelegate/cancelFailedWithErrorCode:</TokenIdentifier>
+			<Abstract type="html">This method is called when there is an error with the cancel firmware update.</Abstract>
+			<DeclaredIn>RigFirmwareUpdateManager.h</DeclaredIn>
+			
+			<Declaration>- (void)cancelFailedWithErrorCode:(RigDfuError_t)error</Declaration>
+			
+			
+			<Anchor>//api/name/cancelFailedWithErrorCode:</Anchor>
+            <NodeRef refid="12"/>
+		</Token>
+		
         
         
 	</File>

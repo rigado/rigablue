@@ -60,11 +60,17 @@
 	
 	<optgroup label="Instance Methods">
 		
+		<option value="//api/name/didDiscoverDescriptorsForCharacteristic:forDevice:">- didDiscoverDescriptorsForCharacteristic:forDevice:</option>
+		
 		<option value="//api/name/didUpdateNotifyStateForCharacteristic:forDevice:">- didUpdateNotifyStateForCharacteristic:forDevice:</option>
 		
 		<option value="//api/name/didUpdateValueForCharacteristic:forDevice:">- didUpdateValueForCharacteristic:forDevice:</option>
 		
+		<option value="//api/name/didUpdateValueForDescriptor:forDevice:">- didUpdateValueForDescriptor:forDevice:</option>
+		
 		<option value="//api/name/didWriteValueForCharacteristic:forDevice:">- didWriteValueForCharacteristic:forDevice:</option>
+		
+		<option value="//api/name/didWriteValueForDescriptor:forDevice:">- didWriteValueForDescriptor:forDevice:</option>
 		
 		<option value="//api/name/discoveryDidCompleteForDevice:">- discoveryDidCompleteForDevice:</option>
 		
@@ -242,70 +248,6 @@ a characteristic changes its value due to a notification from the peripheral.</p
 		</div>
 	</div>
 </div><div class="section-method">
-	<a name="//api/name/didUpdateNotifyStateForCharacteristic:forDevice:" title="didUpdateNotifyStateForCharacteristic:forDevice:"></a>
-	<h3 class="method-title"><code><a href="#//api/name/didUpdateNotifyStateForCharacteristic:forDevice:">&ndash;&nbsp;didUpdateNotifyStateForCharacteristic:forDevice:</a></code>
-<span class="task-item-suffix">required method</span></h3>
-
-	<div class="method-info">
-		<div class="pointy-thing"></div>
-
-		<div class="method-info-container">
-			
-			
-			<div class="method-subsection brief-description">
-				<p>@method didUpdateNotifyStateForCharacteristic:</p>
-			</div>
-			
-		    
-
-			<div class="method-subsection method-declaration"><code>- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)<em>characteristic</em> forDevice:(RigLeBaseDevice *)<em>device</em></code></div>
-
-		    
-			
-			<div class="method-subsection arguments-section parameters">
-				<h4 class="method-subtitle parameter-title">Parameters</h4>
-				<table class="argument-def parameter-def">
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>characteristic</code></th>
-						<td><p>The characteristic for which notifications were enabled.</p></td>
-					</tr>
-				
-					<tr>
-						<th scope="row" class="argument-name"><code>device</code></th>
-						<td><p>The device to which this characteristic belongs.</p></td>
-					</tr>
-				
-				</table>
-			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection discussion-section">
-				<h4 class="method-subtitle">Discussion</h4>
-				<p>This is called when a notification enable request has
-been request for a particular characteristic with the notify property set.</p>
-			</div>
-			
-
-			
-
-			
-
-			
-			<div class="method-subsection declared-in-section">
-				<h4 class="method-subtitle">Declared In</h4>
-				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
-			</div>
-			
-			
-		</div>
-	</div>
-</div><div class="section-method">
 	<a name="//api/name/didWriteValueForCharacteristic:forDevice:" title="didWriteValueForCharacteristic:forDevice:"></a>
 	<h3 class="method-title"><code><a href="#//api/name/didWriteValueForCharacteristic:forDevice:">&ndash;&nbsp;didWriteValueForCharacteristic:forDevice:</a></code>
 <span class="task-item-suffix">required method</span></h3>
@@ -370,6 +312,260 @@ WriteWithResponse (CBCharacteristicPropertyWrite), this callback will not be iss
 			
 		</div>
 	</div>
+</div><div class="section-method">
+	<a name="//api/name/didUpdateNotifyStateForCharacteristic:forDevice:" title="didUpdateNotifyStateForCharacteristic:forDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didUpdateNotifyStateForCharacteristic:forDevice:">&ndash;&nbsp;didUpdateNotifyStateForCharacteristic:forDevice:</a></code>
+<span class="task-item-suffix">required method</span></h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method didUpdateNotifyStateForCharacteristic:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic *)<em>characteristic</em> forDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>characteristic</code></th>
+						<td><p>The characteristic for which notifications were enabled.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>device</code></th>
+						<td><p>The device to which this characteristic belongs.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This is called when a notification enable request has
+been request for a particular characteristic with the notify property set.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didDiscoverDescriptorsForCharacteristic:forDevice:" title="didDiscoverDescriptorsForCharacteristic:forDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didDiscoverDescriptorsForCharacteristic:forDevice:">&ndash;&nbsp;didDiscoverDescriptorsForCharacteristic:forDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method didDiscoverDescriptorsForCharacteristic:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)<em>characteristic</em> forDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>characteristic</code></th>
+						<td><p>The characteristic for which discovery has occurred.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>device</code></th>
+						<td><p>The device to which this characteristic belongs.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is called when the device discovers a descriptor on a characteristic.</p><p>This method is called when the device discovers a descriptor on a characteristic.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didUpdateValueForDescriptor:forDevice:" title="didUpdateValueForDescriptor:forDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didUpdateValueForDescriptor:forDevice:">&ndash;&nbsp;didUpdateValueForDescriptor:forDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method didUpdateValueForDescriptor:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didUpdateValueForDescriptor:(CBDescriptor *)<em>descriptor</em> forDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>descriptor</code></th>
+						<td><p>The descriptor for which the value was read.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>device</code></th>
+						<td><p>The device to which this characteristic belongs.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This is called when a read request is performed or when
+a descriptor changes its value due to a notification from the peripheral.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
+</div><div class="section-method">
+	<a name="//api/name/didWriteValueForDescriptor:forDevice:" title="didWriteValueForDescriptor:forDevice:"></a>
+	<h3 class="method-title"><code><a href="#//api/name/didWriteValueForDescriptor:forDevice:">&ndash;&nbsp;didWriteValueForDescriptor:forDevice:</a></code>
+</h3>
+
+	<div class="method-info">
+		<div class="pointy-thing"></div>
+
+		<div class="method-info-container">
+			
+			
+			<div class="method-subsection brief-description">
+				<p>@method didWriteValueForDescriptor:</p>
+			</div>
+			
+		    
+
+			<div class="method-subsection method-declaration"><code>- (void)didWriteValueForDescriptor:(CBDescriptor *)<em>descriptor</em> forDevice:(RigLeBaseDevice *)<em>device</em></code></div>
+
+		    
+			
+			<div class="method-subsection arguments-section parameters">
+				<h4 class="method-subtitle parameter-title">Parameters</h4>
+				<table class="argument-def parameter-def">
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>descriptor</code></th>
+						<td><p>The descriptor for which the value was read.</p></td>
+					</tr>
+				
+					<tr>
+						<th scope="row" class="argument-name"><code>device</code></th>
+						<td><p>The device to which this characteristic belongs.</p></td>
+					</tr>
+				
+				</table>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection discussion-section">
+				<h4 class="method-subtitle">Discussion</h4>
+				<p>This method is called when your app calls the writeValue:forDescriptor: method on the peripheral.</p>
+			</div>
+			
+
+			
+
+			
+
+			
+			<div class="method-subsection declared-in-section">
+				<h4 class="method-subtitle">Declared In</h4>
+				<p><code class="declared-in-ref">RigLeBaseDevice.h</code></p>
+			</div>
+			
+			
+		</div>
+	</div>
 </div>
 						</div>
 						
@@ -385,7 +581,7 @@ WriteWithResponse (CBCharacteristicPropertyWrite), this callback will not be iss
 				<footer>
 					<div class="footer-copyright">
 						
-						<p class="copyright">Copyright &copy; 2016 Rigado, LLC. All rights reserved. Updated: 2016-09-23</p>
+						<p class="copyright">Copyright &copy; 2016 Rigado, LLC. All rights reserved. Updated: 2016-12-30</p>
 						
 						
 						<p class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc 2.2.1 (build 1334)</a>.</p>
