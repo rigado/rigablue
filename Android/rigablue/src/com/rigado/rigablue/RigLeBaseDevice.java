@@ -2,6 +2,7 @@ package com.rigado.rigablue;
 
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 
 import java.util.ArrayList;
@@ -49,6 +50,8 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
      */
     private IRigLeBaseDeviceObserver mObserver;
 
+    private IRigLeDescriptorObserver mDescriptorObserver;
+
     /**
      * The scan response data that was present in the RigAvailableDevice data.
      */
@@ -62,9 +65,16 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
     private boolean mIsDiscoveryComplete;
 
     /**
+     * A value indicating if full descriptor discovery has been completed for this device object.
+     * This includes reading all descriptors for all characteristics in each available service.
+     *
+     */
+    private boolean mIsDescriptorDiscoveryComplete;
+
+    /**
      * Local index value for managing device discovery.
      */
-    private int mSerivceIndex;
+    private int mServiceIndex;
 
     /**
      * Local index value for managing device discovery.
@@ -72,22 +82,34 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
     private int mCharacteristicIndex;
 
     /**
+     * Local index value for managing descriptor discovery.
+     */
+    private int mDescriptorIndex;
+
+    /**
      * Creates a new base device object.
      *
-     * @param bluetoothDevice The Bluetooth device for this base device
-     * @param serviceList The list of services available for the Bluetooth device
-     * @param scanRecord The advertising data for this device
+     *  @param deviceName The local name of the device parsed from the advertising
+     *                    data {@code scanRecord} or set using {@link BluetoothDevice#getName()}.
+     *                    See {@link RigAvailableDeviceData#parseNameFromScanRecord(byte[],
+     *                    BluetoothDevice)}
+     *  @param bluetoothDevice The Bluetooth device for this base device
+     *  @param serviceList The list of services available for the Bluetooth device
+     *  @param scanRecord The advertising data for this device
      */
-    public RigLeBaseDevice(BluetoothDevice bluetoothDevice, List<BluetoothGattService> serviceList, byte[] scanRecord) {
+    public RigLeBaseDevice(String deviceName,
+                           BluetoothDevice bluetoothDevice,
+                           List<BluetoothGattService> serviceList,
+                           byte[] scanRecord) {
         mBluetoothDevice = bluetoothDevice;
-        mName = mBluetoothDevice.getName();
+        mName = deviceName;
         mBluetoothGattServices = new ArrayList<>();
         if (serviceList != null) {
             UUID mGapUuid = UUID.fromString("00001800-0000-1000-8000-00805f9b34fb");
             UUID mGattUuid = UUID.fromString("00001801-0000-1000-8000-00805f9b34fb");
             for(BluetoothGattService service : serviceList) {
                 if(service.getUuid().equals(mGapUuid) ||
-                   service.getUuid().equals(mGattUuid)) {
+                        service.getUuid().equals(mGattUuid)) {
                     //Ignore GAP and GATT services for now
                     continue;
                 }
@@ -96,6 +118,19 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
         }
         mScanRecord = scanRecord;
         mIsDiscoveryComplete = false;
+    }
+
+    /**
+     * Creates a new base device object using {@link BluetoothDevice#getName()}
+     *
+     * @param bluetoothDevice The Bluetooth device for this base device
+     * @param serviceList The list of services available for the Bluetooth device
+     * @param scanRecord The advertising data for this device
+     */
+    public RigLeBaseDevice(BluetoothDevice bluetoothDevice,
+                           List<BluetoothGattService> serviceList,
+                           byte[] scanRecord) {
+        this(bluetoothDevice.getName(), bluetoothDevice, serviceList, scanRecord);
     }
 
     /**
@@ -170,7 +205,7 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
      */
     public void runDiscovery() {
         RigLog.d("__runDiscovery__");
-        mSerivceIndex = 0;
+        mServiceIndex = 0;
         mCharacteristicIndex = 0;
 
         didUpdateValue(null, null);
@@ -183,6 +218,32 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
      */
     public void setObserver(IRigLeBaseDeviceObserver observer) {
         mObserver = observer;
+    }
+
+    /**
+     * Sets the descriptor observer for this device.
+     *
+     * @param observer The observer object
+     */
+    public void setDescriptorObserver(IRigLeDescriptorObserver observer) {
+        mDescriptorObserver = observer;
+    }
+
+    /**
+     * Reads the value of the characteristic
+     *
+     * @param descriptor The descriptor to read
+     * @return Return false if the descriptor is invalid
+     */
+    public boolean readDescriptor(BluetoothGattDescriptor descriptor) {
+        RigLog.d("RigLeBaseDevice.readDescriptor");
+        if(descriptor == null) {
+            RigLog.w("Descriptor was null! Ignoring read request.");
+            return false;
+        }
+
+        RigCoreBluetooth.getInstance().readDescriptor(mBluetoothDevice, descriptor);
+        return true;
     }
 
     /**
@@ -278,8 +339,8 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
             * calls to this function, the characteristic and service indexes are not reset.  This
             * keeps the code from starting the search over every time since the search is actually
             * just being paused while a read completes. */
-            while(mSerivceIndex < mBluetoothGattServices.size()) {
-                BluetoothGattService service = mBluetoothGattServices.get(mSerivceIndex);
+            while(mServiceIndex < mBluetoothGattServices.size()) {
+                BluetoothGattService service = mBluetoothGattServices.get(mServiceIndex);
                 while (mCharacteristicIndex < service.getCharacteristics().size()) {
                     BluetoothGattCharacteristic c = service.getCharacteristics().get(mCharacteristicIndex);
                     mCharacteristicIndex++;
@@ -290,8 +351,8 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
                 }
                 mCharacteristicIndex = 0;
                 RigLog.d("Characteristic: " + mCharacteristicIndex);
-                mSerivceIndex++;
-                RigLog.d("Service: " + mSerivceIndex);
+                mServiceIndex++;
+                RigLog.d("Service: " + mServiceIndex);
             }
 
             /* At this point, all services and characteristics have been exhausted. */
@@ -299,6 +360,8 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
             if(mObserver != null) {
                 RigLog.d("Discovery did complete");
                 mObserver.discoveryDidComplete(this);
+            } else {
+                RigLog.e("Discovery did complete but the observer was null!");
             }
         }
     }
@@ -313,6 +376,21 @@ public class RigLeBaseDevice implements IRigCoreBluetoothDeviceObserver {
     public void didWriteValue(BluetoothDevice btDevice, BluetoothGattCharacteristic characteristic) {
         if(mObserver != null) {
             mObserver.didWriteValue(this, characteristic);
+        }
+    }
+
+    /**
+     * This callback is received from the low level Bluetooth API due to a read request
+     * on a BluetoothGattDescriptor.
+     *
+     * @param btDevice The device for which the descriptor read was requested
+     * @param descriptor The descriptor which was read
+     */
+    @Override
+    public void didReadDescriptor(BluetoothDevice btDevice, BluetoothGattDescriptor descriptor) {
+        if (mDescriptorObserver != null) {
+            mDescriptorObserver.didReadDescriptor(this, descriptor);
+
         }
     }
 }

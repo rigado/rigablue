@@ -147,9 +147,14 @@ public class RigCoreBluetooth implements IRigCoreListener {
         this.mContext = context;
     }
 
+    /**
+     * The discovery flag is reset here to handle cases where a bluetooth state change is
+     * received while discovery is running. 
+     */
     public void init() {
         RigLog.d("__RigCoreBluetooth.init__");
 
+        mIsDiscovering = false;
         mBluetoothLeService = new RigService(mContext, this);
         mBluetoothLeService.initialize();
         mContext.registerReceiver(mBluetoothStateReceiver, new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED));
@@ -158,31 +163,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
-            mLollipopScanCallback = new ScanCallback() {
-                @Override
-                public void onScanFailed(int errorCode) {
-                    super.onScanFailed(errorCode);
-                    RigLog.e("BLE Scan failed with error code " + errorCode);
-                }
-
-                @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-                @Override
-                public void onScanResult(int callbackType, ScanResult result) {
-                    super.onScanResult(callbackType, result);
-                    BluetoothDevice device = result.getDevice();
-                    int rssi = result.getRssi();
-                    ScanRecord scanRecord = result.getScanRecord();
-                    if (scanRecord == null) {
-                        return;
-                    }
-                    byte[] rawScanRecord = scanRecord.getBytes();
-                    if (isRelevantScanRecord(rawScanRecord)) {
-                        mDiscoveryObserver.didDiscoverDevice(device, rssi, rawScanRecord);
-                        RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());
-                    }
-                }
-            };
+            setUpLollipopScanCallback();
         } else {
             mLegacyScanCallback = new BluetoothAdapter.LeScanCallback() {
                 @Override
@@ -196,6 +177,34 @@ public class RigCoreBluetooth implements IRigCoreListener {
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setUpLollipopScanCallback() {
+        mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();
+        mLollipopScanCallback = new ScanCallback() {
+            @Override
+            public void onScanFailed(int errorCode) {
+                super.onScanFailed(errorCode);
+                RigLog.e("BLE Scan failed with error code " + errorCode);
+            }
+
+            @Override
+            public void onScanResult(int callbackType, ScanResult result) {
+                super.onScanResult(callbackType, result);
+                BluetoothDevice device = result.getDevice();
+                int rssi = result.getRssi();
+                ScanRecord scanRecord = result.getScanRecord();
+                if (scanRecord == null) {
+                    return;
+                }
+                byte[] rawScanRecord = scanRecord.getBytes();
+                if (isRelevantScanRecord(rawScanRecord)) {
+                    mDiscoveryObserver.didDiscoverDevice(device, rssi, rawScanRecord);
+                    RigLog.i("Name: " + device.getName() + ". Address: " + device.getAddress());
+                }
+            }
+        };
+    }
+
     public void finish() {
         RigLog.d("__RigCoreBluetooth.finish__");
         try {
@@ -207,8 +216,9 @@ public class RigCoreBluetooth implements IRigCoreListener {
     }
 
     public int getDeviceConnectionState(BluetoothDevice device) {
-        final BluetoothManager bluetoothManager = (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
-        return bluetoothManager.getConnectionState(device, BluetoothProfile.GATT);
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        return bluetoothManager.getConnectionState(device, BluetoothGatt.GATT_SERVER);
     }
 
     void startDiscovery(final UUID[] uuidList, long timeout) {
@@ -289,6 +299,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
         if (!checkBluetoothState()) {
             return;
         }
+
         mConnectingDevice = device;
         mBluetoothLeService.connect(device.getAddress());
         scheduleConnectionTimeout(timeout);
@@ -328,6 +339,13 @@ public class RigCoreBluetooth implements IRigCoreListener {
 
         IRigDataRequest request = new RigNotificationStateChangeRequest(device, characteristic, enableState);
         write(request);
+    }
+
+    public void readDescriptor(BluetoothDevice device, BluetoothGattDescriptor descriptor) {
+        RigLog.d("__RigCoreBluetooth.readDescriptor__");
+
+        IRigDataRequest request = new RigDescriptorReadRequest(device, descriptor);
+        read(request);
     }
 
     private synchronized void read(IRigDataRequest request) {
@@ -494,8 +512,9 @@ public class RigCoreBluetooth implements IRigCoreListener {
         mDiscoveryObserver = observer;
     }
 
-    private void clearQueue () {
+    private synchronized void clearQueue () {
         if (mOpsQueue != null) {
+            mIsDataOpInProgress = false;
             mOpsQueue.clear();
         }
     }
@@ -581,6 +600,17 @@ public class RigCoreBluetooth implements IRigCoreListener {
         RigLeBaseDevice baseDevice = getRigLeBaseDeviceForBluetoothDevice(bluetoothDevice);
         if(baseDevice != null) {
             baseDevice.didWriteValue(bluetoothDevice, characteristic);
+        }
+        nextOp();
+    }
+
+    @Override
+    public void onActionGattDescriptorRead(BluetoothDevice bluetoothDevice, BluetoothGattDescriptor descriptor) {
+        RigLog.d("__RigCoreBluetooth.onActionGattDescriptorRead__");
+        mIsDataOpInProgress = false;
+        RigLeBaseDevice baseDevice = getRigLeBaseDeviceForBluetoothDevice(bluetoothDevice);
+        if(baseDevice != null) {
+            baseDevice.didReadDescriptor(bluetoothDevice, descriptor);
         }
         nextOp();
     }

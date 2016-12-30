@@ -73,7 +73,12 @@ public class RigLeDiscoveryManager implements IRigCoreBluetoothDiscoveryObserver
     }
 
     /**
-     * Starts device discovery using the parameters of the device request.
+     * Starts device discovery using the parameters of the device request. Be careful
+     * about restarting the discovery process too frequently. On devices running Android N,
+     * if scanning is initiated more than 5 times in 30 seconds, all scans are blocked for the
+     * next 24.5 seconds.
+     *
+     * https://github.com/AltBeacon/android-beacon-library/issues/418
      *
      * @param request The request for this discovery session
      * @see RigDeviceRequest

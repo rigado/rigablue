@@ -1,6 +1,6 @@
 //
 //  @file RigLeBaseDevice.h
-//  @library Rigablue 
+//  @library Rigablue
 //
 //  Created by Eric Stutzenberger on 4/28/14.
 //  @copyright (c) 2014 Rigado, LLC. All rights reserved.
@@ -46,17 +46,6 @@
 - (void)didUpdateValueForCharacteristic:(CBCharacteristic*)characteristic forDevice:(RigLeBaseDevice*)device;
 
 /**
- *  @method didUpdateNotifyStateForCharacteristic:
- *
- *  This is called when a notification enable request has
- *  been request for a particular characteristic with the notify property set.
- *
- *  @param characteristic   The characteristic for which notifications were enabled.
- *  @param device           The device to which this characteristic belongs.
- */
-- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic*)characteristic forDevice:(RigLeBaseDevice*)device;
-
-/**
  *  @method didWriteValueForCharacteristic:
  *
  *  This method is called ONLY when a characteristic is writen with the property
@@ -67,6 +56,54 @@
  *  @param device           The device to which this characteristic belongs.
  */
 - (void)didWriteValueForCharacteristic:(CBCharacteristic*)characteristic forDevice:(RigLeBaseDevice*)device;
+
+/**
+ *  @method didUpdateNotifyStateForCharacteristic:
+ *
+ *  This is called when a notification enable request has
+ *  been request for a particular characteristic with the notify property set.
+ *
+ *  @param characteristic   The characteristic for which notifications were enabled.
+ *  @param device           The device to which this characteristic belongs.
+ */
+- (void)didUpdateNotifyStateForCharacteristic:(CBCharacteristic*)characteristic forDevice:(RigLeBaseDevice*)device;
+
+@optional
+
+/**
+ *  @method didDiscoverDescriptorsForCharacteristic:
+ *
+ *  This method is called when the device discovers a descriptor on a characteristic.
+ *
+ *  @param characteristic   The characteristic for which discovery has occurred.
+ *  @param device           The device to which this characteristic belongs.
+ *
+ *  @discussion This method is called when the device discovers a descriptor on a characteristic.
+ */
+- (void)didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice*)device;
+
+/**
+ *  @method didUpdateValueForDescriptor:
+ *
+ *  This is called when a read request is performed or when
+ *  a descriptor changes its value due to a notification from the peripheral.
+ *
+ *  @param descriptor       The descriptor for which the value was read.
+ *  @param device           The device to which this characteristic belongs.
+ */
+- (void)didUpdateValueForDescriptor:(CBDescriptor*)descriptor forDevice:(RigLeBaseDevice*)device;
+
+/**
+ *  @method didWriteValueForDescriptor:
+ *
+ *  This method is called when your app calls the writeValue:forDescriptor: method on the peripheral.
+ *
+ *  @param descriptor       The descriptor for which the value was read.
+ *  @param device           The device to which this characteristic belongs.
+ */
+- (void)didWriteValueForDescriptor:(CBDescriptor*)descriptor forDevice:(RigLeBaseDevice*)device;
+
+
 @end
 
 /**

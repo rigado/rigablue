@@ -109,6 +109,30 @@ public class RigLeConnectionManager implements IRigCoreBluetoothConnectionObserv
     }
 
     /**
+     * To clean up {@link android.bluetooth.BluetoothGatt} objects in a timely manner, you should
+     * cancel the connection if you have tried to connect to an available device, but have not yet
+     * received the actual base device in a connection callback.
+     *
+     * @param deviceToRemove The {@link RigAvailableDeviceData} used in
+     *                       {@code connectDevice}
+     *
+     * Example:
+     * <pre>
+     * {@code
+     * if (rigLeBaseDevice != null) {
+     *     connectionManager.disconnectDevice(rigLeBaseDevice);
+     * } else if (rigAvailableDeviceData != null) {
+     *     connectionManager.cancelConnection(rigAvailableDeviceData);
+     * }
+     * }
+     * </pre>
+     */
+    public void cancelConnection(RigAvailableDeviceData deviceToRemove) {
+        RigCoreBluetooth.getInstance()
+                .disconnectPeripheral(deviceToRemove.getBluetoothDevice());
+    }
+
+    /**
      * Disconnects from the device.
      * @param device The device to disconnect
      */
@@ -135,7 +159,12 @@ public class RigLeConnectionManager implements IRigCoreBluetoothConnectionObserv
     public void didConnectDevice(BluetoothDevice btDevice) {
         byte [] scanRecord;
         scanRecord = mAdvertisingDataList.get(btDevice);
-        RigLeBaseDevice baseDevice = new RigLeBaseDevice(btDevice, RigCoreBluetooth.getInstance().getServiceList(btDevice.getAddress()), scanRecord);
+        RigLeBaseDevice baseDevice =
+                new RigLeBaseDevice(
+                        mConnectingDevice.getUncachedName(),
+                        btDevice,
+                        RigCoreBluetooth.getInstance().getServiceList(btDevice.getAddress()),
+                        scanRecord);
         mAdvertisingDataList.remove(btDevice);
         RigAvailableDeviceData toRemove = null;
 

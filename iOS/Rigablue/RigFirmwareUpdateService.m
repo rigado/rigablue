@@ -38,6 +38,7 @@ NSString *kDisModelNumberUuidString = @"2a24";
 
 @implementation RigFirmwareUpdateService
 {
+    // TODO: - Remove central manager, it is not used as far as I can tell.
     CBCentralManager    *centralManager;
     RigLeBaseDevice     *updateDevice;
     RigAvailableDeviceData *availDevice;
@@ -383,6 +384,8 @@ NSString *kDisModelNumberUuidString = @"2a24";
     }
 }
 
+// TODO: This method should be renamed in a future release
+// resetConnectionManagerDelegateToOldDelegate would accurately describe its behaviour
 - (void)completeUpdate
 {
     [RigLeConnectionManager sharedInstance].delegate = oldDelegate;

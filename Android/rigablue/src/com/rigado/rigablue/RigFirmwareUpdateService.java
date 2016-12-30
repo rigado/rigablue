@@ -4,9 +4,12 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
+import android.support.annotation.NonNull;
 
 import java.util.List;
 import java.util.UUID;
+
+import static android.R.attr.data;
 
 /**
  *  RigFirmwareUpdateService.java
@@ -335,9 +338,12 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
 
     /**
+     * Deprecated as of v1.2.0.
+     *
      * Writes data to the update device's control point characteristic.
      * @param data The data to write
      */
+    @Deprecated
     public void writeDataToControlPoint(byte[] data) {
         if(mUpdateDevice == null) {
             RigLog.e("Update device is null!");
@@ -358,9 +364,33 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
 
     /**
-     * Writes data to the update device's packet characteristic.
-     * @param data The data to write
+     * Writes data to the update device's control point characteristic
+     *
+     * @param writeData The data to write as a {@code byte []}
+     * @return An instance of {@link RigDfuError} on failure, {@code null} on success.
      */
+    RigDfuError writeToControlPoint(@NonNull byte[] writeData) {
+        if(mUpdateDevice == null) {
+            RigLog.e("Not connected to a peripheral!");
+            return RigDfuError.errorFromCode(RigDfuError.BAD_PERIPHERAL);
+        }
+
+        if(mControlPoint == null) {
+            RigLog.e("Control point characteristic is missing!");
+            return RigDfuError.errorFromCode(RigDfuError.CONTROL_POINT_CHARACTERISTIC_MISSING);
+        }
+
+        mUpdateDevice.writeCharacteristic(mControlPoint, writeData);
+        return null;
+    }
+
+    /**
+     * Deprecated as of v1.2.0.
+     *
+     * Writes data to the update device's packet characteristic.
+     * @param data The data to write.
+     */
+    @Deprecated
     public void writeDataToPacketCharacteristic(byte [] data) {
         if(mUpdateDevice == null) {
             RigLog.e("Update device is null!");
@@ -381,22 +411,44 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
 
     /**
+     * Writes data to the update device's packet characteristic.
+     *
+     * @param writeData The data to write as a {@code byte []}
+     * @return An instance of {@link RigDfuError} on failure, {@code null} on success.
+     */
+    RigDfuError writeToPacketCharacteristic(byte [] writeData) {
+        if(mUpdateDevice == null) {
+            RigLog.e("Not connected to a peripheral!");
+            return RigDfuError.errorFromCode(RigDfuError.BAD_PERIPHERAL);
+        }
+
+        if(mPacketChar == null) {
+            RigLog.e("Packet characteristic missing!");
+            return RigDfuError.errorFromCode(RigDfuError.CONTROL_POINT_CHARACTERISTIC_MISSING);
+        }
+
+        mUpdateDevice.writeCharacteristic(mPacketChar, writeData);
+        return null;
+    }
+
+    /**
      * Enables notifications for the DFU service control point.
      */
-    public void enableControlPointNotifications() {
+    RigDfuError enableControlPointNotifications() {
         RigLog.d("__RigFirmwareUpdateService.enableControlPointNotifications__");
 
         if(mUpdateDevice == null) {
             RigLog.e("Update device is null!");
-            return;
+            return RigDfuError.errorFromCode(RigDfuError.BAD_PERIPHERAL);
         }
 
         if(mControlPoint == null) {
             RigLog.e("Dfu control point is null!");
-            return;
+            return RigDfuError.errorFromCode(RigDfuError.CONTROL_POINT_CHARACTERISTIC_MISSING);
         }
 
         mUpdateDevice.setCharacteristicNotification(mControlPoint, true);
+        return null;
     }
 
     /**
@@ -467,7 +519,9 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
             /* This may be the original device disconnect.  Pass it on to the original connection
              * manager delegate.
              */
-            mOldConnectionObserver.didDisconnectDevice(btDevice);
+            if (mOldConnectionObserver != null) {
+                mOldConnectionObserver.didDisconnectDevice(btDevice);
+            }
         }
     }
 
@@ -554,6 +608,13 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
     }
     //endregion
 
+    /**
+     * Detects the Dfu version (200 or 300) and sets the firmware
+     * update UUIDs accordingly. Clears the list of UUIDs if
+     * a matching service is not found.
+     *
+     * @param device An instance of #RigLeBaseDevice
+     */
     private void setDfuUUIDsFromDevice (RigLeBaseDevice device) {
         List<BluetoothGattService> fwServices = device.getServiceList();
         for (BluetoothGattService service: fwServices) {
@@ -574,6 +635,9 @@ public class RigFirmwareUpdateService implements IRigLeConnectionManagerObserver
         clearDfuUUIDs();
     }
 
+    /**
+     * Resets the Dfu firmware update UUIDs
+     */
     private void clearDfuUUIDs() {
         mUpdateDfuServiceUuidString = null;
         mUpdateDfuControlPointUuidString = null;

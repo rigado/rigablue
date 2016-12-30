@@ -50,6 +50,26 @@
 		</Token>
 		
 		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didWriteValueForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html">@method didWriteValueForCharacteristic:</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)didWriteValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>characteristic</Name>
+					<Abstract type="html">The characteristic that was written.</Abstract>
+				</Parameter><Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device to which this characteristic belongs.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didWriteValueForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="14"/>
+		</Token>
+		
+		<Token>
 			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didUpdateNotifyStateForCharacteristic:forDevice:</TokenIdentifier>
 			<Abstract type="html">@method didUpdateNotifyStateForCharacteristic:</Abstract>
 			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
@@ -70,22 +90,62 @@
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didWriteValueForCharacteristic:forDevice:</TokenIdentifier>
-			<Abstract type="html">@method didWriteValueForCharacteristic:</Abstract>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didDiscoverDescriptorsForCharacteristic:forDevice:</TokenIdentifier>
+			<Abstract type="html">@method didDiscoverDescriptorsForCharacteristic:</Abstract>
 			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
 			
-			<Declaration>- (void)didWriteValueForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
+			<Declaration>- (void)didDiscoverDescriptorsForCharacteristic:(CBCharacteristic *)characteristic forDevice:(RigLeBaseDevice *)device</Declaration>
 			<Parameters>
 				<Parameter>
 					<Name>characteristic</Name>
-					<Abstract type="html">The characteristic that was written.</Abstract>
+					<Abstract type="html">The characteristic for which discovery has occurred.</Abstract>
 				</Parameter><Parameter>
 					<Name>device</Name>
 					<Abstract type="html">The device to which this characteristic belongs.</Abstract>
 				</Parameter>
 			</Parameters>
 			
-			<Anchor>//api/name/didWriteValueForCharacteristic:forDevice:</Anchor>
+			<Anchor>//api/name/didDiscoverDescriptorsForCharacteristic:forDevice:</Anchor>
+            <NodeRef refid="14"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didUpdateValueForDescriptor:forDevice:</TokenIdentifier>
+			<Abstract type="html">@method didUpdateValueForDescriptor:</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)didUpdateValueForDescriptor:(CBDescriptor *)descriptor forDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>descriptor</Name>
+					<Abstract type="html">The descriptor for which the value was read.</Abstract>
+				</Parameter><Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device to which this characteristic belongs.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didUpdateValueForDescriptor:forDevice:</Anchor>
+            <NodeRef refid="14"/>
+		</Token>
+		
+		<Token>
+			<TokenIdentifier>//apple_ref/occ/intfm/RigLeBaseDeviceDelegate/didWriteValueForDescriptor:forDevice:</TokenIdentifier>
+			<Abstract type="html">@method didWriteValueForDescriptor:</Abstract>
+			<DeclaredIn>RigLeBaseDevice.h</DeclaredIn>
+			
+			<Declaration>- (void)didWriteValueForDescriptor:(CBDescriptor *)descriptor forDevice:(RigLeBaseDevice *)device</Declaration>
+			<Parameters>
+				<Parameter>
+					<Name>descriptor</Name>
+					<Abstract type="html">The descriptor for which the value was read.</Abstract>
+				</Parameter><Parameter>
+					<Name>device</Name>
+					<Abstract type="html">The device to which this characteristic belongs.</Abstract>
+				</Parameter>
+			</Parameters>
+			
+			<Anchor>//api/name/didWriteValueForDescriptor:forDevice:</Anchor>
             <NodeRef refid="14"/>
 		</Token>
 		

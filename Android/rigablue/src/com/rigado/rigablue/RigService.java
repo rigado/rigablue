@@ -110,13 +110,18 @@ public class RigService {
     }
 
     /**
+     * {@Deprecated} See {@link RigCoreBluetooth#getDeviceConnectionState(BluetoothDevice)}
+     *
      * Returns the current connection state for the device
+     *
      * @param device The device for which to retrieve the connection state
      * @return The connection state
      */
+    @Deprecated
     public int getConnectionStateForDevice(BluetoothDevice device) {
-        BluetoothGatt gatt = mBluetoothGattHashMap.get(device.getAddress());
-        return gatt.getConnectionState(device);
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) mContext.getSystemService(Context.BLUETOOTH_SERVICE);
+        return bluetoothManager.getConnectionState(device, BluetoothGatt.GATT_SERVER);
     }
 
     /**
@@ -143,7 +148,7 @@ public class RigService {
 
         new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 boolean isAlreadyConnected = false;
 
                 if (mBluetoothGattHashMap.containsKey(address)) {
@@ -195,7 +200,7 @@ public class RigService {
         
         new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 BluetoothGatt gatt = mBluetoothGattHashMap.get(address);
                 if(gatt != null) {
                     mBluetoothGattHashMap.get(address).disconnect();
@@ -213,7 +218,7 @@ public class RigService {
         RigLog.d("close");
         new Thread(new Runnable() {
             @Override
-            public void run() {
+            public synchronized void run() {
                 for (BluetoothGatt bluetoothGatt : mBluetoothGattHashMap.values()) {
                     if (bluetoothGatt != null) {
                         bluetoothGatt.close();
@@ -273,6 +278,32 @@ public class RigService {
         }
     }
 
+    /**
+     * Request a read on a given {@code BluetoothGattDescriptor}. The read result is reported
+     * asynchronously through the {@code BluetoothGattCallback#onDescriptorRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattDescriptor, int)}
+     * callback.
+     *
+     * @param address The address of the destination device.
+     * @param descriptor The descriptor to read
+     */
+    public synchronized void readDescriptor(final String address, final BluetoothGattDescriptor descriptor) {
+        if(mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
+            RigLog.w("BluetoothAdapter not initialized or device already disconnected");
+            return;
+        }
+
+        if(descriptor == null) {
+            RigLog.e("Invalid descriptor; Descriptor is null!");
+            return;
+        }
+
+        RigLog.i("readDescriptor for " + address);
+
+        if(!mBluetoothGattHashMap.get(address).readDescriptor(descriptor)) {
+            RigLog.e("readDescriptor failed!");
+        }
+    }
+
     private static final UUID CLIENT_CHARACTERISTIC_CONFIGURATION =
             UUID.fromString("00002902-0000-1000-8000-00805f9b34fb");
 
@@ -299,7 +330,8 @@ public class RigService {
         BluetoothGattDescriptor descriptor = characteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIGURATION);
         if (descriptor != null) {
             RigLog.d("descriptor = " + descriptor.getUuid());
-            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+            descriptor.setValue(enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                    : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
             mBluetoothGattHashMap.get(address).writeDescriptor(descriptor);
         } else {
             RigLog.w("descriptor = null");

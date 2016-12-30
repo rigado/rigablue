@@ -22,7 +22,7 @@ public interface IRigLeDiscoveryManagerObserver {
      * in the device request.
      *
      * @param device The available device information for the discovered device
-     * @see RigAvailableDevice
+     * @see RigAvailableDeviceData
      */
     void didDiscoverDevice(RigAvailableDeviceData device);
 

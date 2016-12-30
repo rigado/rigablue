@@ -32,4 +32,5 @@ public interface IRigCoreListener {
     void onActionGattDataNotification(BluetoothGattCharacteristic characteristic, BluetoothDevice bluetoothDevice);
     void onActionGattDescriptorWrite(BluetoothGattDescriptor descriptor, BluetoothDevice bluetoothDevice);
     void onActionGattCharWrite(BluetoothDevice bluetoothDevice, BluetoothGattCharacteristic characteristic);
+    void onActionGattDescriptorRead(BluetoothDevice bluetoothDevice, BluetoothGattDescriptor descriptor);
 }

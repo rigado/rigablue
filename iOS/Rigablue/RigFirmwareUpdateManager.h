@@ -49,6 +49,18 @@
  */
 - (void)updateFailed:(NSString*)status errorCode:(RigDfuError_t)error;
 
+/**
+ *  This method is called when the firmware update is canceled.
+ *
+ */
+- (void)updateCanceled;
+
+/**
+ *  This method is called when there is an error with the cancel firmware update.
+ *
+ */
+- (void)cancelFailedWithErrorCode:(RigDfuError_t)error;
+
 @end
 
 @interface RigFirmwareUpdateManager : NSObject
@@ -83,4 +95,11 @@
                 activateCommand:(uint8_t*)command activateCommandLen:(uint8_t)commandLen;
 
 - (RigDfuError_t)performUpdate:(RigFirmwareUpdateRequest*)request;
+
+/**
+ *  This method cancels a firmware update.
+ *
+ */
+- (void)cancelFirmwareUpdate;
+
 @end
