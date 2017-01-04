@@ -24,7 +24,7 @@
 - Add null check for observers in some circumstances
 - Synchronize methods that modify the gatt hashmap & clear queue operation
 - Update targeted API handling to prevent linter error
-- Fix and deprecate RigService method to retreive connection state (use RigCoreBluetooth instead)
+- Fix and deprecate RigService method to retrieve connection state (use RigCoreBluetooth instead)
 - Set firmware service at start of DFU to prevent NPEs on update failures
 - Write the correct notification toggle value to the descriptor
 
@@ -33,7 +33,7 @@
 - Support cancellation of firmware updates
 - Add ability to cancel connection requests
 - Add ability to read ble descriptors
-- Mark `opInProgress` as false whe queue is cleared; prevents unresponsive operations after a reconnection.
+- Mark `opInProgress` as false when queue is cleared; prevents unresponsive operations after a reconnection.
 - Stop device discovery on cancel
 - Reset discovery flag on initialization
 - Parse name from raw scan record bytes
