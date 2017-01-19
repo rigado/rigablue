@@ -125,6 +125,19 @@ public class RigService {
     }
 
     /**
+     * Convenience method to return the current connection state for the device.
+     *
+     * @param address The address of the device wfor which to retrieve the connection state
+     * @return True if connected
+     */
+    private synchronized boolean isConnected(String address) {
+        return RigCoreBluetooth.getInstance()
+                .getDeviceConnectionState(
+                        mBluetoothGattHashMap.get(address).getDevice())
+                == BluetoothProfile.STATE_CONNECTED;
+    }
+
+    /**
      * Connects to the GATT server hosted on the Bluetooth LE device.
      *
      * @param address The device address of the destination device.
@@ -240,16 +253,27 @@ public class RigService {
     public synchronized void readCharacteristic(final String address, final BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
             RigLog.e("BluetoothAdapter not initialized or device already disconnected");
+            RigCoreBluetooth.getInstance().requestDidFail();
             return;
         }
 
         if(characteristic == null) {
             RigLog.e("Invalid characteristic; Characteristic is null!");
+            RigCoreBluetooth.getInstance().requestDidFail();
+            return;
+        }
+
+        if (!isConnected(address)) {
+            RigLog.w("Disconnected! Aborting read request for " + address);
+            RigCoreBluetooth.getInstance().requestDidFail();
             return;
         }
 
         RigLog.d("readCharacteristic - " + Arrays.toString(characteristic.getValue()));
-        mBluetoothGattHashMap.get(address).readCharacteristic(characteristic);
+        if (!mBluetoothGattHashMap.get(address).readCharacteristic(characteristic)) {
+            RigLog.w("Failed to initialize read request!");
+            RigCoreBluetooth.getInstance().requestDidFail();
+        }
     }
 
     /**
@@ -263,44 +287,61 @@ public class RigService {
     public synchronized void writeCharacteristic(final String address, final BluetoothGattCharacteristic characteristic) {
         if (mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
             RigLog.w("BluetoothAdapter not initialized or device already disconnected");
+            RigCoreBluetooth.getInstance().requestDidFail();
             return;
         }
 
-        if(characteristic == null) {
+        if (characteristic == null) {
             RigLog.e("Invalid characteristic; Characteristic is null!");
+            RigCoreBluetooth.getInstance().requestDidFail();
+            return;
+        }
+
+        if (!isConnected(address)) {
+            RigLog.w("Disconnected! Aborting write request for " + address);
+            RigCoreBluetooth.getInstance().requestDidFail();
             return;
         }
 
         RigLog.i("writeCharacteristic for " + address + " with value - " + Arrays.toString(characteristic.getValue()));
-
-        if(!mBluetoothGattHashMap.get(address).writeCharacteristic(characteristic)) {
-            RigLog.e("writeCharacteristic failed!");
+        if (!mBluetoothGattHashMap.get(address).writeCharacteristic(characteristic)) {
+            RigLog.e("Failed to initialize write request!");
+            RigCoreBluetooth.getInstance().requestDidFail();
         }
     }
 
     /**
      * Request a read on a given {@code BluetoothGattDescriptor}. The read result is reported
-     * asynchronously through the {@code BluetoothGattCallback#onDescriptorRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattDescriptor, int)}
+     * asynchronously through the
+     * {@code BluetoothGattCallback#onDescriptorRead(android.bluetooth.BluetoothGatt, android.bluetooth.BluetoothGattDescriptor, int)}
      * callback.
      *
      * @param address The address of the destination device.
      * @param descriptor The descriptor to read
      */
     public synchronized void readDescriptor(final String address, final BluetoothGattDescriptor descriptor) {
-        if(mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
+        if (mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
             RigLog.w("BluetoothAdapter not initialized or device already disconnected");
+            RigCoreBluetooth.getInstance().requestDidFail();
             return;
         }
 
-        if(descriptor == null) {
+        if (descriptor == null) {
             RigLog.e("Invalid descriptor; Descriptor is null!");
+            RigCoreBluetooth.getInstance().requestDidFail();
+            return;
+        }
+
+        if (!isConnected(address)) {
+            RigLog.w("Disconnected! Aborting read descriptor request for " + address);
+            RigCoreBluetooth.getInstance().requestDidFail();
             return;
         }
 
         RigLog.i("readDescriptor for " + address);
-
-        if(!mBluetoothGattHashMap.get(address).readDescriptor(descriptor)) {
-            RigLog.e("readDescriptor failed!");
+        if (!mBluetoothGattHashMap.get(address).readDescriptor(descriptor)) {
+            RigLog.e("Failed to initialize read descriptor request!");
+            RigCoreBluetooth.getInstance().requestDidFail();
         }
     }
 
@@ -314,27 +355,45 @@ public class RigService {
      * @param characteristic Characteristic to act on
      * @param enabled        If true, enable notification; false otherwise
      */
-    public synchronized void setCharacteristicNotification(final String address, final BluetoothGattCharacteristic characteristic, final boolean enabled) {
+    public synchronized void setCharacteristicNotification(final String address,
+                                                           final BluetoothGattCharacteristic characteristic,
+                                                           final boolean enabled) {
         if (mBluetoothAdapter == null || mBluetoothGattHashMap.get(address) == null) {
             RigLog.w("BluetoothAdapter not initialized or device already disconnected");
+            RigCoreBluetooth.getInstance().requestDidFail();
             return;
         }
 
-        if(characteristic == null) {
+        if (characteristic == null) {
             RigLog.e("Invalid characteristic; Characteristic is null!");
+            RigCoreBluetooth.getInstance().requestDidFail();
+            return;
+        }
+
+        if (!isConnected(address)) {
+            RigLog.w("Disconnected! Aborting notify request for " + address);
+            RigCoreBluetooth.getInstance().requestDidFail();
             return;
         }
 
         RigLog.d("setCharacteristicNotification - " + Arrays.toString(characteristic.getValue()));
         mBluetoothGattHashMap.get(address).setCharacteristicNotification(characteristic, enabled);
-        BluetoothGattDescriptor descriptor = characteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIGURATION);
-        if (descriptor != null) {
-            RigLog.d("descriptor = " + descriptor.getUuid());
-            descriptor.setValue(enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
-                    : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
-            mBluetoothGattHashMap.get(address).writeDescriptor(descriptor);
-        } else {
-            RigLog.w("descriptor = null");
+
+        BluetoothGattDescriptor descriptor =
+                characteristic.getDescriptor(CLIENT_CHARACTERISTIC_CONFIGURATION);
+
+        if (descriptor == null) {
+            RigLog.w("The Client Characteristic Configuration Descriptor was null!");
+            RigCoreBluetooth.getInstance().requestDidFail();
+            return;
+        }
+
+        descriptor.setValue(enabled ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE
+                : BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE);
+
+        if (!mBluetoothGattHashMap.get(address).writeDescriptor(descriptor)) {
+            RigLog.e("Failed to initialize notification request!");
+            RigCoreBluetooth.getInstance().requestDidFail();
         }
     }
 
