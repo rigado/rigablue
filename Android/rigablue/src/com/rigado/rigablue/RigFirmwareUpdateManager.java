@@ -371,11 +371,24 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     }
 
     /**
-     * Cancels an in progress firmware update. Sets #FirmwareManagerStateEnum to `State_Cancelled`,
-     * prevents reconnection attempts, and sends a reset command to the bootloader. The reset
-     * will trigger the `didDisconnectDevice` or `didDisconnectPeripheral` callbacks depending
-     * on connection state at the time of the cancel. Either callback will pass
-     * the correct #RigDfuError code to `handleUpdateError`.
+     * Cancels an in progress firmware update. Sets {@code mState} to
+     * {@link FirmwareManagerStateEnum#State_Cancelled} and prevents reconnection attempts.
+     *
+     * This method should only be called after a successful connection to the bootloader. We send a
+     * reset command to potentially reset any long-running bootloader advertising process.
+     *
+     * However, if RigDfu has been discovered, and a connection is in progress, but not completed,
+     * it may still continue to connect in the background. To prevent this, store a reference to the
+     * bootloader {@link RigAvailableDeviceData} and cancel the pending connection before calling
+     * {@link #cancelUpdate()}. See the below example:
+     *
+     * <code>
+     *     mConnectionManager.cancelConnection(mRigDfuAvailableDeviceData);
+     * </code>
+     *
+     * The reset (or cancelled connection) will trigger {@link #didDisconnectDevice(BluetoothDevice)}
+     * or {@link #didDisconnectPeripheral()} depending on connection state at the time of the cancel.
+     * Either callback will pass the correct error code to {@link #handleUpdateError(RigDfuError)}.
      *
      */
     public void cancelUpdate() {
@@ -394,6 +407,7 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
 
         byte [] data = { (byte)DfuOpCodeEnum.DfuOpCode_SystemReset.ordinal() };
         final RigDfuError error = mFirmwareUpdateService.writeToControlPoint(data);
+
         if (error != null) {
             RigLog.w("Unable to cancel firmware update!");
             handleUpdateError(error);
@@ -1219,11 +1233,8 @@ public class RigFirmwareUpdateManager implements IRigLeDiscoveryManagerObserver,
     /**
      * Called after a successful connection has been made to the bootloader device.
      *
-     * We check for `State_Cancelled` here and trigger a reset if the update has been
-     * cancelled. Currently, there is no way to tell how the bootloader was
-     * entered. The firmware decides whether or not the bootloader advertises for 2 seconds
-     * or 3 minutes. We call #cancelUpdate only after a successful connection attempt so
-     * that we can potentially reset any long-running bootloader advertising process.
+     * We check for {@link FirmwareManagerStateEnum#State_Cancelled} here and trigger a reset if
+     * the update has been cancelled. See {@link #cancelUpdate()} for more information.
      *
      * @param device The newly connected device
      */
