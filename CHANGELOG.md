@@ -1,5 +1,19 @@
 # Change Log
 
+## [1.2.1] - 2017-01-20
+
+### Android
+
+#### Fixed
+
+- Use the correct javadocs deprecated tag
+- Mark `opInProgress` as false when a queue request fails to prevent unresponsive operations after a reconnection.
+
+#### Changed
+
+- Improve `RigDfuError` documentation
+
+
 ## [1.2] - 2016-12-30
 
 ### iOS
