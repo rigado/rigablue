@@ -180,7 +180,7 @@ public class RigCoreBluetooth implements IRigCoreListener {
     /**
      * Reset the flag when write/read/notify requests fail to prevent blocking the queue.
      */
-    public void requestDidFail() {
+    void requestDidFail() {
         RigLog.w("__RigCoreBluetooth.requestDidFail__");
         mIsDataOpInProgress = false;
     }
