@@ -110,9 +110,10 @@ public class RigService {
     }
 
     /**
-     * {@Deprecated} See {@link RigCoreBluetooth#getDeviceConnectionState(BluetoothDevice)}
-     *
      * Returns the current connection state for the device
+     *
+     * @deprecated Use {@link RigCoreBluetooth#getDeviceConnectionState(BluetoothDevice)} instead.
+     *
      *
      * @param device The device for which to retrieve the connection state
      * @return The connection state
