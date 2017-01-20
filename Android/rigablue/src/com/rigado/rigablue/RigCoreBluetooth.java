@@ -177,6 +177,14 @@ public class RigCoreBluetooth implements IRigCoreListener {
         }
     }
 
+    /**
+     * Reset the flag when write/read/notify requests fail to prevent blocking the queue.
+     */
+    void requestDidFail() {
+        RigLog.w("__RigCoreBluetooth.requestDidFail__");
+        mIsDataOpInProgress = false;
+    }
+
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void setUpLollipopScanCallback() {
         mBleScanner = mBluetoothAdapter.getBluetoothLeScanner();

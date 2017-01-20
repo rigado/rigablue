@@ -27,27 +27,35 @@ public class RigDfuError {
     public static final int PERIPHERAL_NOT_SET = -4;
     /** The firmware update request was initialized with a null parameter */
     public static final int INVALID_PARAMETER = -5;
-    /** Failed to validate the firmware image after a successful transfer */
+    /**
+     * Failed to validate the firmware image after a successful transfer. It is possible that trying
+     * again may fix it.
+     */
     public static final int IMAGE_VALIDATION_FAILURE = -6;
-    /** Unused in iOS **/
+    /**
+     * Failed to activate the firmware. It is possible that trying again may fix it.
+     */
     public static final int IMAGE_ACTIVATION_FAILURE = -7;
     /**
-     * The image on the device before patching does not match the image the patch was started from.
+     * The CRC of the image on the device before patching does not match the expected CRC. This is
+     * an unrecoverable error that has to do with having the wrong patch file.
      */
     public static final int PATCH_CURRENT_IMAGE_CRC_FAILURE = -8;
     /**
-     * Replaces error {@code IMAGE_VALIDATION_FAILURE} for patch binaries
-     * Unused in iOS
+     * Replaces error {@code IMAGE_VALIDATION_FAILURE} for patch binaries. This means that the CRC
+     * of the firmware after patching did not match the expected CRC. Retrying may recover from
+     * this error, but unlikely.
      */
     public static final int POST_PATCH_IMAGE_CRC_FAILURE = -9;
     /**
-     * Unused, we handle connection failures with {@code CONNECTION_FAILED},
-     * {@code CONNECTION_TIMEOUT}, and {@code BOOTLOADER_DISCONNECT}
+     * This means that the update manager could not connect to RigDfu. Currently unused, we handle
+     * connection failures with {@code CONNECTION_FAILED}, {@code CONNECTION_TIMEOUT}, and
+     * {@code BOOTLOADER_DISCONNECT}
      */
     public static final int COULD_NOT_CONNECT = -10;
 
     /**
-     * Received unexpected data after trying to initialize a patch update
+     * An unknown error occurred.
      */
     public static final int UNKNOWN_ERROR = -11;
 
@@ -62,7 +70,13 @@ public class RigDfuError {
     public static final int PATCH_INIT_WRITE_FAILURE = -33;
     /** Unused */
     public static final int FIRMWARE_VALIDATION_INIT_FAILURE = -34;
+    /**
+     * Called if the bootloader fails to connect or if it disconnects during the update process.
+     */
     public static final int BOOTLOADER_DISCONNECT = -35;
+    /**
+     * An in progress firmware update was cancelled by the user.
+     */
     public static final int FIRMWARE_UPDATE_CANCELLED = -36;
 
     private static final Map<Integer, String> errorReasons;
