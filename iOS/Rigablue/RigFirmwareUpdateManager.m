@@ -596,18 +596,6 @@ typedef enum FirmwareManagerState_enum
 }
 
 #pragma mark - LeFirmwareUpdateServiceDelegate Methods
-/**
- *  This method is sent from the delegate protocol once the device is registered as connected by CoreBluetooth.
- */
-- (void)didConnectPeripheral
-{
-    //Sent as a delegate method but not needed for this implementation
-    RigDfuError_t result = [firmwareUpdateService triggerServiceDiscovery];
-    if (result != DfuError_None) {
-        [self firmwareUpdateFailedFromError:result withErrorMessage:@"Failed to initiate discovery for update device."];
-        [self cleanUpAfterFailure];
-    }
-}
 
 /**
  *  This method is sent from the delegate protocol once device service and characteristic discovery is complete.
