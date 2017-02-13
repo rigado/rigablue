@@ -32,8 +32,6 @@
 #define VALIDATE_FIRMWARE_IMAGE                 4
 #define ACTIVATE_FIRMWARE_AND_RESET             5
 #define SYSTEM_RESET                            6
-#define ERASE_AND_RESET                         9
-#define ERASE_SIZE_REQUEST                      10
 #define INITIALIZE_PATCH                        10
 #define RECEIVE_PATCH_IMAGE                     11
 
@@ -858,40 +856,6 @@ typedef enum FirmwareManagerState_enum
                 NSLog(@"Error occurred during firmware validation");
                 [self firmwareUpdateFailedFromError:DfuError_ImageValidationFailure withErrorMessage:@"Firmware Validation Failed!"];
                 [self cleanUpAfterFailure];
-            }
-        }
-    } else if (opCode == RECEIVED_OPCODE && request == ERASE_SIZE_REQUEST) {
-        if (value[2] == OPERATION_SUCCESS) {
-            //NOTE: This is not used for the dual bank bootloader.  Also, as of S110 7.0, it is not nessary to disable the
-            //radio to read/write to/from the internal flash of the part.
-            //This message is sent by the DFU after an erase size request.  Initially, if not earsed, the erase
-            //size request will return 0.  This will trigger the firmware update manager to send an erase and
-            //reset command to the device which will then cause the device to disconnect and perform the
-            //erase.  Once that is complete, the update manager will reconnect, perform discovery, and then send
-            //another erase size request.  At that point, the erase size should be greater than the size of the
-            //image to be sent.  If this is the case, then the firmware update is started by sending the DFU Start
-            //command.  Once this command is written successfully, the didWriteValueToCharacteristic callback will
-            //cause the firmware image size to be written to the device.  Once received, this will trigger the DFU
-            //to send the DFU Start response operation code and firmware transfer will begin.  See the first if
-            //condition in this function.
-            totalBytesErased = (value[3] + (value[4] << 8) + (value[5] << 16) + (value[6] << 24)) & 0xFFFFFFFF;
-            if (totalBytesErased < [self getImageSize]) {
-                uint8_t cmd = ERASE_AND_RESET;
-                NSLog(@"Sending ERASE_AND_RESET opcode");
-                if (state == State_CheckEraseAfterReset) {
-                    state = State_ReconnectAfterInitialFlashErase;
-                }
-                firmwareUpdateService.shouldReconnectToPeripheral = YES;
-                [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
-            } else {
-                /* Device already erased, continue with firmware update */
-                uint8_t cmd = DFU_START;
-                NSLog(@"Sending DFU_START opcode");
-                shouldWaitForErasedSize = NO;
-                if (state == State_CheckEraseAfterReset) {
-                    state = State_TransferringRadioImage;
-                }
-                [firmwareUpdateService writeDataToControlPoint:&cmd withLen:sizeof(cmd) shouldGetResponse:YES];
             }
         }
     }
