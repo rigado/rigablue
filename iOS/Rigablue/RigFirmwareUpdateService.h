@@ -42,11 +42,6 @@ extern NSString *kupdateDFUServiceUuidString300;
 - (void)didWriteValueForControlPoint;
 
 /**
- *  This method is called upon establishing a connection with a device.
- */
-- (void)didConnectPeripheral;
-
-/**
  *  This method is called after discovery has been performed on the DFU service.
  */
 - (void)didDiscoverCharacteristicsForDFUService;
