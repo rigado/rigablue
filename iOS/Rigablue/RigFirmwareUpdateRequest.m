@@ -3,8 +3,11 @@
 //  Rigablue
 //
 //  Created by Eric P. Stutzenberger on 9/17/15.
-//  Copyright © 2015 Rigado, LLC. All rights reserved.
+//  Copyright © 2017 Rigado, Inc. All rights reserved.
 //
+//  Source code licensed under BMD-200 Software License Agreement.
+//  You should have received a copy with purchase of BMD-200 product.
+//  If not, contact info@rigado.com for a copy.
 
 #import "RigFirmwareUpdateRequest.h"
 #import "RigLeBaseDevice.h"
