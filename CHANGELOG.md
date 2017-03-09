@@ -1,7 +1,26 @@
 # Change Log
 
-## [1.2.1] - 2017-01-20
+## [1.2.2] - 2017-03-09
 
+### iOS
+
+#### Changed
+
+- Update Copyright info
+- Add Comments for RigDfuError
+- Remove didConnectPeripheral from RigFirmwareUpdateService
+- Remove reference to Erase Size in RigFirmwareUpdateManager
+- Update Xcode Settings - Deployment Target = 8.0
+
+### Android
+
+#### Changed
+
+- Update Copyright info
+- Version bump
+
+## [1.2.1] - 2017-01-20
+ 
 ### Android
 
 #### Fixed

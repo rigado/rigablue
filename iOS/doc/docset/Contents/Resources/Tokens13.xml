@@ -58,18 +58,6 @@ type of WriteWithResponse.</Abstract>
 		</Token>
 		
 		<Token>
-			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didConnectPeripheral</TokenIdentifier>
-			<Abstract type="html">This method is called upon establishing a connection with a device.</Abstract>
-			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>
-			
-			<Declaration>- (void)didConnectPeripheral</Declaration>
-			
-			
-			<Anchor>//api/name/didConnectPeripheral</Anchor>
-            <NodeRef refid="13"/>
-		</Token>
-		
-		<Token>
 			<TokenIdentifier>//apple_ref/occ/intfm/RigFirmwareUpdateServiceDelegate/didDiscoverCharacteristicsForDFUService</TokenIdentifier>
 			<Abstract type="html">This method is called after discovery has been performed on the DFU service.</Abstract>
 			<DeclaredIn>RigFirmwareUpdateService.h</DeclaredIn>

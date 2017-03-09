@@ -27,8 +27,8 @@
 	<key>DocSetPublisherIdentifier</key>
 	<string>com.rigado.documentation</string>
 	<key>DocSetPublisherName</key>
-	<string>Rigado, LLC</string>
+	<string>Rigado, Inc.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright © 2016 Rigado, LLC. All rights reserved.</string>
+	<string>Copyright © 2017 Rigado, Inc.. All rights reserved.</string>
 </dict>
 </plist>
