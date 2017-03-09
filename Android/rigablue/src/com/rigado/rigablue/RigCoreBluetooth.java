@@ -24,11 +24,11 @@ import java.util.concurrent.TimeUnit;
 /**
  *  RigCoreBluetooth.java
  *
- *  @copyright (c) Rigado, LLC. All rights reserved.
+ *  @copyright (c) Rigado, Inc. All rights reserved.
  *
  *  Source code licensed under BMD-200 Software License Agreement.
  *  You should have received a copy with purchase of BMD-200 product.
- *  If not, contact info@rigado.com for for a copy.
+ *  If not, contact info@rigado.com for a copy.
  */
 
 /**
